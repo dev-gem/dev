@@ -14,8 +14,8 @@ describe Project do
 	end
 
 	it "should be able to make a specific tag" do
-		hellogem=Project.new('http://github.com/lou-parslow/hello.gem.git')
-		makedir="#{Environment.dev_root}/make/github/lou-parslow/hello.gem-0.0.0"
+		hellogem=Project.new('http://github.com/dev-gem/HelloRubyGem.git')
+		makedir="#{Environment.dev_root}/make/github/dev-gem/HelloRubyGem-0.0.0"
 		FileUtils.rm_r(makedir) if File.exists? makedir
 
 		logfile="#{Environment.dev_root}/log/#{hellogem.fullname}/0.0.0/#{Environment.user}@#{Environment.machine}.json"
@@ -32,7 +32,7 @@ describe Project do
 	end
 
 	it "should be able to list tags" do
-		hellogem=Project.new('http://github.com/lou-parslow/hello.gem.git')
+		hellogem=Project.new('http://github.com/dev-gem/HelloRubyGem.git')
 		#expect(hellogem.tags.include?('0.0.0')).to eq(true), 'hellogem.tags did not include '0.0.0'
 	end
 end
