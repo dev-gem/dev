@@ -56,11 +56,6 @@ class Project < Hash
 		"#{Environment.dev_root}/wrk/#{self.fullname}"
 	end
 
-	def make_dir
-		FileUtils.mkdir("#{Environment.dev_root}/make") if !File.exists? "#{Environment.dev_root}/make"
-		"#{Environment.dev_root}/make/#{self.fullname}"
-	end
-
 	def pull
 		if(File.exists?(wrk_dir) && File.exists?("#{wrk_dir}/.git"))
 			Dir.chdir(wrk_dir) do
@@ -106,7 +101,8 @@ class Project < Hash
 	end
 
     def latest_tag
-    	makedir=make_dir
+		FileUtils.mkdir("#{Environment.dev_root}/make") if !File.exists? "#{Environment.dev_root}/make"
+		makedir="#{Environment.dev_root}/make/#{self.fullname}"
     	FileUtils.mkdir_p(File.dirname(makedir)) if !File.exists?(File.dirname(makedir))
         if(File.exists?(makedir))
         	Dir.chdir(makedir) do
