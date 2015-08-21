@@ -43,7 +43,7 @@ class Projects < Hash
 		filter=''
 		filter=args[1] if !args.nil? && args.length > 0
 		self.each{|k,v|
-			if filter.length==0 || k.include?(filter)
+			if filter.nil? || filter.length==0 || k.include?(filter)
 				puts "making #{k}"
 			 	v.make
 		    end
