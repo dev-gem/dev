@@ -32,6 +32,7 @@ task :push do
 end 
 
 task :publish do
+	require_relative('./lib/apps/git.rb')
     Git.tag "#{File.dirname(__FILE__)}","#{Gem::Specification.load('dev.gemspec').version.to_s}"
 	#if `git remote show origin`.include?('github.com')
 	  begin
