@@ -7,7 +7,7 @@ require_relative('../base/timer.rb')
 
 RAKE_DEFAULT_EXISTS=File.exists?('rake.default')
 
-current=Projects.current
+
 
 if(!defined?(NO_DEFAULT_TASK)) 
   desc 'perform project commands to push gem development'
