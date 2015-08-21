@@ -9,9 +9,12 @@ if(File.exists?(Environment.configuration))
   require Environment.configuration
 end
 
- PROJECT=Project.new()
+PROJECT=Project.new()
 
 class Dev
-
+	def self.execute args
+		puts 'dev'
+		puts "args: #{args.to_s}"
+	end
 end
 
