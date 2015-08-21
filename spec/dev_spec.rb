@@ -30,6 +30,7 @@ describe Dev do
             expect(File.exists?(publish_file)).to eq(false), "#{publish_file} was not cleaned up"
             Command.execute('rake default')
             expect(File.exists?(publish_file)).to eq(true), "#{publish_file} does not exist after rake default"
+            Dev.execute(['make',' github/dev-gem/HelloCSharpLibrary'])
         end
         FileUtils.rm_r dir
 	end
