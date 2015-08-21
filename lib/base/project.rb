@@ -103,7 +103,11 @@ class Project < Hash
     	"#{Environment.dev_root}/make/#{self.fullname}-#{tag}"
     end
 
-	def make tag
+	def make tag=''
+		tag=Git.latest_tag if tag.length==0
+
+		raise 'no tag specified' if tag.length==0
+
 		rake_default=nil
 		logfile="#{Environment.dev_root}/log/#{self.fullname}/#{tag}/#{Environment.user}@#{Environment.machine}.json"
 		if(File.exists?(logfile))

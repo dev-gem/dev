@@ -112,4 +112,8 @@ class Git
             end
         end
     end
+
+    def self.latest_tag
+        `git describe --abbrev=0 --tags`.strip
+    end
 end
