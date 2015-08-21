@@ -32,7 +32,7 @@ class Project < Hash
 		    self[:url] = value if value.is_a?(String) && value.length > 0
 		    self[:fullname] = Project.get_fullname_from_url self[:url]
 		elsif(value.is_a?(Hash))
-			value.each{|k,v|self[k]=v}
+			value.each{|k,v|self[k.to_sym]=v}
 		else
 			self[:fullname]=Project.get_fullname
 		end
