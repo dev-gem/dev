@@ -8,13 +8,14 @@ describe Dev do
         Dir.chdir(dir) do
             FileUtils.rm_r '.git'
             Text.replace_in_file('rakefile.rb',"require 'dev'","require_relative('../../lib/dev.rb')")
-            rake_default=Command.new({:input=>'rake default',:ignore_failure=> true, :quiet => true})
-            rake_default.execute
-            if(rake_default[:exit_code] != 0)
-                puts rake_default[:output]
-                puts rake_default[:error]
-            end
             expect(Command.exit_code('rake default')).to eq(0)
+            #rake_default=Command.new({:input=>'rake default',:ignore_failure=> true, :quiet => true})
+            #rake_default.execute
+            #if(rake_default[:exit_code] != 0)
+            #    puts rake_default[:output]
+            #    puts rake_default[:error]
+            #end
+            #expect(Command.exit_code('rake default')).to eq(0)
         end
         FileUtils.rm_r dir
     end
