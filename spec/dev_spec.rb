@@ -11,6 +11,7 @@ describe Dev do
             Text.replace_in_file('rakefile.rb',"require 'dev'","require_relative('../../lib/dev.rb')")
             publish_file="#{Environment.dev_root}/publish/HelloRubyGem-#{Version.get_version}.gem"
             File.delete publish_file if File.exists? publish_file
+            expect(File.exists?(publish_file)).to eq(false), "#{publish_file} was not cleaned up"
             Command.execute('rake default')
             expect(File.exists?(publish_file)).to eq(true), "#{publish_file} does not exist after rake default"
         end
