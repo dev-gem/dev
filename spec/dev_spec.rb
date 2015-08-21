@@ -41,7 +41,7 @@ describe Dev do
         Dir.chdir(dir) do
             FileUtils.rm_r '.git'
             Text.replace_in_file('rakefile.rb',"require 'dev'","require_relative('../../lib/dev.rb')")
-            publish_file="#{Environment.dev_root}/publish/HelloCSharpConsole.#{Version.get_version}.nupkg"
+            publish_file="#{Environment.dev_root}/publish/HelloCSharpConsole-#{Version.get_version}.msi"
             File.delete publish_file if File.exists? publish_file
             expect(File.exists?(publish_file)).to eq(false), "#{publish_file} was not cleaned up"
             Command.execute('rake default')
