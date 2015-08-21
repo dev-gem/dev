@@ -32,6 +32,7 @@ task :push do
 end 
 
 task :publish do
+    Git.tag "#{File.dirname(__FILE__)}","#{Gem::Specification.load('dev.gemspec').version.to_s}"
 	#if `git remote show origin`.include?('github.com')
 	  begin
 	  	#version="#{Gem::Specification.load('dev.gemspec').version.to_s}"
