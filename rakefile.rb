@@ -32,17 +32,17 @@ task :push do
 end 
 
 task :publish do
-	if `git remote show origin`.include?('gitlab.com')
+	#if `git remote show origin`.include?('github.com')
 	  begin
-	  	VERSION="#{Gem::Specification.load('dev.gemspec').version.to_s}"
-	  	source=FileList.new('lib/**/*.rb','rakefile.rb','dev.gemspec','LICENSE','README.md','Gemfile')
-	  	puts 'publishing to https://github.com/lou-parslow/dev.gem.git'
-	  	require_relative('./lib/apps/git.rb')
-		Git.publish "https://github.com/lou-parslow/dev.gem.git" ,File.dirname(__FILE__), source, VERSION
+	  	#version="#{Gem::Specification.load('dev.gemspec').version.to_s}"
+	  	#source=FileList.new('lib/**/*.rb','rakefile.rb','dev.gemspec','LICENSE','README.md','Gemfile')
+	  	#puts 'publishing to https://github.com/lou-parslow/dev.gem.git'
+	  	#require_relative('./lib/apps/git.rb')
+		#Git.publish "https://github.com/lou-parslow/dev.gem.git" ,File.dirname(__FILE__), source, VERSION
 		puts `gem push dev-#{Gem::Specification.load('dev.gemspec').version.to_s}.gem`
 	  rescue
 	  end
-    end
+    #end
 end
 
 task :show_projects , [:filter] do |t, args| 
