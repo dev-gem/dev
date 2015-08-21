@@ -52,7 +52,13 @@ class Project < Hash
     end
 
 	def wrk_dir
+		FileUtils.mkdir("#{Environment.dev_root}/wrk") if !File.exists? "#{Environment.dev_root}/wrk"
 		"#{Environment.dev_root}/wrk/#{self.fullname}"
+	end
+
+	def make_dir
+		FileUtils.mkdir("#{Environment.dev_root}/make") if !File.exists? "#{Environment.dev_root}/make"
+		"#{Environment.dev_root}/make/#{self.fullname}"
 	end
 
 	def pull
@@ -99,12 +105,30 @@ class Project < Hash
 		puts "#{'version'.fix(13)}: #{VERSION}" if defined? VERSION
 	end
 
+    def latest_tag
+    	makedir=make_dir
+    	FileUtils.mkdir_p(File.dirname(makedir)) if !File.exists?(File.dirname(makedir))
+        if(File.exists?(makedir))
+        	Dir.chdir(makedir) do
+        	  Command.exit_code('git pull')
+            end
+        else
+        	Command.exit_code('git clone #{self.url} #{makedir}')
+        end
+        if(File.exists?(makedir))
+        	Dir.chdir(makedir) do
+        		return Git.latest_tag
+        	end
+        end
+        ''
+    end
+
     def make_dir tag
     	"#{Environment.dev_root}/make/#{self.fullname}-#{tag}"
     end
 
 	def make tag=''
-		tag=Git.latest_tag if tag.length==0
+		tag=latest_tag if tag.length==0
 
 		raise 'no tag specified' if tag.length==0
 
