@@ -127,7 +127,7 @@ class Command < Hash
     	  puts self[:error]
       end
     	if(!self.has_key?(:ignore_failure) || !self[:ignore_failure])
-    		raise "#{self[:input]} failed" 
+    		raise "#{self[:input]} failed\n#{self[:output]}\n#{self[:error]}" 
     	end
     end
       
@@ -163,6 +163,12 @@ class Command < Hash
       }
       dir=home
      return dir
+    end
+
+    def self.execute command
+      cmd = Command.new(command)
+      cmd.execute
+      cmd[:exit_code]
     end
 
     def self.exit_code command

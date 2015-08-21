@@ -4,11 +4,12 @@ describe Dev do
 
     it "should be able to make HelloRubyGem" do
         dir="#{File.dirname(__FILE__)}/dev_spec_HelloRubyGem"
+        FileUtils.rm_r dir if File.exists? dir
         `git clone http://github.com/dev-gem/HelloRubyGem.git #{dir}`
         Dir.chdir(dir) do
             FileUtils.rm_r '.git'
             Text.replace_in_file('rakefile.rb',"require 'dev'","require_relative('../../lib/dev.rb')")
-            expect(Command.exit_code('rake default')).to eq(0)
+            Command.execute('rake default')
             #rake_default=Command.new({:input=>'rake default',:ignore_failure=> true, :quiet => true})
             #rake_default.execute
             #if(rake_default[:exit_code] != 0)
