@@ -6,11 +6,11 @@ require 'rake'
 describe Project do
 
 	it "should be able to automatically initialize properties from url constructor" do
-		hellogem=Project.new('http://github.com/lou-parslow/hello.gem.git')
-		expect(hellogem.url).to eq('http://github.com/lou-parslow/hello.gem.git')
-		expect(hellogem.fullname).to eq('github/lou-parslow/hello.gem')
-		expect(hellogem.name).to eq('hello.gem')
-		expect(hellogem.make_dir('0.0.0')).to eq("#{Environment.dev_root}/make/github/lou-parslow/hello.gem-0.0.0")
+		hellogem=Project.new('http://github.com/dev-gem/HelloRubyGem.git')
+		expect(hellogem.url).to eq('http://github.com/dev-gem/HelloRubyGem.git')
+		expect(hellogem.fullname).to eq('github/dev-gem/HelloRubyGem')
+		expect(hellogem.name).to eq('HelloRubyGem')
+		expect(hellogem.make_dir('0.0.0')).to eq("#{Environment.dev_root}/make/github/dev-gem/HelloRubyGem-0.0.0")
 	end
 
 	it "should be able to make a specific tag" do
