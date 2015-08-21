@@ -4,6 +4,8 @@ require 'json'
 require 'rake'
 require_relative('environment.rb')
 require_relative('project.rb')
+require_relative('../apps/git.rb')
+require_relative('../apps/svn.rb')
 
 class Projects < Hash
 	attr_accessor :filename
@@ -64,6 +66,10 @@ class Projects < Hash
 	end
 end
 
+current=Projects.current # this makes sure the current project is added to PROJECTS
+
 PROJECTS=Projects.new
 PROJECTS.open Projects.user_projects_filename if File.exists? Projects.user_projects_filename
 PROJECTS.save Projects.user_projects_filename if !File.exists? Projects.user_projects_filename
+
+
