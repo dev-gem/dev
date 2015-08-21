@@ -99,14 +99,6 @@ describe Command do
         f.puts " puts 'rake_test'"
         f.puts "end" 
     }
-    Dir.chdir(dir) do
-        #rake = Command.new({ :input => 'rake', :timeout => 300, :ignore_failure => true })
-        #rake.execute
-
-        #expect(rake[:exit_code]).to eq(0)
-        #expect(rake.summary.include?('rake')).to eq(true)
-        #expect(rake[:output].include?('rake_test')).to eq(true)
-    end
     FileUtils.rm_r("#{File.dirname(__FILE__)}/command_spec")
   end
 
