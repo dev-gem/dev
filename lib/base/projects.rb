@@ -41,7 +41,7 @@ class Projects < Hash
 
 	def make args
 		filter=''
-		filter=args[1] if args.length > 0
+		filter=args[1] if ~args.nil? && args.length > 0
 		self.each{|k,v|
 			if filter.length==0 || k.include?(filter)
 				puts "making #{k}"
