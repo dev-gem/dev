@@ -45,6 +45,12 @@ task :publish do
     end
 end
 
+task :show_projects , [:filter] do |t, args| 
+	require_relative('./lib/base/projects.rb')
+	PROJECTS.show if !args.has_key? :filter
+	PROJECTS.show args[:filter] if args.has_key? :filter
+end
+
 task :default => [:build,:test,:add,:commit,:publish,:push] do
 	File.open('rake.default','w'){|f|f.puts 'a'}
 end

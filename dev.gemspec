@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
 	s.email			= 'lou.parslow@gmail.com'
 	s.homepage		= 'http://rubygems.org/gems/dev'
     s.required_ruby_version = '>= 1.9.3'
+    s.executables   = ["dev"]
 	s.files         = Dir["LICENSE","README","{lib}/**/*.rb","{test]/**/test_*.rb"]
 	s.license       = 'Apache 2.0'
 	s.add_runtime_dependency 'rake', '~> 10.1'

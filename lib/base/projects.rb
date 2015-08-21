@@ -33,6 +33,12 @@ class Projects < Hash
 		update
 	end
 
+    def show filter=''
+		self.each{|k,v|
+			puts k if(filter.length == 0 || k.include?(filter))
+		}
+	end
+
 	def self.user_projects_filename
 		FileUtils.mkdir("#{Environment.dev_root}/data") if(!File.exists?("#{Environment.dev_root}/data"))
 		"#{Environment.dev_root}/data/PROJECTS.json"
