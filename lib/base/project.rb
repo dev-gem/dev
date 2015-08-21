@@ -21,7 +21,7 @@ class Project < Hash
 	end
 
 	def self.get_fullname_from_url url
-		return url.gsub('http://','').gsub('http://','').gsub('.com/','/').gsub('.git','')
+		return url.gsub('http://','').gsub('https://','').gsub('.com/','/').gsub('.git','')
 	end
 
 	def initialize value=''
