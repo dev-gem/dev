@@ -4,6 +4,16 @@ class Version
 		return IO.read(filename).scan(/Version\(\"([\d.]+)\"\)/)[0][0] if filename.include?('AssemblyInfo.cs')  
 		'0.0.0'
 	end
+
+	def self.get_version
+		Dir.glob('**/*.gemspec').each{|gemspec|
+			return Version.read gemspec
+		}
+		Dir.glob('**/AssemblyInfo.cs').each{|assemblyInfo|
+			return Version.read assemblyInfo
+		}
+		'0.0.0'
+	end
 end
 
 if !defined? VERSION
