@@ -9,14 +9,10 @@ describe Dev do
         Dir.chdir(dir) do
             FileUtils.rm_r '.git'
             Text.replace_in_file('rakefile.rb',"require 'dev'","require_relative('../../lib/dev.rb')")
+            publish_file="#{Environment.dev_root}/publish/HelloRubyGem-#{Version.get_version}.gem"
+            File.delete publish_file if File.exists? publish_file
             Command.execute('rake default')
-            #rake_default=Command.new({:input=>'rake default',:ignore_failure=> true, :quiet => true})
-            #rake_default.execute
-            #if(rake_default[:exit_code] != 0)
-            #    puts rake_default[:output]
-            #    puts rake_default[:error]
-            #end
-            #expect(Command.exit_code('rake default')).to eq(0)
+            expect(File.exists?(publish_file)).to eq(true), "#{publish_file} does not exist after rake default"
         end
         FileUtils.rm_r dir
     end
