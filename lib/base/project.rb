@@ -132,6 +132,7 @@ class Project < Hash
 	def make tag=''
 		tag=latest_tag if tag.length==0
 
+		return if tag.length==0
 		raise 'no tag specified' if tag.length==0
 
 		rake_default=nil
