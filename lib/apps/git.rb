@@ -115,11 +115,13 @@ class Git
 
     def self.latest_tag directory=''
         if directory.length==0
-            `git describe --abbrev=0 --tags`.strip
+            Command.output('git describe --abbrev=0 --tags').strip
+            #`git describe --abbrev=0 --tags`.strip
         else
             result=''
             Dir.chdir(directory) do
-                result=`git describe --abbrev=0 --tags`.strip
+                result=Command.output('git describe --abbrev=0 --tags').strip
+                #result=`git describe --abbrev=0 --tags`.strip
             end
             result
         end
