@@ -27,14 +27,14 @@ class Project < Hash
 	def initialize value=''
 		@filename=''
 		self[:url]=Project.get_url
-		self[:fullname]=Project.get_fullname
+		self[:fullname]=Project.get_fullname_from_url self[:url] if self[:url].length > 0
 		if value.is_a?(String)
 		    self[:url] = value if value.is_a?(String) && value.length > 0
 		    self[:fullname] = Project.get_fullname_from_url self[:url]
 		elsif(value.is_a?(Hash))
 			value.each{|k,v|self[k.to_sym]=v}
 		else
-			self[:fullname]=Project.get_fullname
+			self[:fullname]=Project.get_fullname_from_url self[:url] if self[:url].length > 0
 		end
 	end
 
