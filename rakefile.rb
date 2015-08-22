@@ -11,7 +11,8 @@ task :build do
 end
 
 task :test do
-	puts `rspec --format documentation`
+	#puts `rspec --format documentation`
+	puts `rspec`
 	raise 'rspec failed' if($?.to_i != 0)
 end
 
