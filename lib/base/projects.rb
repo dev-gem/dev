@@ -44,8 +44,11 @@ class Projects < Hash
 		filter=args[1] if !args.nil? && args.length > 0
 		self.each{|k,v|
 			if filter.nil? || filter.length==0 || k.include?(filter)
-				puts "making #{k}"
-			 	v.make
+				tag=v.latest_tag
+				if(tag.length > 0)
+				   puts "making #{k} #{tag}"
+			 	   v.make tag
+			    end
 		    end
 		}
 	end

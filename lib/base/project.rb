@@ -147,17 +147,20 @@ class Project < Hash
 			if(self[:url].include?('.git'))
 				clone=Command.new({:input=>"git clone #{self[:url]} #{makedir}",:quiet=>true})
 				clone.execute
-				Dir.chdir(makedir) do
+				if(File.exists?(makedir))
+				  Dir.chdir(makedir) do
 					checkout=Command.new({:input=>"git checkout #{tag}",:quiet=>true})
 					checkout.execute
 					FileUtils.rm_r '.git'
-					rake_default=Command.new('rake default')
+					rake_default=Command.new('rake default --trace')
 					rake_default[:quiet]=true
+					#rake_default[:timeout]=5*60*1000
 					rake_default.execute
 					FileUtils.mkdir_p(File.dirname(logfile)) if !File.exists?(File.dirname(logfile))
 					File.open(logfile,'w'){|f|f.write(rake_default.to_json)}
 					rake_default
-				end
+				  end
+			   end
 			end
 			FileUtils.rm_r makedir
 			rake_default
