@@ -97,7 +97,7 @@ class Command < Hash
     			  self[:end_time] = Time.now
           else
             require_relative 'timeout.rb'
-            result=run_with_timeout2(self[:directory],self[:input], self[:timeout], 2)
+            result=run_with_timeout2(self[:directory],self[:input], self[:timeout])
             self[:output]=result[0]
             self[:error]=result[1]
             self[:exit_code]=result[2]

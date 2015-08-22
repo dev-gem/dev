@@ -18,7 +18,7 @@ class Projects < Hash
     	self.each{|k,v|
     		self[k]=Project.new(v) if(v.is_a?(String))
     		self[k]=Project.new(v) if(!v.is_a?(Project) && v.is_a?(Hash))
-    		self[k][:name]=k
+    		self[k][:fullname]=k
     	}
     end
 
@@ -65,14 +65,14 @@ class Projects < Hash
 		if(Rake.application.original_dir.include?('/wrk/') &&
 			   url.length > 0)
 			project=Project.new(url)
-			name=Rake.application.original_dir.gsub("#{Environment.dev_root}/wrk/",'')
-			project[:name] = name if(name.length>0 && !name.include?(Environment.dev_root))
+			fullname=Rake.application.original_dir.gsub("#{Environment.dev_root}/wrk/",'')
+			project[:fullname] = name if(name.length>0 && !name.include?(Environment.dev_root))
 			if(defined?(PROJECTS))
 				PROJECTS[name]=project if(!PROJECTS.has_key?(name))
 				project.each{|k,v|PROJECTS[name][k]=v}
 				PROJECTS.save
 			else
-				project[:name]=name
+				project[:fullname]=name
 			end
 		end			
 		project
@@ -86,10 +86,8 @@ class Projects < Hash
 	end
 end
 
-current=Projects.current # this makes sure the current project is added to PROJECTS
-
 PROJECTS=Projects.new
 PROJECTS.open Projects.user_projects_filename if File.exists? Projects.user_projects_filename
+current=Projects.current # this makes sure the current project is added to PROJECTS
+PROJECTS[current.fullname]=current if !PROJECTS.has_key? current.fullname
 PROJECTS.save Projects.user_projects_filename if !File.exists? Projects.user_projects_filename
-
-
