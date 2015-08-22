@@ -111,7 +111,7 @@ class Project < Hash
         else
         	clone=Command.new("git clone #{self.url} #{makedir}")
 			clone[:quiet]=true
-			cline[:ignore_failure]=true
+			clone[:ignore_failure]=true
 			clone.execute
         end
         if(File.exists?(makedir))
