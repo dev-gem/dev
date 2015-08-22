@@ -18,7 +18,7 @@ describe Environment do
   	expect(File.exists?(Environment.dev_root)).to eq(true)
   end
 
-  it "should be able to check" do
-    Environment.check
-  end
+ #it "should be able to check" do
+ #   Environment.check
+ # end
 end

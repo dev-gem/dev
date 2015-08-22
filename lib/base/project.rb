@@ -154,7 +154,7 @@ class Project < Hash
 					FileUtils.rm_r '.git'
 					rake_default=Command.new('rake default --trace')
 					rake_default[:quiet]=true
-					rake_default[:timeout]=5*60*1000
+					#rake_default[:timeout]=5*60*1000
 					rake_default.execute
 					FileUtils.mkdir_p(File.dirname(logfile)) if !File.exists?(File.dirname(logfile))
 					File.open(logfile,'w'){|f|f.write(rake_default.to_json)}

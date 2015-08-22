@@ -89,5 +89,5 @@ end
 PROJECTS=Projects.new
 PROJECTS.open Projects.user_projects_filename if File.exists? Projects.user_projects_filename
 current=Projects.current # this makes sure the current project is added to PROJECTS
-PROJECTS[current.fullname]=current if !PROJECTS.has_key? current.fullname
+PROJECTS[current.fullname]=current if !current.nil? && !PROJECTS.has_key?(current.fullname) && current.wrk_dir == Rake.application.original_dir
 PROJECTS.save Projects.user_projects_filename if !File.exists? Projects.user_projects_filename
