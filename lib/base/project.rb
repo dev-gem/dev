@@ -113,7 +113,10 @@ class Project < Hash
         end
         if(File.exists?(makedir))
         	Dir.chdir(makedir) do
-        		return Git.latest_tag
+        		begin
+        		    return Git.latest_tag
+        	    rescue
+        	    end
         	end
         end
         ''
