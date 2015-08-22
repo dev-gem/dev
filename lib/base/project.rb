@@ -109,7 +109,10 @@ class Project < Hash
         	  Command.exit_code('git pull')
             end
         else
-        	Command.execute("git clone #{self.url} #{makedir}")
+        	clone=Command.new("git clone #{self.url} #{makedir}")
+			clone[:quiet]=true
+			cline[:ignore_failure]=true
+			clone.execute
         end
         if(File.exists?(makedir))
         	Dir.chdir(makedir) do
