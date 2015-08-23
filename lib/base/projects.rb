@@ -87,15 +87,15 @@ class Projects < Hash
 
 	def import pattern=''
 		wrk="#{Environment.dev_root}/wrk"
-		puts "importing project from #{wrk}"
+		#puts "importing project from #{wrk}"
 		if File.exists?(wrk)
 		   Dir.chdir(wrk) do
 		   		Dir.glob('**/rakefile.rb').each{|rakefile|
 		   			rakedir=File.dirname(rakefile)
 		   			url = Project.get_url rakedir
-		   			puts "checking #{url}"
+		   			#puts "checking #{url}"
 		   			project = Project.new(Project.get_url(rakedir))
-		   			puts "fullname:#{project.fullname}"
+		   			#puts "fullname:#{project.fullname}"
 		   			if(pattern.length==0 || project.fullname.include?(pattern) && !self.has_key?(project.fullname))
 		   				puts "importing #{project.fullname}"
 		   				self[project.fullname]=project

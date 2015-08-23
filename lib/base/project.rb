@@ -10,8 +10,8 @@ class Project < Hash
 	def self.get_url directory=Rake.application.original_dir
 	  url=''
 	  Dir.chdir(directory) do#Rake.application.original_dir) do
-	    url= `git config --get remote.origin.url` if(File.exists?('.git'))
-	    url= Svn.url if(File.exists?('.svn'))
+	    url=`git config --get remote.origin.url`.strip if(File.exists?('.git'))
+	    url= Svn.url.strip if(File.exists?('.svn'))
 	  end
 	  url
 	end
