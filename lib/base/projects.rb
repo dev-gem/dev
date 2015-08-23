@@ -102,7 +102,7 @@ class Projects < Hash
 		   			end
 		   		}
 		   end
-		   self.save
+		   self.save Projects.user_projects_filename
 	    end
 	end
 end
