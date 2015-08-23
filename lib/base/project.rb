@@ -7,9 +7,9 @@ require_relative('string.rb')
 class Project < Hash
 	attr_accessor :filename
 
-	def self.get_url
+	def self.get_url directory=Rake.application.original_dir
 	  url=''
-	  Dir.chdir(Rake.application.original_dir) do
+	  Dir.chdir(directory) do#Rake.application.original_dir) do
 	    url= `git config --get remote.origin.url` if(File.exists?('.git'))
 	    url= Svn.url if(File.exists?('.svn'))
 	  end

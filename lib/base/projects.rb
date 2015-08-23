@@ -84,10 +84,27 @@ class Projects < Hash
 	def rake
 		self.each{|k,v| v.rake if v.respond_to?("rake".to_sym)}
 	end
+
+	def import pattern=''
+		wrk="#{Environment.dev_root}/wrk"
+		if File.exists?(wrk)
+		   Dir.chdir(wrk) do
+		   		Dir.glob('**/*.rakefile.rb').each{|rakefile|
+		   			rakedir=File.dirname(rakefile)
+		   			project = Project.new(Project.get_url(rakedir))
+		   			if(pattern.length==0 || project.fullname.include?(pattern) && !self.has_key?(project.fullname))
+		   				puts "importing #{project.fullname}"
+		   				self[project.fullname]=project
+		   			end
+		   		}
+		   end
+		   self.save
+	    end
+	end
 end
 
 PROJECTS=Projects.new
 PROJECTS.open Projects.user_projects_filename if File.exists? Projects.user_projects_filename
-current=Projects.current # this makes sure the current project is added to PROJECTS
-PROJECTS[current.fullname]=current if(!current.nil? && !PROJECTS.has_key?(current.fullname) && current.wrk_dir == Rake.application.original_dir)
+#current=Projects.current # this makes sure the current project is added to PROJECTS
+#PROJECTS[current.fullname]=current if(!current.nil? && !PROJECTS.has_key?(current.fullname) && current.wrk_dir == Rake.application.original_dir)
 PROJECTS.save Projects.user_projects_filename if !File.exists? Projects.user_projects_filename
