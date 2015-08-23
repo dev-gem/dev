@@ -16,9 +16,9 @@ class Project < Hash
 	  url
 	end
 
-	def self.get_fullname
-	  Rake.application.original_dir.gsub(Environment.dev_root,'').gsub('/trunk','') .gsub('/wrk','')
-	end
+	#def self.get_fullname
+	#  Rake.application.original_dir.gsub(Environment.dev_root,'').gsub('/trunk','') .gsub('/wrk','')
+	#end
 
 	def self.get_fullname_from_url url
 		return url.gsub('http://','').gsub('https://','').gsub('.com/','/').gsub('.git','')
