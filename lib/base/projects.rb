@@ -33,7 +33,7 @@ class Projects < Hash
 		update
 	end
 
-    def show filter=''
+    def list filter=''
 		self.each{|k,v|
 			puts k if(filter.length == 0 || k.include?(filter))
 		}
