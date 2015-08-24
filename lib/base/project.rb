@@ -164,7 +164,10 @@ class Project < Hash
 				  end
 			   end
 			end
-			FileUtils.rm_r makedir
+			begin
+			    FileUtils.rm_r makedir
+		    rescue
+		    end
 			rake_default
 		end
 	end
