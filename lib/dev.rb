@@ -16,6 +16,7 @@ class Dev
 		PROJECTS.import(args.length>1 ? args[1]:'') if args.length > 0 && args[0] == 'import'
 		PROJECTS.show(args.length>1 ? args[1]:'') if args.length > 0 && args[0] == 'list'
 		PROJECTS.make(args) if args.length > 0 && args[0] == 'make'
+		PROJECTS.work(args) if args.length > 0 && args[0] == 'work'
 		usage if args.length == 0
 	end
 

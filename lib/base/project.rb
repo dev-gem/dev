@@ -167,6 +167,16 @@ class Project < Hash
 		end
 	end
 
+    def work
+    	clone
+    	checkout
+    	if(File.exists?(wrk_dir))
+    		Dir.chdir(wrk_dir) do
+    			Command.exit_code('rake default')
+    	    end
+    	end
+    end
+
     def tags
     	tags=Array.new
     	if !File.exists? wrk_dir

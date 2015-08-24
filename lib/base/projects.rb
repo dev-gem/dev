@@ -53,6 +53,17 @@ class Projects < Hash
 		}
 	end
 
+	def work args
+		filter=''
+		filter=args[1] if !args.nil? && args.length > 0
+		self.each{|k,v|
+			if filter.nil? || filter.length==0 || k.include?(filter)
+				puts "working #{k} #{tag}"
+			 	v.work
+		    end
+		}
+	end
+
 	def self.user_projects_filename
 		FileUtils.mkdir("#{Environment.dev_root}/data") if(!File.exists?("#{Environment.dev_root}/data"))
 		"#{Environment.dev_root}/data/PROJECTS.json"
