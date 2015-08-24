@@ -58,7 +58,7 @@ class Projects < Hash
 		filter=args[1] if !args.nil? && args.length > 0
 		self.each{|k,v|
 			if filter.nil? || filter.length==0 || k.include?(filter)
-				puts "working #{k} #{tag}"
+				puts "working #{k}"
 			 	v.work
 		    end
 		}
