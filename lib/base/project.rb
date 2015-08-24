@@ -17,7 +17,7 @@ class Project < Hash
 	end
 
 	def self.get_fullname directory
-	  directory.gsub(Environment.dev_root,'').gsub('/trunk','') .gsub('/wrk','')
+	    directory.gsub(Environment.dev_root,'').gsub('/trunk','') .gsub('/wrk','')
 	end
 
 	def self.get_fullname_from_url url
@@ -178,7 +178,7 @@ class Project < Hash
     	clone
     	checkout
     	if(File.exists?(wrk_dir))
-    		if(last_work_mtime.nil? || last_wrk_mtime < Environment.get_latest_mtime(wrk_dir))
+    		if(last_work_mtime.nil? || last_work_mtime < Environment.get_latest_mtime(wrk_dir))
     		  Dir.chdir(wrk_dir) do
     		  	rake_default=Command.new('rake default')
 				rake_default[:quiet]=true
