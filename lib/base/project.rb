@@ -144,8 +144,10 @@ class Project < Hash
 			makedir="#{Environment.dev_root}/make/#{self.fullname}-#{tag}"
 			FileUtils.mkdir_p(File.dirname(makedir)) if !File.exists? File.dirname(makedir)
 			if(self[:url].include?('.git'))
-				clone=Command.new({:input=>"git clone #{self[:url]} #{makedir}",:quiet=>true})
-				clone.execute
+				if(!File.exists?(makedir))
+				   clone=Command.new({:input=>"git clone #{self[:url]} #{makedir}",:quiet=>true})
+				   clone.execute
+			    end
 				if(File.exists?(makedir))
 				  Dir.chdir(makedir) do
 					checkout=Command.new({:input=>"git checkout #{tag}",:quiet=>true})
