@@ -167,12 +167,29 @@ class Project < Hash
 		end
 	end
 
+    def last_work_mtime
+    	logfile="#{Environment.dev_root}/log/#{self.fullname}/#{Environment.user}@#{Environment.machine}.json"
+    	if File.exists? logfile
+    		return File.mtime(logfile)
+    	end
+    	nil
+    end
+
     def work
     	clone
     	checkout
     	if(File.exists?(wrk_dir))
-    		Dir.chdir(wrk_dir) do
-    			Command.exit_code('rake default')
+    		if(last_work_mtime.nil? || last_wrk_mtime < Environment.get_latest_mtime(wrk_dir))
+    		  Dir.chdir(wrk_dir) do
+    		  	rake_default=Command.new('rake default')
+				rake_default[:quiet]=true
+				rake_default[:ignore_failure]=true
+				rake_default.execute
+    			#Command.exit_code('rake default')
+    			logfile="#{Environment.dev_root}/log/#{self.fullname}/#{Environment.user}@#{Environment.machine}.json"
+    			FileUtils.mkdir_p(File.dirname(logfile)) if !File.exists?(File.dirname(logfile))
+				File.open(logfile,'w'){|f|f.write(rake_default.to_json)}
+    	      end
     	    end
     	end
     end
