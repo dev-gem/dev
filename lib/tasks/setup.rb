@@ -12,6 +12,10 @@ class Setup < Array
 	def update
 		add 'bundle install' if(File.exists?('Gemfile'))
 
+		['bin','data','log','make','publish'].each{|dir|
+			add "<%FileUtils.mkdir('#{Environment.dev_root}/#{dir}')%>" if !File.exists? "#{Environment.dev_root}/#{dir}"
+		}
+		
 		Dir.glob('*.gemspec').each{|gemspec_file|
 			add "<%Gemspec.update('#{gemspec_file}')%>"
 		}
