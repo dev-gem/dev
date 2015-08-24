@@ -35,17 +35,10 @@ end
 task :publish do
 	require_relative('./lib/apps/git.rb')
     Git.tag "#{File.dirname(__FILE__)}","#{Gem::Specification.load('dev.gemspec').version.to_s}"
-	#if `git remote show origin`.include?('github.com')
 	  begin
-	  	#version="#{Gem::Specification.load('dev.gemspec').version.to_s}"
-	  	#source=FileList.new('lib/**/*.rb','rakefile.rb','dev.gemspec','LICENSE','README.md','Gemfile')
-	  	#puts 'publishing to https://github.com/lou-parslow/dev.gem.git'
-	  	#require_relative('./lib/apps/git.rb')
-		#Git.publish "https://github.com/lou-parslow/dev.gem.git" ,File.dirname(__FILE__), source, VERSION
 		puts `gem push dev-#{Gem::Specification.load('dev.gemspec').version.to_s}.gem`
 	  rescue
 	  end
-    #end
 end
 
 task :show_projects , [:filter] do |t, args| 

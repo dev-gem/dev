@@ -2,7 +2,7 @@ require_relative('../lib/dev.rb')
 
 describe Dev do
 
-    it "should be able to make HelloRubyGem" do
+    it "should be able to rake HelloRubyGem" do
         dir="#{File.dirname(__FILE__)}/dev_spec_HelloRubyGem"
         FileUtils.rm_r dir if File.exists? dir
         Command.exit_code("git clone http://github.com/dev-gem/HelloRubyGem.git #{dir}")
@@ -18,7 +18,7 @@ describe Dev do
         FileUtils.rm_r dir
     end
 
-	it "should be able to make HelloCSharpLibrary" do
+	it "should be able to rake HelloCSharpLibrary" do
     	dir="#{File.dirname(__FILE__)}/dev_spec_HelloCSharpLibrary"
         FileUtils.rm_r dir if File.exists? dir
         Command.exit_code("git clone http://github.com/dev-gem/HelloCSharpLibrary.git #{dir}")
@@ -30,12 +30,11 @@ describe Dev do
             expect(File.exists?(publish_file)).to eq(false), "#{publish_file} was not cleaned up"
             Command.exit_code('rake default')
             expect(File.exists?(publish_file)).to eq(true), "#{publish_file} does not exist after rake default"
-            #Dev.execute(['make',' github/dev-gem/HelloCSharpLibrary'])
         end
         FileUtils.rm_r dir
 	end
 
-	it "should be able to make HelloCSharpConsole" do
+	it "should be able to rake HelloCSharpConsole" do
         dir="#{File.dirname(__FILE__)}/dev_spec_HelloCSharpConsole"
         FileUtils.rm_r dir if File.exists? dir
         Command.exit_code("git clone http://github.com/dev-gem/HelloCSharpConsole.git #{dir}")
