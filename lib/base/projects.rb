@@ -108,9 +108,11 @@ class Projects < Hash
 		   			#puts "checking #{url}"
 		   			project = Project.new(Project.get_url(rakedir))
 		   			project[:fullname]=Project.get_fullname rakedir if(project.fullname.include?(':'))
-		   			if(pattern.length==0 || project.fullname.include?(pattern) && project.fullname.length > 0 && !self.has_key?(project.fullname))
-		   				puts "importing #{project.fullname}"
-		   				self[project.fullname]=project
+		   			if(pattern.length==0 || project.fullname.include?(pattern))
+		   				if(project.fullname.length > 0 && !self.has_key?(project.fullname))
+		   				    puts "importing #{project.fullname}"
+		   				    self[project.fullname]=project
+		   			    end
 		   			end
 		   		}
 		   end

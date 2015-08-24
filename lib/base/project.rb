@@ -37,7 +37,7 @@ class Project < Hash
 			self[:fullname]=Project.get_fullname_from_url self[:url] if self[:url].length > 0
 		end
 
-		self[:fullname]=Project.get_fullname Rake.application.original_dir if(self.fullname.include?(':') && Rake.application.original_dir.include?('/wrk/'))
+		#self[:fullname]=Project.get_fullname Rake.application.original_dir if(self.fullname.include?(':') && Rake.application.original_dir.include?('/wrk/'))
 	end
 
     def url
