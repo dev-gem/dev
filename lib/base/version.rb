@@ -22,15 +22,4 @@ class Version
 	end
 end
 
-if !defined? VERSION
-	Dir.glob('**/*.gemspec').each{|gemspec|
-		if !defined? VERSION
-			VERSION=Version.read gemspec
-		end
-	}
-	Dir.glob('**/AssemblyInfo.cs').each{|assemblyInfo|
-		if !defined? VERSION
-			VERSION=Version.read assemblyInfo
-		end
-	}
-end
+VERSION=Version.get_version if !defined? VERSION
