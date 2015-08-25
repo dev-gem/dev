@@ -25,11 +25,11 @@ task :commit =>[:add] do
 end
 
 task :pull do
-	puts `git pull`
+	puts `git pull` if `git branch`.include?('* master')
 end
 
 task :push do
-	puts `git push`
+	puts `git push`  if `git branch`.include?('* master')
 end 
 
 task :publish do
