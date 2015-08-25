@@ -2,7 +2,6 @@ require_relative '../lib/base/version.rb'
 require 'fileutils'
 
 describe Version do
-
 	it "should be extract the version from AssemblyInfo.cs" do
 		FileUtils.mkdir("#{File.dirname(__FILE__)}/version_spec") if(!File.exists?("#{File.dirname(__FILE__)}/version_spec"))
 		Dir.chdir("#{File.dirname(__FILE__)}/version_spec") do
