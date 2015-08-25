@@ -46,6 +46,8 @@ class Command < Hash
 
     if(command.kind_of?(Hash))
       command.each{|k,v|self[k.to_sym]=v}
+      self[:start_time]=Time.parse(self[:start_time]) if(self.has_key?(:start_time) && !self[:start_time].nil?)
+      self[:end_time]=Time.parse(self[:end_time]) if(self.has_key?(:end_time) && !self[:end_time].nil?)
     end
 	end
 

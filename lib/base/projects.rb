@@ -46,7 +46,7 @@ class Projects < Hash
 			if filter.nil? || filter.length==0 || k.include?(filter)
 				tag=v.latest_tag
 				if(tag.length > 0)
-				   puts "making #{k} #{tag}"
+				   #puts "making #{k} #{tag}"
 			 	   v.make tag
 			    end
 		    end
