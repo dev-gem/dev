@@ -50,6 +50,13 @@ class Command < Hash
     end
 	end
 
+  def open filename=''
+    @filename=filename if filename.length > 0
+    self.clear
+    JSON.parse(IO.read(@filename)).each{|k,v| self[k.to_s]=v}
+    update
+  end
+
   def quiet?
     (self.has_key?(:quiet) && self[:quiet])
   end

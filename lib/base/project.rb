@@ -94,6 +94,20 @@ class Project < Hash
 		end
 	end
 
+    def fails
+    	Dir.chdir("#{Environment.dev_root}/log/#{self.fullname}") do
+    		Dir.glob("**/#{Environment.user}@#{Environment.machine}.json").each{|logfile|
+    			command=Command.new
+    			command.open(logfile)
+    			if(command.has_key?(:exit_code) && command[:exit_code] != 0)
+    				puts command[:directory]
+    			end
+    		}
+    	end
+    	#wrk_logfile="#{Environment.dev_root}/log/#{self.fullname}/#{Environment.user}@#{Environment.machine}.json"
+    	#logfile="#{Environment.dev_root}/log/#{self.fullname}/#{tag}/#{Environment.user}@#{Environment.machine}.json"
+    end
+
 	def info
 		puts "Project #{name}"
 		puts "#{'fullname'.fix(13)}: #{self.fullname}"
