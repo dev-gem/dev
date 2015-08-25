@@ -129,7 +129,10 @@ describe Command do
     expect(cmd[:exit_code]).not_to eq(0)
 
     FileUtils.rm("#{dir}/rakefile.rb")
-    FileUtils.rm_r("#{File.dirname(__FILE__)}/command_spec")
+    begin
+       FileUtils.rm_r(dir)
+    rescue
+    end
   end
 
   it "should be able to execute an array of commands" do

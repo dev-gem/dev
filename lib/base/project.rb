@@ -188,7 +188,7 @@ class Project < Hash
     	if(File.exists?(wrk_dir))
     		if(last_work_mtime.nil? || last_work_mtime < Environment.get_latest_mtime(wrk_dir))
     		  Dir.chdir(wrk_dir) do
-    		  	puts "working #{k}"
+    		  	puts "working #{self.fullname}"
     		  	rake_default=Command.new('rake default')
 				rake_default[:quiet]=true
 				rake_default[:ignore_failure]=true
