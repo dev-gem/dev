@@ -29,7 +29,6 @@ BUFFER_SIZE=1024 if(!defined?(BUFFER_SIZE))
 #
 class Command < Hash
 	def initialize command
-
     self[:input] = ''
 		self[:timeout] = 0
 		self[:directory] = ''
@@ -54,7 +53,6 @@ class Command < Hash
     @filename=filename if filename.length > 0
     self.clear
     JSON.parse(IO.read(@filename)).each{|k,v| self[k.to_s]=v}
-    update
   end
 
   def quiet?
