@@ -211,10 +211,11 @@ class Command < Hash
 
     def summary
       duration=""
-      duration=getFormattedTimeSpan(self[:end_time]-self[:start_time]) + " - " if(!self[:end_time].nil?)
+      duration=getFormattedTimeSpan(self[:end_time]-self[:start_time])# + " - " if(!self[:end_time].nil?)
       #duration + "#{self[:exit_code].to_s} #{self[:input]} (#{self[:directory]})"
-      "OK    '#{self[:input]}' (#{self[:directory]}) #{self[:exit_code].to_s} [#{duration}]" if self[:exit_code]==0
-      "Error '#{self[:input]}' (#{self[:directory]}) #{self[:exit_code].to_s} [#{duration}]" if self[:exit_code]!=0
+      status="OK   "
+      status="Error" if(!self.has_key?(:exit_code) || self[:exit_code] != 0)
+      "#{status} '#{self[:input]}' (#{self[:directory]}) #{self[:exit_code].to_s} [#{duration}]"
     end
 
     def to_html
