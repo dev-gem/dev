@@ -53,6 +53,19 @@ class Projects < Hash
 		}
 	end
 
+	def work args
+		filter=''
+		filter=args[1] if !args.nil? && args.length > 0
+		self.each{|k,v|
+			if filter.nil? || filter.length==0 || k.include?(filter)
+				log_filename=
+				last_work_time=nil
+				puts "working #{k}"
+			 	v.work
+		    end
+		}
+	end
+
 	def self.user_projects_filename
 		FileUtils.mkdir("#{Environment.dev_root}/data") if(!File.exists?("#{Environment.dev_root}/data"))
 		"#{Environment.dev_root}/data/PROJECTS.json"
@@ -87,7 +100,6 @@ class Projects < Hash
 
 	def import pattern=''
 		wrk="#{Environment.dev_root}/wrk"
-		#puts "importing project from #{wrk}"
 		if File.exists?(wrk)
 		   Dir.chdir(wrk) do
 		   		Dir.glob('**/rakefile.rb').each{|rakefile|
@@ -95,10 +107,12 @@ class Projects < Hash
 		   			url = Project.get_url rakedir
 		   			#puts "checking #{url}"
 		   			project = Project.new(Project.get_url(rakedir))
-		   			#puts "fullname:#{project.fullname}"
-		   			if(pattern.length==0 || project.fullname.include?(pattern) && !self.has_key?(project.fullname))
-		   				puts "importing #{project.fullname}"
-		   				self[project.fullname]=project
+		   			project[:fullname]=Project.get_fullname rakedir if(project.fullname.include?(':'))
+		   			if(pattern.length==0 || project.fullname.include?(pattern))
+		   				if(project.fullname.length > 0 && !self.has_key?(project.fullname))
+		   				    puts "importing #{project.fullname}"
+		   				    self[project.fullname]=project
+		   			    end
 		   			end
 		   		}
 		   end

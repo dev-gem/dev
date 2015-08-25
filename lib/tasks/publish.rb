@@ -6,6 +6,7 @@ task :publish do Tasks.execute_task :publish; end
 class Publish < Array
 	def update
 
+        FileUtils.mkdir_p("#{Environment.dev_root}/publish") if !File.exists?("#{Environment.dev_root}/publish")
 		if(File.exists?('.git') && defined?(VERSION))
 			add "<%Git.tag('#{Rake.application.original_dir}','#{VERSION}')%>"
 		end

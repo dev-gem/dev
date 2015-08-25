@@ -16,9 +16,9 @@ class Project < Hash
 	  url
 	end
 
-	#def self.get_fullname
-	#  Rake.application.original_dir.gsub(Environment.dev_root,'').gsub('/trunk','') .gsub('/wrk','')
-	#end
+	def self.get_fullname directory
+	    directory.gsub(Environment.dev_root,'').gsub('/trunk','') .gsub('/wrk','')
+	end
 
 	def self.get_fullname_from_url url
 		return url.gsub('http://','').gsub('https://','').gsub('.com/','/').gsub('.git','')
@@ -36,6 +36,8 @@ class Project < Hash
 		else
 			self[:fullname]=Project.get_fullname_from_url self[:url] if self[:url].length > 0
 		end
+
+		#self[:fullname]=Project.get_fullname Rake.application.original_dir if(self.fullname.include?(':') && Rake.application.original_dir.include?('/wrk/'))
 	end
 
     def url
@@ -48,7 +50,6 @@ class Project < Hash
     def name
     	parts=fullname.split('/')
     	parts[parts.length-1]
-    	#self[:name]
     end
 
 	def wrk_dir
@@ -145,8 +146,10 @@ class Project < Hash
 			makedir="#{Environment.dev_root}/make/#{self.fullname}-#{tag}"
 			FileUtils.mkdir_p(File.dirname(makedir)) if !File.exists? File.dirname(makedir)
 			if(self[:url].include?('.git'))
-				clone=Command.new({:input=>"git clone #{self[:url]} #{makedir}",:quiet=>true})
-				clone.execute
+				if(!File.exists?(makedir))
+				   clone=Command.new({:input=>"git clone #{self[:url]} #{makedir}",:quiet=>true})
+				   clone.execute
+			    end
 				if(File.exists?(makedir))
 				  Dir.chdir(makedir) do
 					checkout=Command.new({:input=>"git checkout #{tag}",:quiet=>true})
@@ -154,6 +157,7 @@ class Project < Hash
 					FileUtils.rm_r '.git'
 					rake_default=Command.new('rake default --trace')
 					rake_default[:quiet]=true
+					rake_default[:ignore_failure]=true
 					#rake_default[:timeout]=5*60*1000
 					rake_default.execute
 					FileUtils.mkdir_p(File.dirname(logfile)) if !File.exists?(File.dirname(logfile))
@@ -162,10 +166,40 @@ class Project < Hash
 				  end
 			   end
 			end
-			FileUtils.rm_r makedir
+			begin
+			    FileUtils.rm_r makedir
+		    rescue
+		    end
 			rake_default
 		end
 	end
+
+    def last_work_mtime
+    	logfile="#{Environment.dev_root}/log/#{self.fullname}/#{Environment.user}@#{Environment.machine}.json"
+    	if File.exists? logfile
+    		return File.mtime(logfile)
+    	end
+    	nil
+    end
+
+    def work
+    	clone
+    	checkout
+    	if(File.exists?(wrk_dir))
+    		if(last_work_mtime.nil? || last_work_mtime < Environment.get_latest_mtime(wrk_dir))
+    		  Dir.chdir(wrk_dir) do
+    		  	rake_default=Command.new('rake default')
+				rake_default[:quiet]=true
+				rake_default[:ignore_failure]=true
+				rake_default.execute
+    			#Command.exit_code('rake default')
+    			logfile="#{Environment.dev_root}/log/#{self.fullname}/#{Environment.user}@#{Environment.machine}.json"
+    			FileUtils.mkdir_p(File.dirname(logfile)) if !File.exists?(File.dirname(logfile))
+				File.open(logfile,'w'){|f|f.write(rake_default.to_json)}
+    	      end
+    	    end
+    	end
+    end
 
     def tags
     	tags=Array.new

@@ -28,7 +28,6 @@ describe Svn do
 			FileUtils.rm_r 'change_repo'
 
 		end		
-
 		FileUtils.rm_r "#{File.dirname(__FILE__)}/svn_spec"
 	end
 
