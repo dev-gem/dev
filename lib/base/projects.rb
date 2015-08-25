@@ -47,7 +47,7 @@ class Projects < Hash
 				tag=v.latest_tag
 				if(tag.length > 0)
 				   puts "making #{k} #{tag}"
-			 	   rake_default v.make tag
+			 	   rake_default=v.make tag
 			 	   puts rake_default.summary if !rake_default.nil?
 			    end
 		    end
