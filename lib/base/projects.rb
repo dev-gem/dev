@@ -46,8 +46,9 @@ class Projects < Hash
 			if filter.nil? || filter.length==0 || k.include?(filter)
 				tag=v.latest_tag
 				if(tag.length > 0)
-				   #puts "making #{k} #{tag}"
-			 	   v.make tag
+				   puts "making #{k} #{tag}"
+			 	   rake_default v.make tag
+			 	   puts rake_default.summary if !rake_default.nil?
 			    end
 		    end
 		}
