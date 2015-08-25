@@ -103,7 +103,7 @@ describe Command do
   end
 
   it "should fail when calling rake produces an error" do
-    dir="#{File.dirname(__FILE__)}/command_spec/rake_error_test"
+    dir="#{File.dirname(__FILE__)}/command_spec"
     FileUtils.mkdir_p(dir) if(!File.exists?(dir))
     File.open("#{dir}/rakefile.rb","w") { |f| 
         f.puts "task :default do"
@@ -128,7 +128,11 @@ describe Command do
     cmd.execute
     expect(cmd[:exit_code]).not_to eq(0)
 
-    FileUtils.rm_r("#{File.dirname(__FILE__)}/command_spec")
+    FileUtils.rm("#{dir}/rakefile.rb")
+    begin
+       FileUtils.rm_r(dir)
+    rescue
+    end
   end
 
   it "should be able to execute an array of commands" do
