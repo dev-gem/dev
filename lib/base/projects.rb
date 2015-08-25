@@ -60,19 +60,8 @@ class Projects < Hash
 			if filter.nil? || filter.length==0 || k.include?(filter)
 				log_filename=
 				last_work_time=nil
-				puts "working #{k}"
+				#puts "working #{k}"
 			 	v.work
-		    end
-		}
-	end
-
-	def fails args
-		filter=''
-		filter=args[1] if !args.nil? && args.length > 0
-		self.each{|k,v|
-			if filter.nil? || filter.length==0 || k.include?(filter)
-				log_filename=
-			 	v.fails
 		    end
 		}
 	end

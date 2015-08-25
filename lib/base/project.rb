@@ -94,20 +94,6 @@ class Project < Hash
 		end
 	end
 
-    def fails
-    	Dir.chdir("#{Environment.dev_root}/log/#{self.fullname}") do
-    		Dir.glob("**/#{Environment.user}@#{Environment.machine}.json").each{|logfile|
-    			command=Command.new
-    			command.open(logfile)
-    			if(command.has_key?(:exit_code) && command[:exit_code] != 0)
-    				puts command[:directory]
-    			end
-    		}
-    	end
-    	#wrk_logfile="#{Environment.dev_root}/log/#{self.fullname}/#{Environment.user}@#{Environment.machine}.json"
-    	#logfile="#{Environment.dev_root}/log/#{self.fullname}/#{tag}/#{Environment.user}@#{Environment.machine}.json"
-    end
-
 	def info
 		puts "Project #{name}"
 		puts "#{'fullname'.fix(13)}: #{self.fullname}"
@@ -202,6 +188,7 @@ class Project < Hash
     	if(File.exists?(wrk_dir))
     		if(last_work_mtime.nil? || last_work_mtime < Environment.get_latest_mtime(wrk_dir))
     		  Dir.chdir(wrk_dir) do
+    		  	puts "working #{k}"
     		  	rake_default=Command.new('rake default')
 				rake_default[:quiet]=true
 				rake_default[:ignore_failure]=true
@@ -210,7 +197,15 @@ class Project < Hash
     			logfile="#{Environment.dev_root}/log/#{self.fullname}/#{Environment.user}@#{Environment.machine}.json"
     			FileUtils.mkdir_p(File.dirname(logfile)) if !File.exists?(File.dirname(logfile))
 				File.open(logfile,'w'){|f|f.write(rake_default.to_json)}
+				puts rake_default.summary
     	      end
+    	    else
+    	    	logfile="#{Environment.dev_root}/log/#{self.fullname}/#{Environment.user}@#{Environment.machine}.json"
+    	    	if(File.exists?(logfile))
+    	    		rake_default=Command.new
+    	    		rake_default.open logfile
+    	    		puts rake_default.summary
+    	    	end
     	    end
     	end
     end
