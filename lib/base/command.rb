@@ -52,7 +52,7 @@ class Command < Hash
   def open filename=''
     @filename=filename if filename.length > 0
     self.clear
-    JSON.parse(IO.read(@filename)).each{|k,v| self[k.to_s]=v}
+    JSON.parse(IO.read(@filename)).each{|k,v| self[k.to_sym]=v}
   end
 
   def quiet?
@@ -201,7 +201,7 @@ class Command < Hash
     end
 
     def getFormattedTimeSpan timespan
-      seconds = timespan
+      seconds = timespan.round
       seconds.to_s + " sec"
     end
 
