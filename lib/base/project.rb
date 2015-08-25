@@ -202,7 +202,7 @@ class Project < Hash
     	    else
     	    	logfile="#{Environment.dev_root}/log/#{self.fullname}/#{Environment.user}@#{Environment.machine}.json"
     	    	if(File.exists?(logfile))
-    	    		rake_default=Command.new
+    	    		rake_default=Command.new('rake default')
     	    		rake_default.open logfile
     	    		puts rake_default.summary
     	    	end
