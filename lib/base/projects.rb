@@ -14,7 +14,7 @@ class Projects < Hash
 		@filename=''
 	end
 
-    def update
+    def update_state
     	self.each{|k,v|
     		self[k]=Project.new(v) if(v.is_a?(String))
     		self[k]=Project.new(v) if(!v.is_a?(Project) && v.is_a?(Hash))
@@ -30,7 +30,7 @@ class Projects < Hash
 	def open filename=''
 		@filename=filename if filename.length > 0
 		JSON.parse(IO.read(@filename)).each{|k,v| self[k]=v}
-		update
+		update_state
 	end
 
     def list filter=''
@@ -46,7 +46,8 @@ class Projects < Hash
 			if filter.nil? || filter.length==0 || k.include?(filter)
 				tag=v.latest_tag
 				if(tag.length > 0)
-				   puts "making #{k} #{tag}"
+				   logfile="#{Environment.dev_root}/log/#{v.fullname}/#{tag}/#{Environment.user}@#{Environment.machine}.json"
+				   puts "making #{k} #{tag}" if(!File.exists?(logfile))
 			 	   rake_default=v.make tag
 			 	   puts rake_default.summary if !rake_default.nil?
 			    end
@@ -59,10 +60,19 @@ class Projects < Hash
 		filter=args[1] if !args.nil? && args.length > 0
 		self.each{|k,v|
 			if filter.nil? || filter.length==0 || k.include?(filter)
-				log_filename=
 				last_work_time=nil
-				#puts "working #{k}"
 			 	v.work
+		    end
+		}
+	end
+
+	def update args
+		filter=''
+		filter=args[1] if !args.nil? && args.length > 0
+		self.each{|k,v|
+			if filter.nil? || filter.length==0 || k.include?(filter)
+				puts "updating #{v.fullname}"
+			 	v.update
 		    end
 		}
 	end

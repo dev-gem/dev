@@ -140,7 +140,8 @@ class Project < Hash
 		logfile="#{Environment.dev_root}/log/#{self.fullname}/#{tag}/#{Environment.user}@#{Environment.machine}.json"
 		if(File.exists?(logfile))
 			# load hash from json
-			return Command.new(JSON.parse(IO.read(logfile)))
+			rake_default=Command.new(JSON.parse(IO.read(logfile)))
+			#puts rake_default.summary
 		else
 			FileUtils.mkdir("#{Environment.dev_root}/make") if !File.exists? "#{Environment.dev_root}/make"
 			makedir="#{Environment.dev_root}/make/#{self.fullname}-#{tag}"
@@ -152,6 +153,7 @@ class Project < Hash
 			    end
 				if(File.exists?(makedir))
 				  Dir.chdir(makedir) do
+				  	#puts "making #{self.fullname}"
 					checkout=Command.new({:input=>"git checkout #{tag}",:quiet=>true})
 					checkout.execute
 					FileUtils.rm_r '.git'
@@ -162,6 +164,7 @@ class Project < Hash
 					rake_default.execute
 					FileUtils.mkdir_p(File.dirname(logfile)) if !File.exists?(File.dirname(logfile))
 					File.open(logfile,'w'){|f|f.write(rake_default.to_json)}
+					#puts rake_default.summary
 					rake_default
 				  end
 			   end
@@ -207,6 +210,23 @@ class Project < Hash
     	    		puts rake_default.summary
     	    	end
     	    end
+    	end
+    end
+
+    def update
+    	clone
+    	checkout
+    	if(File.exists?(wrk_dir))
+    		Dir.chdir(wrk_dir) do
+    			rake_default=Command.new('git pull')
+				rake_default[:quiet]=true
+				rake_default[:ignore_failure]=true
+				rake_default.execute
+				rake_default=Command.new('svn update')
+				rake_default[:quiet]=true
+				rake_default[:ignore_failure]=true
+				rake_default.execute
+    		end
     	end
     end
 
