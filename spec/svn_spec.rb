@@ -55,12 +55,12 @@ describe Svn do
 			expect(`svn info #{svn_dest}/file3.text 2>&1`.include?('Revision:')).to eq(false)
 			expect(`svn info #{svn_dest}/file4.dat 2>&1`.include?('Revision:')).to eq(true)
 
-			FileUtils.rm_r('to_publish')
+			Environment.remove('to_publish')
 			expect(File.exists?('to_publish')).to eq(false)
-			FileUtils.rm_r('svn_test_repo')
+			Environment.remove('svn_test_repo')
 			expect(File.exists?('svn_test_repo')).to eq(false)
 		end
 		
-		FileUtils.rm_r "#{File.dirname(__FILE__)}/svn_spec"
+		Environment.remove "#{File.dirname(__FILE__)}/svn_spec"
 	end
 end
