@@ -1,3 +1,4 @@
 *.gem
 *.yardopts
 *.html
+**/dev_root/*
