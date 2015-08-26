@@ -12,11 +12,14 @@ end
 PROJECT=Project.new()
 
 class Dev
-	@env=nil
-	@env_aliases={
-		'HOME' => ['USERPROFILE'],
-		'DEV_ROOT' => ['DEV_HOME','HOME','USERPROFILE']
-	}
+	
+	def initialize
+		@env=nil
+		@env_aliases={'HOME' => ['USERPROFILE'],
+		          'DEV_ROOT' => ['DEV_HOME','HOME','USERPROFILE']
+		}
+	end
+
 	def get_env key
 		if(!@env.nil? && @env.has_key?(key))
 		  return @env[key] 
