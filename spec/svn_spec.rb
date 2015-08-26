@@ -33,6 +33,7 @@ describe Svn do
 
 	it "should be able to publish files to a subversion repository" do
 		FileUtils.mkdir_p("#{File.dirname(__FILE__)}/svn_spec/publish_test") if(!File.exists?("#{File.dirname(__FILE__)}/svn_spec/publish_test"))
+		FileUtils.chmod 0755, "#{File.dirname(__FILE__)}/svn_spec/publish_test"
 
 		svn_repo="file:///#{File.dirname(__FILE__)}/svn_spec/publish_test/svn_test_repo"
 		Dir.chdir("#{File.dirname(__FILE__)}/svn_spec/publish_test") do

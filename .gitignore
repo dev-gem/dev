@@ -2,3 +2,4 @@
 *.yardopts
 *.html
 **/dev_root/*
+dev_root

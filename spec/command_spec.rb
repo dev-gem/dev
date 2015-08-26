@@ -92,14 +92,14 @@ describe Command do
   end
 
   it "should be able to rake" do
-    dir="#{File.dirname(__FILE__)}/command_spec/rake_timeout_test"
-    FileUtils.mkdir_p(dir) if(!File.exists?(dir))
+    dir="#{File.dirname(__FILE__)}/command_spec"
+    FileUtils.mkdir(dir) if(!File.exists?(dir))
     File.open("#{dir}/rakefile.rb","w") { |f| 
         f.puts "task :default do"
         f.puts " puts 'rake_test'"
         f.puts "end" 
     }
-    FileUtils.rm_r("#{File.dirname(__FILE__)}/command_spec")
+    Environment.remove("#{File.dirname(__FILE__)}/command_spec")
   end
 
   it "should fail when calling rake produces an error" do

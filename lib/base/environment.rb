@@ -19,7 +19,7 @@ class Environment < Hash
     if(!value.nil?)
       FileUtils.mkdir_p value if(!File.exists?(value))
       ['bin','data','log','make','publish','test'].each{|dir|
-        FileUtils.mkdir_p("#{value}/#{dir}") if !File.exists? "#{value}/#{dir}"
+        #FileUtils.mkdir_p("#{value}/#{dir}") if !File.exists? "#{value}/#{dir}"
       }
     end
   end

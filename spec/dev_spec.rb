@@ -76,5 +76,6 @@ describe Dev do
         #expect(File.exists?("#{dir}/log/"))
         Environment.set_development_root nil
         #FileUtils.rm_r dir
+        Environment.remove dir
     end
 end
