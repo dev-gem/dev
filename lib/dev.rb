@@ -18,6 +18,7 @@ class Dev
 		@env_aliases={'HOME' => ['USERPROFILE'],
 		          'DEV_ROOT' => ['DEV_HOME','HOME','USERPROFILE']
 		}
+		@projects=Projects.new(self)
 	end
 
 	def get_env key
@@ -40,7 +41,7 @@ class Dev
 		@env[key]=value
 	end
 
-    @projects=nil
+    #@projects=nil
     def projects
     	if(@projects.nil?)
     		projects=Projects.new(self)
