@@ -12,6 +12,7 @@ end
 
 task :test do
 	#puts `rspec --format documentation`
+	#puts `rspec --profile`
 	puts `rspec`
 	raise 'rspec failed' if($?.to_i != 0)
 end
