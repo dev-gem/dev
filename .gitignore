@@ -2,4 +2,4 @@
 *.yardopts
 *.html
 **/dev_root/*
-dev_root
+**/svn_spec/*
