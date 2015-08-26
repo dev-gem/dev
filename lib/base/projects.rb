@@ -78,7 +78,7 @@ class Projects < Hash
 	end
 
 	def self.user_projects_filename
-		FileUtils.mkdir("#{Environment.dev_root}/data") if(!File.exists?("#{Environment.dev_root}/data"))
+		FileUtils.mkdir_p("#{Environment.dev_root}/data") if(!File.exists?("#{Environment.dev_root}/data"))
 		"#{Environment.dev_root}/data/PROJECTS.json"
 	end
 
@@ -108,6 +108,18 @@ class Projects < Hash
 	def rake
 		self.each{|k,v| v.rake if v.respond_to?("rake".to_sym)}
 	end
+
+    def add args
+    	if(args.length > 1)
+    	  project=Project.new(args[1])
+    	  project[:fullname] = args[2] if args.length > 2
+    	  if(project.fullname.length > 0 && !self.has_key?(project.fullname))
+		   	puts "adding #{project.fullname}"
+		   	self[project.fullname]=project
+		   	self.save Projects.user_projects_filename
+		  end
+		end
+    end
 
 	def import pattern=''
 		wrk="#{Environment.dev_root}/wrk"

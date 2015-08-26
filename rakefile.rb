@@ -25,16 +25,16 @@ task :commit =>[:add] do
 end
 
 task :pull do
-	puts `git pull`
+	puts `git pull` if `git branch`.include?('* master')
 end
 
 task :push do
-	puts `git push`
+	puts `git push`  if `git branch`.include?('* master')
 end 
 
 task :publish do
 	require_relative('./lib/apps/git.rb')
-    Git.tag "#{File.dirname(__FILE__)}","#{Gem::Specification.load('dev.gemspec').version.to_s}"
+    Git.tag "#{File.dirname(__FILE__)}","#{Gem::Specification.load('dev.gemspec').version.to_s}" if `git branch`.include?('* master') 
 	  begin
 		puts `gem push dev-#{Gem::Specification.load('dev.gemspec').version.to_s}.gem`
 	  rescue
