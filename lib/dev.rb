@@ -25,6 +25,13 @@ class Dev
 		@env[key]=value
 	end
 
+    @projects=nil
+    def projects
+    	if(@projects.nil?)
+    		projects=Projects.new(self)
+    	end
+    end
+    
 	def execute args
 		if(args.kind_of?(String))
 			args=args.split(' ')
