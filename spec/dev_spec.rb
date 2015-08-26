@@ -56,9 +56,9 @@ describe Dev do
         Environment.set_development_root dir
         DEV.execute('add https://github.com/dev-gem/HelloRubyGem.git')
         expect(File.exists?("#{dir}/data/Projects.json")).to equal(true)
-        DEV.execute('list')
-        DEV.execute('make')
-        DEV.execute('work')
+        #DEV.execute('list')
+        #DEV.execute('make')
+        #DEV.execute('work')
         #DEV.execute('make HelloRubyGem')
         #expect(File.exists?("#{dir}/log/"))
         Environment.set_development_root nil
