@@ -5,6 +5,7 @@ describe Dev do
     it "should support some basic environment variables" do
         dev1=Dev.new
         expect(File.exists?(dev1.get_env('HOME'))).to eq(true)
+        expect(File.exists?(dev1.get_env('DEV_ROOT'))).to eq(true)
     end
 
     it "should be able to modify it environment variables independently" do
