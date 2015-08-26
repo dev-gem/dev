@@ -12,12 +12,12 @@ end
 PROJECT=Project.new()
 
 class Dev
-	def self.execute args
+	def execute args
 		if(args.kind_of?(String))
 			args=args.split(' ')
 		end
 		projects=Projects.new
-		PROJECTS.open Projects.user_projects_filename if File.exists? Projects.user_projects_filename
+		projects.open Projects.user_projects_filename if File.exists? Projects.user_projects_filename
 		projects.add(args) if args.length > 0 && args[0] == 'add'
 		projects.import(args.length>1 ? args[1]:'') if args.length > 0 && args[0] == 'import'
 		projects.list(args.length>1 ? args[1]:'') if args.length > 0 && args[0] == 'list'
@@ -27,9 +27,10 @@ class Dev
 		usage if args.length == 0
 	end
 
-	def self.usage
+	def usage
 		puts 'Usage:'
 		puts ' list [pattern]'
 	end
 end
 
+DEV=Dev.new

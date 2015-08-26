@@ -60,9 +60,9 @@ describe Dev do
         rescue
         end
         Environment.set_development_root dir
-        Dev.execute('add https://github.com/dev-gem/HelloRubyGem.git')
+        DEV.execute('add https://github.com/dev-gem/HelloRubyGem.git')
         expect(File.exists?("#{dir}/data/Projects.json")).to equal(true)
-        Dev.execute('make HelloRubyGem')
+        DEV.execute('make HelloRubyGem')
         #expect(File.exists?("#{dir}/log/"))
         Environment.set_development_root nil
         #FileUtils.rm_r dir
