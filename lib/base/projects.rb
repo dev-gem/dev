@@ -53,7 +53,7 @@ class Projects < Hash
 				     puts rake_default.summary if !rake_default.nil?
 				   else
 				   	 rake_default=v.make tag
-				   	 puts rake_default.summary if !rake_default.nil? && rake_default.summary.include?('Error')
+				   	 puts rake_default.summary if !rake_default.nil? && rake_default[:exit_code] != 0
 				   end
 			    end
 		    end

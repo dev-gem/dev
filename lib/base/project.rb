@@ -207,7 +207,7 @@ class Project < Hash
     	    	if(File.exists?(logfile))
     	    		rake_default=Command.new('rake default')
     	    		rake_default.open logfile
-    	    		puts rake_default.summary if(rake_default.summary.include?('Error'))
+    	    		puts rake_default.summary if(rake_default[:exit_code] != 0)
     	    	end
     	    end
     	end
