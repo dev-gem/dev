@@ -206,7 +206,8 @@ class Project < Hash
     	else
     		status['status']='?'
     	end
-    	File.open(status_logfile,'w'){|f|f.write(rake_default.to_json)}
+    	FileUtils.mkdir_p(File.dirname(status_logfile)) if !File.exists?(File.dirname(status_logfile))
+    	File.open(status_logfile,'w'){|f|f.write(status.to_json)}
     end
 
     def status
