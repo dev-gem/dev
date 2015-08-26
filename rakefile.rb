@@ -39,10 +39,11 @@ task :publish do
 	puts ':publish'
 	require_relative('./lib/apps/git.rb')
     Git.tag "#{File.dirname(__FILE__)}","#{Gem::Specification.load('dev.gemspec').version.to_s}" if `git branch`.include?('* master') 
-	  begin
+	begin
 		puts `gem push dev-#{Gem::Specification.load('dev.gemspec').version.to_s}.gem`
-	  rescue
-	  end
+		FileUtils.rm(" dev-#{Gem::Specification.load('dev.gemspec').version.to_s}.gem")
+	rescue
+	end
 end
 
 task :show_projects , [:filter] do |t, args| 
@@ -51,6 +52,4 @@ task :show_projects , [:filter] do |t, args|
 	PROJECTS.show args[:filter] if args.has_key? :filter
 end
 
-task :default => [:build,:test,:add,:commit,:publish,:push] do
-	File.open('rake.default','w'){|f|f.puts 'a'}
-end
+task :default => [:build,:test,:add,:commit,:publish,:push]
