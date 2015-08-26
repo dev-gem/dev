@@ -101,7 +101,7 @@ class Project < Hash
 		puts "#{'version'.fix(13)}: #{VERSION}" if defined? VERSION
 	end
 
-    def latest_tag
+    def latest_tag update=false
 		FileUtils.mkdir("#{Environment.dev_root}/make") if !File.exists? "#{Environment.dev_root}/make"
 		makedir="#{Environment.dev_root}/make/#{self.fullname}"
     	FileUtils.mkdir_p(File.dirname(makedir)) if !File.exists?(File.dirname(makedir))
@@ -110,10 +110,12 @@ class Project < Hash
         	  Command.exit_code('git pull')
             end
         else
-        	clone=Command.new("git clone #{self.url} #{makedir}")
-			clone[:quiet]=true
-			clone[:ignore_failure]=true
-			clone.execute
+        	if(update)
+        	   clone=Command.new("git clone #{self.url} #{makedir}")
+			   clone[:quiet]=true
+			   clone[:ignore_failure]=true
+			   clone.execute
+		    end
         end
         if(File.exists?(makedir))
         	Dir.chdir(makedir) do
