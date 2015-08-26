@@ -10,9 +10,12 @@ describe Dev do
 
     it "should be able to modify it environment variables independently" do
         dev1=Dev.new
-        #expect(File.exists?(dev1.get_env('HOME'))).to eq(true)
         dev2=Dev.new
         expect(dev1.get_env('DEV_ROOT')).to eq(dev2.get_env('DEV_ROOT'))
+        FileUtils.mkdir('dev_spec') if !File.exists?('dev_spec')
+        dev2.set_env 'DEV_ROOT', "#{File.dirname(__FILE__)}/dev_spec"
+        expect(dev1.get_env('DEV_ROOT')).not_to eq(dev2.get_env('DEV_ROOT'))
+        Environment.remove('dev_spec')
     end
 
     #it "should be able to rake HelloRubyGem" do

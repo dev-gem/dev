@@ -41,7 +41,7 @@ class Dev
 	end
 
 	def set_env key,value
-		@env=Hash.new if env.nil?
+		@env=Hash.new if @env.nil?
 		@env[key]=value
 	end
 
