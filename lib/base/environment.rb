@@ -46,6 +46,16 @@ class Environment < Hash
 	 return machine.strip
   end
 
+  def self.remove directory
+    if(File.exists?(directory))
+      begin
+        FileUtils.rm_rf directory
+        FileUtils.rm_r directory
+      rescue
+      end
+    end
+  end
+
   def self.user
   	return ENV['USER'] if !ENV['USER'].nil?  #on Unix
     ENV['USERNAME']
