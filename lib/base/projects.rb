@@ -8,10 +8,15 @@ require_relative('../apps/git.rb')
 require_relative('../apps/svn.rb')
 
 class Projects < Hash
-	attr_accessor :filename
+	#attr_accessor :filename
 
-	def initialize
-		@filename=''
+	def initialize dev
+		@dev=dev
+		#@filename=''
+	end
+
+	def filename
+		"#{@dev.get_env('DEV_ROOT')}/data/Projects.json"
 	end
 
     def update_state
@@ -22,14 +27,13 @@ class Projects < Hash
     	}
     end
 
-	def save filename=''
-		@filename=filename if !filename.nil? && filename.length > 0
-		File.open(@filename,'w'){|f|f.write(JSON.pretty_generate(self))} if @filename.length > 0
+	def save
+		File.open(filename,'w'){|f|f.write(JSON.pretty_generate(self))}
 	end
 
-	def open filename=''
-		@filename=filename if filename.length > 0
-		JSON.parse(IO.read(@filename)).each{|k,v| self[k]=v}
+	def open
+		#@filename=filename if filename.length > 0
+		JSON.parse(IO.read(filename)).each{|k,v| self[k]=v}
 		update_state
 	end
 
@@ -149,8 +153,8 @@ class Projects < Hash
 	end
 end
 
-PROJECTS=Projects.new
-PROJECTS.open Projects.user_projects_filename if File.exists? Projects.user_projects_filename
+#PROJECTS=Projects.new
+#PROJECTS.open Projects.user_projects_filename if File.exists? Projects.user_projects_filename
 #current=Projects.current # this makes sure the current project is added to PROJECTS
 #PROJECTS[current.fullname]=current if(!current.nil? && !PROJECTS.has_key?(current.fullname) && current.wrk_dir == Rake.application.original_dir)
 #PROJECTS.save Projects.user_projects_filename if !File.exists? Projects.user_projects_filename
