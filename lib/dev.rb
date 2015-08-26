@@ -17,7 +17,7 @@ class Dev
 			args=args.split(' ')
 		end
 		projects=Projects.new
-		projects.add(args.length>1 ? args[1]:'') if args.length > 0 && args[0] == 'add'
+		projects.add(args) if args.length > 0 && args[0] == 'add'
 		projects.import(args.length>1 ? args[1]:'') if args.length > 0 && args[0] == 'import'
 		projects.list(args.length>1 ? args[1]:'') if args.length > 0 && args[0] == 'list'
 		projects.make(args) if args.length > 0 && args[0] == 'make'

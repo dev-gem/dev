@@ -110,13 +110,15 @@ class Projects < Hash
 	end
 
     def add args
-    	project=Project.new(args[0])
-    	project[:fullname] = args[1] if args.length > 0
-    	if(project.fullname.length > 0 && !self.has_key?(project.fullname))
+    	if(args.length > 1)
+    	  project=Project.new(args[1])
+    	  project[:fullname] = args[2] if args.length > 2
+    	  if(project.fullname.length > 0 && !self.has_key?(project.fullname))
 		   	puts "adding #{project.fullname}"
 		   	self[project.fullname]=project
 		   	self.save Projects.user_projects_filename
-		 end
+		  end
+		end
     end
 
 	def import pattern=''
