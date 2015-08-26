@@ -13,11 +13,9 @@
 #   limitations under the License.
 #
 #
-
-
 Gem::Specification.new do |s|
 	s.name			= 'dev'
-	s.version		= "2.0.258"
+	s.version		= "2.0.259"
 	s.date			= '2015-08-25'
 	s.summary		= 'dev'
 	s.description	= 'development tasks'

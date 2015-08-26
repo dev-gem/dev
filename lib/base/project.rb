@@ -157,7 +157,7 @@ class Project < Hash
 					checkout=Command.new({:input=>"git checkout #{tag}",:quiet=>true})
 					checkout.execute
 					FileUtils.rm_r '.git'
-					rake_default=Command.new('rake default --trace')
+					rake_default=Command.new('rake default')
 					rake_default[:quiet]=true
 					rake_default[:ignore_failure]=true
 					#rake_default[:timeout]=5*60*1000
@@ -207,7 +207,7 @@ class Project < Hash
     	    	if(File.exists?(logfile))
     	    		rake_default=Command.new('rake default')
     	    		rake_default.open logfile
-    	    		puts rake_default.summary
+    	    		puts rake_default.summary if(rake_default.summary.include?('Error'))
     	    	end
     	    end
     	end

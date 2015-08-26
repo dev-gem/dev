@@ -47,9 +47,14 @@ class Projects < Hash
 				tag=v.latest_tag
 				if(tag.length > 0)
 				   logfile="#{Environment.dev_root}/log/#{v.fullname}/#{tag}/#{Environment.user}@#{Environment.machine}.json"
-				   puts "making #{k} #{tag}" if(!File.exists?(logfile))
-			 	   rake_default=v.make tag
-			 	   puts rake_default.summary if !rake_default.nil?
+				   if(!File.exists?(logfile))
+				     puts "making #{k} #{tag}" if(!File.exists?(logfile))
+				     rake_default=v.make tag
+				     puts rake_default.summary if !rake_default.nil?
+				   else
+				   	 rake_default=v.make tag
+				   	 puts rake_default.summary if !rake_default.nil? && rake_default.summary.include?('Error')
+				   end
 			    end
 		    end
 		}

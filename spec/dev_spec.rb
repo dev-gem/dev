@@ -4,10 +4,10 @@ describe Dev do
 
     it "should be able to rake HelloRubyGem" do
         dir="#{File.dirname(__FILE__)}/dev_spec_HelloRubyGem"
-        FileUtils.rm_r dir if File.exists? dir
+        Environment.remove dir if File.exists? dir
         Command.exit_code("git clone http://github.com/dev-gem/HelloRubyGem.git #{dir}")
         Dir.chdir(dir) do
-            FileUtils.rm_r '.git'
+            Environment.remove '.git'
             Text.replace_in_file('rakefile.rb',"require 'dev'","require_relative('../../lib/dev.rb')")
             publish_file="#{Environment.dev_root}/publish/HelloRubyGem-#{Version.get_version}.gem"
             File.delete publish_file if File.exists? publish_file
@@ -15,7 +15,7 @@ describe Dev do
             Command.exit_code('rake default')
             expect(File.exists?(publish_file)).to eq(true), "#{publish_file} does not exist after rake default"
         end
-        FileUtils.rm_r dir
+        Environment.remove dir
     end
 
 	#it "should be able to rake HelloCSharpLibrary" do
