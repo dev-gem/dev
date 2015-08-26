@@ -1,6 +1,7 @@
 require 'rake/clean'
 
-CLEAN.include('*.gem','rake.default')
+CLEAN.include('*.gem','*.html')
+CLEAN.include('.yardopts') if File.exists?('.yardopts')
 CLOBBER.include('*.gem','lib/dev_*.rb')
 build_product= "dev-#{Gem::Specification.load('dev.gemspec').version}.gem"
 
