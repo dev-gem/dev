@@ -12,6 +12,14 @@ end
 PROJECT=Project.new()
 
 class Dev
+	@env=Hash.new
+	def get_env key
+		return env[key] if env.has_key? key
+		ENV[key]
+	end
+	def set_env key,value
+		env[key]=value
+	end
 	def execute args
 		if(args.kind_of?(String))
 			args=args.split(' ')
