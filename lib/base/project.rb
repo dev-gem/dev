@@ -185,6 +185,28 @@ class Project < Hash
     	nil
     end
 
+    def status
+    	status='?'
+    	wrk_logfile="#{Environment.dev_root}/log/#{self.fullname}/#{Environment.user}@#{Environment.machine}.json"
+    	if(File.exists(wrk_logfile))
+    		rake_default=Command.new(JSON.parse(IO.read(wrk_logfile)))
+    		status='0'
+    		return 'X' if rake_default[:exit_code] != 0
+    	end
+    	make_logfile="#{Environment.dev_root}/log/#{self.fullname}/#{latest_tag}/#{Environment.user}@#{Environment.machine}.json"
+    	if(File.exists?(make_logfile))
+    		rake_default=Command.new(JSON.parse(IO.read(make_logfile)))
+    		status='0'
+    		return 'X' if rake_default[:exit_code] != 0
+    	else
+    		return '?' # outstanding make
+    	end
+    	status
+    end
+
+    def report
+    end
+
     def work
     	clone
     	checkout

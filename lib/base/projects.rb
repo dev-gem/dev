@@ -35,7 +35,7 @@ class Projects < Hash
 
     def list filter=''
 		self.each{|k,v|
-			puts k if(filter.length == 0 || k.include?(filter))
+			puts "#{v.status} #{k}" if(filter.length == 0 || k.include?(filter))
 		}
 	end
 
@@ -61,10 +61,10 @@ class Projects < Hash
 	end
 
 	def work args
-		filter=''
+		filter=nil
 		filter=args[1] if !args.nil? && args.length > 0
 		self.each{|k,v|
-			if filter.nil? || filter.length==0 || k.include?(filter)
+			if filter.nil? || filter.length==0 || k.to_s.include?(filter)
 				last_work_time=nil
 			 	v.work
 		    end
