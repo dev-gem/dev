@@ -17,7 +17,7 @@ class Project < Hash
 	end
 
 	def self.get_fullname directory
-	    directory.gsub(Environment.dev_root,'').gsub('/trunk','') .gsub('/wrk','')
+	    directory.gsub(Environment.dev_root,'').gsub('/wrk','')
 	end
 
 	def self.get_fullname_from_url url
