@@ -32,11 +32,12 @@ describe Svn do
 	end
 
 	it "should be able to publish files to a subversion repository" do
-		FileUtils.mkdir_p("#{File.dirname(__FILE__)}/svn_spec/publish_test") if(!File.exists?("#{File.dirname(__FILE__)}/svn_spec/publish_test"))
-		FileUtils.chmod 0755, "#{File.dirname(__FILE__)}/svn_spec/publish_test"
+		dir="#{File.dirname(__FILE__)}/svn_spec"
+		FileUtils.mkdir(dir) if(!File.exists?(dir))
+		#FileUtils.chmod 0755, dir
 
-		svn_repo="file:///#{File.dirname(__FILE__)}/svn_spec/publish_test/svn_test_repo"
-		Dir.chdir("#{File.dirname(__FILE__)}/svn_spec/publish_test") do
+		svn_repo="file:///#{File.dirname(__FILE__)}/svn_spec/svn_test_repo"
+		Dir.chdir(dir) do
 			FileUtils.rm_r('svn_test_repo') if File.exists?('svn_test_repo')
 			`svnadmin create svn_test_repo 2>&1`
 			expect(File.exists?('svn_test_repo')).to eq(true)
@@ -62,6 +63,6 @@ describe Svn do
 			expect(File.exists?('svn_test_repo')).to eq(false)
 		end
 		
-		FileUtils.rm_r "#{File.dirname(__FILE__)}/svn_spec"
+		Environment.remove dir
 	end
 end
