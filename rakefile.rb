@@ -5,12 +5,14 @@ CLOBBER.include('*.gem','lib/dev_*.rb')
 build_product= "dev-#{Gem::Specification.load('dev.gemspec').version}.gem"
 
 task :build do
+	puts ':build'
 	Dir.glob('*.gem'){|f|File.delete f}
 	puts `gem build dev.gemspec`
 	raise 'build failed' if($?.to_i != 0)
 end
 
 task :test do
+	puts ':test'
 	#puts `rspec --format documentation`
 	#puts `rspec --profile`
 	puts `rspec`
@@ -34,6 +36,7 @@ task :push do
 end 
 
 task :publish do
+	puts ':publish'
 	require_relative('./lib/apps/git.rb')
     Git.tag "#{File.dirname(__FILE__)}","#{Gem::Specification.load('dev.gemspec').version.to_s}" if `git branch`.include?('* master') 
 	  begin
