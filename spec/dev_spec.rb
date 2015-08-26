@@ -2,21 +2,34 @@ require_relative('../lib/dev.rb')
 
 describe Dev do
 
-    it "should be able to rake HelloRubyGem" do
-        dir="#{File.dirname(__FILE__)}/dev_spec_HelloRubyGem"
-        Environment.remove dir if File.exists? dir
-        Command.exit_code("git clone http://github.com/dev-gem/HelloRubyGem.git #{dir}")
-        Dir.chdir(dir) do
-            Environment.remove '.git'
-            Text.replace_in_file('rakefile.rb',"require 'dev'","require_relative('../../lib/dev.rb')")
-            publish_file="#{Environment.dev_root}/publish/HelloRubyGem-#{Version.get_version}.gem"
-            File.delete publish_file if File.exists? publish_file
-            expect(File.exists?(publish_file)).to eq(false), "#{publish_file} was not cleaned up"
-            Command.exit_code('rake default')
-            expect(File.exists?(publish_file)).to eq(true), "#{publish_file} does not exist after rake default"
-        end
-        Environment.remove dir
+    it "should support some basic environment variables" do
+        dev1=Dev.new
+        expect(File.exists?(dev1.get_env('HOME'))).to eq(true)
+        expect(File.exists?(dev1.get_env('DEV_ROOT'))).to eq(true)
     end
+
+    it "should be able to modify it environment variables independently" do
+        dev1=Dev.new
+        #expect(File.exists?(dev1.get_env('HOME'))).to eq(true)
+        dev2=Dev.new
+        expect(dev1.get_env('DEV_ROOT')).to eq(dev2.get_env('DEV_ROOT'))
+    end
+
+    #it "should be able to rake HelloRubyGem" do
+    #    dir="#{File.dirname(__FILE__)}/dev_spec_HelloRubyGem"
+    #    Environment.remove dir if File.exists? dir
+    #    Command.exit_code("git clone http://github.com/dev-gem/HelloRubyGem.git #{dir}")
+    #    Dir.chdir(dir) do
+    #        Environment.remove '.git'
+    #        Text.replace_in_file('rakefile.rb',"require 'dev'","require_relative('../../lib/dev.rb')")
+    #        publish_file="#{Environment.dev_root}/publish/HelloRubyGem-#{Version.get_version}.gem"
+    #        File.delete publish_file if File.exists? publish_file
+    #        expect(File.exists?(publish_file)).to eq(false), "#{publish_file} was not cleaned up"
+    #        Command.exit_code('rake default')
+    #        expect(File.exists?(publish_file)).to eq(true), "#{publish_file} does not exist after rake default"
+    #    end
+    #    Environment.remove dir
+    #end
 
 	#it "should be able to rake HelloCSharpLibrary" do
     #	dir="#{File.dirname(__FILE__)}/dev_spec_HelloCSharpLibrary"
@@ -56,12 +69,13 @@ describe Dev do
         Environment.set_development_root dir
         DEV.execute('add https://github.com/dev-gem/HelloRubyGem.git')
         expect(File.exists?("#{dir}/data/Projects.json")).to equal(true)
-        #DEV.execute('list')
-        #DEV.execute('make')
-        #DEV.execute('work')
+        DEV.execute('list')
+        DEV.execute('make')
+        DEV.execute('work')
         #DEV.execute('make HelloRubyGem')
         #expect(File.exists?("#{dir}/log/"))
         Environment.set_development_root nil
         #FileUtils.rm_r dir
+        Environment.remove dir
     end
 end

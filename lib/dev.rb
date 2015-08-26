@@ -13,11 +13,23 @@ PROJECT=Project.new()
 
 class Dev
 	@env=nil
+	@env_aliases={
+		'HOME' => ['USERPROFILE'],
+		'DEV_ROOT' => ['DEV_HOME','HOME','USERPROFILE']
+	}
 	def get_env key
 		if(!@env.nil? && @env.has_key?(key))
 		  return @env[key] 
 	    end
-		ENV[key]
+		value = ENV[key]
+		if(value.nil?)
+			if(@env_aliases.has_key?(key))
+				@env_aliases[key].each{|akey|
+					value=get_env[akey] if value.nil?
+				}
+			end
+		end
+		value
 	end
 
 	def set_env key,value
