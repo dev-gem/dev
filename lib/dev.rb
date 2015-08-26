@@ -23,7 +23,7 @@ class Dev
 	    end
 		value = ENV[key]
 		if(value.nil?)
-			if(@env_alias.has_key?(key))
+			if(@env_aliases.has_key?(key))
 				@env_aliases[key].each{|akey|
 					value=get_env[akey] if value.nil?
 				}
