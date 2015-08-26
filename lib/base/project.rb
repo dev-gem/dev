@@ -188,7 +188,7 @@ class Project < Hash
     def status
     	status='?'
     	wrk_logfile="#{Environment.dev_root}/log/#{self.fullname}/#{Environment.user}@#{Environment.machine}.json"
-    	if(File.exists(wrk_logfile))
+    	if(File.exists?(wrk_logfile))
     		rake_default=Command.new(JSON.parse(IO.read(wrk_logfile)))
     		status='0'
     		return 'X' if rake_default[:exit_code] != 0
