@@ -34,8 +34,6 @@ describe Svn do
 	it "should be able to publish files to a subversion repository" do
 		dir="#{File.dirname(__FILE__)}/svn_spec"
 		FileUtils.mkdir(dir) if(!File.exists?(dir))
-		#FileUtils.chmod 0755, dir
-
 		svn_repo="file:///#{File.dirname(__FILE__)}/svn_spec/svn_test_repo"
 		Dir.chdir(dir) do
 			FileUtils.rm_r('svn_test_repo') if File.exists?('svn_test_repo')
@@ -50,7 +48,7 @@ describe Svn do
 			File.open('to_publish/file4.dat','w'){|f|f.write('jkl')}
 
 			svn_dest="#{svn_repo}/to_publish"
-			Svn.publish svn_dest, "#{File.dirname(__FILE__)}/svn_spec/publish_test/to_publish", FileList.new('*.txt','*.dat')#  ['*.txt','*.dat']
+			Svn.publish svn_dest, "#{File.dirname(__FILE__)}/svn_spec/to_publish", FileList.new('*.txt','*.dat')#  ['*.txt','*.dat']
 			expect(`svn info #{svn_dest}`.include?('Revision:')).to eq(true)
 			expect(`svn info #{svn_dest}/file1.txt`.include?('Revision:')).to eq(true)
 			expect(`svn info #{svn_dest}/file2.txt`.include?('Revision:')).to eq(true)
@@ -62,11 +60,6 @@ describe Svn do
 			Environment.remove('svn_test_repo')
 			expect(File.exists?('svn_test_repo')).to eq(false)
 		end
-		
-<<<<<<< HEAD
 		Environment.remove dir
-=======
-		Environment.remove "#{File.dirname(__FILE__)}/svn_spec"
->>>>>>> b40c385f663e935bd336c01eb0f2a4947669ead7
 	end
 end
