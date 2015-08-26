@@ -131,7 +131,7 @@ class Svn
 				end
 				
 				#begin
-				FileUtils.rm_r "#{dir}/to_publish_checkout"
+				Environment.remove "#{dir}/to_publish_checkout"
 				output
 			}
 		end
