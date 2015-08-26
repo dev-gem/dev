@@ -13,12 +13,10 @@
 #   limitations under the License.
 #
 #
-
-
 Gem::Specification.new do |s|
 	s.name			= 'dev'
-	s.version		= "2.0.243"
-	s.date			= '2015-08-24'
+	s.version		= "2.0.264"
+	s.date			= '2015-08-26'
 	s.summary		= 'dev'
 	s.description	= 'development tasks'
 	s.authors		= ["Lou Parslow"]
@@ -30,4 +28,5 @@ Gem::Specification.new do |s|
 	s.license       = 'Apache 2.0'
 	s.add_runtime_dependency 'rake', '~> 10.1'
     s.add_runtime_dependency 'rspec', '~> 3.0'
+    s.add_runtime_dependency 'rainbow', '~> 2.0'
 end

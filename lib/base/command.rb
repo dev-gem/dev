@@ -29,7 +29,6 @@ BUFFER_SIZE=1024 if(!defined?(BUFFER_SIZE))
 #
 class Command < Hash
 	def initialize command
-
     self[:input] = ''
 		self[:timeout] = 0
 		self[:directory] = ''
@@ -47,8 +46,18 @@ class Command < Hash
 
     if(command.kind_of?(Hash))
       command.each{|k,v|self[k.to_sym]=v}
+      self[:start_time]=Time.parse(self[:start_time]) if(self.has_key?(:start_time) && !self[:start_time].nil?)
+      self[:end_time]=Time.parse(self[:end_time]) if(self.has_key?(:end_time) && !self[:end_time].nil?)
     end
 	end
+
+  def open filename=''
+    @filename=filename if filename.length > 0
+    self.clear
+    JSON.parse(IO.read(@filename)).each{|k,v| self[k.to_sym]=v}
+    self[:start_time]=Time.parse(self[:start_time]) if(self.has_key?(:start_time))
+    self[:end_time]=Time.parse(self[:end_time]) if(self.has_key?(:end_time))
+  end
 
   def quiet?
     (self.has_key?(:quiet) && self[:quiet])
@@ -196,14 +205,17 @@ class Command < Hash
     end
 
     def getFormattedTimeSpan timespan
-      seconds = timespan
+      seconds = timespan.round
       seconds.to_s + " sec"
     end
 
     def summary
       duration=""
-      duration=getFormattedTimeSpan(self[:end_time]-self[:start_time]) + " - " if(!self[:end_time].nil?)
-      duration + "#{self[:exit_code].to_s} #{self[:input]} (#{self[:directory]})"
+      duration=getFormattedTimeSpan(self[:end_time]-self[:start_time])# + " - " if(!self[:end_time].nil?)
+      #duration + "#{self[:exit_code].to_s} #{self[:input]} (#{self[:directory]})"
+      status="OK   "
+      status="Error" if(!self.has_key?(:exit_code) || self[:exit_code] != 0)
+      "#{status} '#{self[:input]}' (#{self[:directory]}) #{self[:exit_code].to_s} [#{duration}]"
     end
 
     def to_html

@@ -12,17 +12,38 @@ end
 PROJECT=Project.new()
 
 class Dev
-	def self.execute args
-		PROJECTS.import(args.length>1 ? args[1]:'') if args.length > 0 && args[0] == 'import'
-		PROJECTS.list(args.length>1 ? args[1]:'') if args.length > 0 && args[0] == 'list'
-		PROJECTS.make(args) if args.length > 0 && args[0] == 'make'
-		PROJECTS.work(args) if args.length > 0 && args[0] == 'work'
+	@env=nil
+	def get_env key
+		if(!@env.nil? && @env.has_key?(key))
+		  return @env[key] 
+	    end
+		ENV[key]
+	end
+
+	def set_env key,value
+		@env=Hash.new if env.nil?
+		@env[key]=value
+	end
+
+	def execute args
+		if(args.kind_of?(String))
+			args=args.split(' ')
+		end
+		projects=Projects.new
+		projects.open Projects.user_projects_filename if File.exists? Projects.user_projects_filename
+		projects.add(args) if args.length > 0 && args[0] == 'add'
+		projects.import(args.length>1 ? args[1]:'') if args.length > 0 && args[0] == 'import'
+		projects.list(args.length>1 ? args[1]:'') if args.length > 0 && args[0] == 'list'
+		projects.make(args) if args.length > 0 && args[0] == 'make'
+		projects.work(args) if args.length > 0 && args[0] == 'work'
+		projects.update(args) if args.length > 0 && args[0] == 'update'
 		usage if args.length == 0
 	end
 
-	def self.usage
+	def usage
 		puts 'Usage:'
 		puts ' list [pattern]'
 	end
 end
 
+DEV=Dev.new

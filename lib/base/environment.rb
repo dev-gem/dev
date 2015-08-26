@@ -6,11 +6,22 @@ class Environment < Hash
 
   @@debug=true if defined?(DEBUG)
   @@debug=false if !defined?(DEBUG)
+  @@development_root=nil
 
   def initialize
     self[:home]=Environment.home
     self[:machine]=Environment.machine
     self[:user]=Environment.user
+  end
+
+  def self.set_development_root value
+    @@development_root=value
+    if(!value.nil?)
+      FileUtils.mkdir_p value if(!File.exists?(value))
+      ['bin','data','log','make','publish','test'].each{|dir|
+        FileUtils.mkdir_p("#{value}/#{dir}") if !File.exists? "#{value}/#{dir}"
+      }
+    end
   end
 
   def self.debug
@@ -46,12 +57,25 @@ class Environment < Hash
 	 return machine.strip
   end
 
+  def self.remove directory
+    if(File.exists?(directory))
+      begin
+        FileUtils.rm_rf directory
+        FileUtils.rm_r directory
+      rescue
+      end
+    end
+  end
+
   def self.user
   	return ENV['USER'] if !ENV['USER'].nil?  #on Unix
     ENV['USERNAME']
   end
 
   def self.dev_root
+    if(!@@development_root.nil?)
+      return @@development_root
+    end
     ["DEV_HOME","DEV_ROOT"].each {|v|
       return ENV[v].gsub('\\','/') unless ENV[v].nil?
     }

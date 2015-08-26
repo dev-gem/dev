@@ -17,7 +17,7 @@ class Project < Hash
 	end
 
 	def self.get_fullname directory
-	    directory.gsub(Environment.dev_root,'').gsub('/trunk','') .gsub('/wrk','')
+	    directory.gsub(Environment.dev_root,'').gsub('/wrk','')
 	end
 
 	def self.get_fullname_from_url url
@@ -101,7 +101,7 @@ class Project < Hash
 		puts "#{'version'.fix(13)}: #{VERSION}" if defined? VERSION
 	end
 
-    def latest_tag
+    def latest_tag update=false
 		FileUtils.mkdir("#{Environment.dev_root}/make") if !File.exists? "#{Environment.dev_root}/make"
 		makedir="#{Environment.dev_root}/make/#{self.fullname}"
     	FileUtils.mkdir_p(File.dirname(makedir)) if !File.exists?(File.dirname(makedir))
@@ -110,10 +110,12 @@ class Project < Hash
         	  Command.exit_code('git pull')
             end
         else
-        	clone=Command.new("git clone #{self.url} #{makedir}")
-			clone[:quiet]=true
-			clone[:ignore_failure]=true
-			clone.execute
+        	if(update)
+        	   clone=Command.new("git clone #{self.url} #{makedir}")
+			   clone[:quiet]=true
+			   clone[:ignore_failure]=true
+			   clone.execute
+		    end
         end
         if(File.exists?(makedir))
         	Dir.chdir(makedir) do
@@ -140,7 +142,8 @@ class Project < Hash
 		logfile="#{Environment.dev_root}/log/#{self.fullname}/#{tag}/#{Environment.user}@#{Environment.machine}.json"
 		if(File.exists?(logfile))
 			# load hash from json
-			return Command.new(JSON.parse(IO.read(logfile)))
+			rake_default=Command.new(JSON.parse(IO.read(logfile)))
+			#puts rake_default.summary
 		else
 			FileUtils.mkdir("#{Environment.dev_root}/make") if !File.exists? "#{Environment.dev_root}/make"
 			makedir="#{Environment.dev_root}/make/#{self.fullname}-#{tag}"
@@ -152,16 +155,18 @@ class Project < Hash
 			    end
 				if(File.exists?(makedir))
 				  Dir.chdir(makedir) do
+				  	#puts "making #{self.fullname}"
 					checkout=Command.new({:input=>"git checkout #{tag}",:quiet=>true})
 					checkout.execute
 					FileUtils.rm_r '.git'
-					rake_default=Command.new('rake default --trace')
+					rake_default=Command.new('rake default')
 					rake_default[:quiet]=true
 					rake_default[:ignore_failure]=true
 					#rake_default[:timeout]=5*60*1000
 					rake_default.execute
 					FileUtils.mkdir_p(File.dirname(logfile)) if !File.exists?(File.dirname(logfile))
 					File.open(logfile,'w'){|f|f.write(rake_default.to_json)}
+					update_status
 					rake_default
 				  end
 			   end
@@ -182,12 +187,65 @@ class Project < Hash
     	nil
     end
 
+    def update_status
+    	status_logfile="#{Environment.dev_root}/log/#{self.fullname}/#{Environment.user}@#{Environment.machine}.status.json"
+    	status=Hash.new({'status'=>'?'})
+    	wrk_logfile="#{Environment.dev_root}/log/#{self.fullname}/#{Environment.user}@#{Environment.machine}.json"
+    	if(File.exists?(wrk_logfile))
+    		rake_default=Command.new(JSON.parse(IO.read(wrk_logfile)))
+    		status[:work_logfile]=wrk_logfile 
+    		status['status']='0' 
+    		status['status']='X' if rake_default[:exit_code] != 0
+        end
+    	make_logfile="#{Environment.dev_root}/log/#{self.fullname}/#{latest_tag}/#{Environment.user}@#{Environment.machine}.json"
+    	if(File.exists?(make_logfile))
+    		rake_default=Command.new(JSON.parse(IO.read(make_logfile)))
+    		status[:make_logfile]=make_logfile 
+    		status['status']='0' 
+    		status['status']='X' if rake_default[:exit_code] != 0
+    	else
+    		status['status']='?'
+    	end
+    	FileUtils.mkdir_p(File.dirname(status_logfile)) if !File.exists?(File.dirname(status_logfile))
+    	File.open(status_logfile,'w'){|f|f.write(status.to_json)}
+    end
+
+    def status
+    	status_logfile="#{Environment.dev_root}/log/#{self.fullname}/#{Environment.user}@#{Environment.machine}.status.json"
+    	update_status if !File.exists? status_logfile
+    	if(File.exists?(status_logfile))
+    	  statusHash=JSON.parse(IO.read(status_logfile))
+    	  return statusHash['status'] if(statusHash.has_key?('status'))
+    	end
+    	'?'
+    	#status='?'
+    	#wrk_logfile="#{Environment.dev_root}/log/#{self.fullname}/#{Environment.user}@#{Environment.machine}.json"
+    	#if(File.exists?(wrk_logfile))
+    	#	rake_default=Command.new(JSON.parse(IO.read(wrk_logfile)))
+    	#	status='0'
+    	#	return 'X' if rake_default[:exit_code] != 0
+    	#end
+    	#make_logfile="#{Environment.dev_root}/log/#{self.fullname}/#{latest_tag}/#{Environment.user}@#{Environment.machine}.json"
+    	#if(File.exists?(make_logfile))
+    	#	rake_default=Command.new(JSON.parse(IO.read(make_logfile)))
+    	#	status='0'
+    	#	return 'X' if rake_default[:exit_code] != 0
+    	#else
+    	#	return '?' # outstanding make
+    	#end
+    	#status
+    end
+
+    def report
+    end
+
     def work
     	clone
     	checkout
     	if(File.exists?(wrk_dir))
     		if(last_work_mtime.nil? || last_work_mtime < Environment.get_latest_mtime(wrk_dir))
     		  Dir.chdir(wrk_dir) do
+    		  	puts "working #{self.fullname}"
     		  	rake_default=Command.new('rake default')
 				rake_default[:quiet]=true
 				rake_default[:ignore_failure]=true
@@ -196,8 +254,34 @@ class Project < Hash
     			logfile="#{Environment.dev_root}/log/#{self.fullname}/#{Environment.user}@#{Environment.machine}.json"
     			FileUtils.mkdir_p(File.dirname(logfile)) if !File.exists?(File.dirname(logfile))
 				File.open(logfile,'w'){|f|f.write(rake_default.to_json)}
+				update_status
+				puts rake_default.summary
     	      end
+    	    else
+    	    	logfile="#{Environment.dev_root}/log/#{self.fullname}/#{Environment.user}@#{Environment.machine}.json"
+    	    	if(File.exists?(logfile))
+    	    		rake_default=Command.new('rake default')
+    	    		rake_default.open logfile
+    	    		puts rake_default.summary if(rake_default[:exit_code] != 0)
+    	    	end
     	    end
+    	end
+    end
+
+    def update
+    	clone
+    	checkout
+    	if(File.exists?(wrk_dir))
+    		Dir.chdir(wrk_dir) do
+    			rake_default=Command.new('git pull')
+				rake_default[:quiet]=true
+				rake_default[:ignore_failure]=true
+				rake_default.execute
+				rake_default=Command.new('svn update')
+				rake_default[:quiet]=true
+				rake_default[:ignore_failure]=true
+				rake_default.execute
+    		end
     	end
     end
 

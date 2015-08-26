@@ -14,7 +14,7 @@ class Projects < Hash
 		@filename=''
 	end
 
-    def update
+    def update_state
     	self.each{|k,v|
     		self[k]=Project.new(v) if(v.is_a?(String))
     		self[k]=Project.new(v) if(!v.is_a?(Project) && v.is_a?(Hash))
@@ -30,12 +30,12 @@ class Projects < Hash
 	def open filename=''
 		@filename=filename if filename.length > 0
 		JSON.parse(IO.read(@filename)).each{|k,v| self[k]=v}
-		update
+		update_state
 	end
 
     def list filter=''
 		self.each{|k,v|
-			puts k if(filter.length == 0 || k.include?(filter))
+			puts "#{v.status} #{k}" if(filter.length == 0 || k.include?(filter))
 		}
 	end
 
@@ -46,28 +46,44 @@ class Projects < Hash
 			if filter.nil? || filter.length==0 || k.include?(filter)
 				tag=v.latest_tag
 				if(tag.length > 0)
-				   puts "making #{k} #{tag}"
-			 	   v.make tag
+				   logfile="#{Environment.dev_root}/log/#{v.fullname}/#{tag}/#{Environment.user}@#{Environment.machine}.json"
+				   if(!File.exists?(logfile))
+				     puts "making #{k} #{tag}" if(!File.exists?(logfile))
+				     rake_default=v.make tag
+				     puts rake_default.summary if !rake_default.nil?
+				   else
+				   	 rake_default=v.make tag
+				   	 puts rake_default.summary if !rake_default.nil? && rake_default[:exit_code] != 0
+				   end
 			    end
 		    end
 		}
 	end
 
 	def work args
-		filter=''
+		filter=nil
 		filter=args[1] if !args.nil? && args.length > 0
 		self.each{|k,v|
-			if filter.nil? || filter.length==0 || k.include?(filter)
-				log_filename=
+			if filter.nil? || filter.length==0 || k.to_s.include?(filter)
 				last_work_time=nil
-				puts "working #{k}"
 			 	v.work
 		    end
 		}
 	end
 
+	def update args
+		filter=''
+		filter=args[1] if !args.nil? && args.length > 0
+		self.each{|k,v|
+			if filter.nil? || filter.length==0 || k.include?(filter)
+				puts "updating #{v.fullname}"
+			 	v.update
+		    end
+		}
+	end
+
 	def self.user_projects_filename
-		FileUtils.mkdir("#{Environment.dev_root}/data") if(!File.exists?("#{Environment.dev_root}/data"))
+		FileUtils.mkdir_p("#{Environment.dev_root}/data") if(!File.exists?("#{Environment.dev_root}/data"))
 		"#{Environment.dev_root}/data/PROJECTS.json"
 	end
 
@@ -97,6 +113,18 @@ class Projects < Hash
 	def rake
 		self.each{|k,v| v.rake if v.respond_to?("rake".to_sym)}
 	end
+
+    def add args
+    	if(args.length > 1)
+    	  project=Project.new(args[1])
+    	  project[:fullname] = args[2] if args.length > 2
+    	  if(project.fullname.length > 0 && !self.has_key?(project.fullname))
+		   	puts "adding #{project.fullname}"
+		   	self[project.fullname]=project
+		   	self.save Projects.user_projects_filename
+		  end
+		end
+    end
 
 	def import pattern=''
 		wrk="#{Environment.dev_root}/wrk"
