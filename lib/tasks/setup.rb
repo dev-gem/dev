@@ -12,7 +12,7 @@ class Setup < Array
 	def update
 		add 'bundle install' if(File.exists?('Gemfile'))
 
-		['bin','data','log','make','publish'].each{|dir|
+		['bin','data','log','make','publish','test'].each{|dir|
 			add "<%FileUtils.mkdir('#{Environment.dev_root}/#{dir}')%>" if !File.exists? "#{Environment.dev_root}/#{dir}"
 		}
 		

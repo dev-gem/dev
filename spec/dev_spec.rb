@@ -49,4 +49,14 @@ describe Dev do
         end
         FileUtils.rm_r dir
     end
+
+    it "should be able to add and make projects" do
+        dir="#{Environment.dev_root}/test/dev_root"
+        FileUtils.rm_r dir if File.exists? dir
+        Environment.set_development_root dir
+        Dev.execute('add https://github.com/dev-gem/HelloRubyGem.git')
+        expect(File.exists?("#{dir}/data/Projects.json")).to equal(true)
+        Environment.set_development_root nil
+        #FileUtils.rm_r dir
+    end
 end

@@ -13,11 +13,16 @@ PROJECT=Project.new()
 
 class Dev
 	def self.execute args
-		PROJECTS.import(args.length>1 ? args[1]:'') if args.length > 0 && args[0] == 'import'
-		PROJECTS.list(args.length>1 ? args[1]:'') if args.length > 0 && args[0] == 'list'
-		PROJECTS.make(args) if args.length > 0 && args[0] == 'make'
-		PROJECTS.work(args) if args.length > 0 && args[0] == 'work'
-		PROJECTS.update(args) if args.length > 0 && args[0] == 'update'
+		if(args.kind_of?(String))
+			args=args.split(' ')
+		end
+		projects=Projects.new
+		projects.add(args.length>1 ? args[1]:'') if args.length > 0 && args[0] == 'add'
+		projects.import(args.length>1 ? args[1]:'') if args.length > 0 && args[0] == 'import'
+		projects.list(args.length>1 ? args[1]:'') if args.length > 0 && args[0] == 'list'
+		projects.make(args) if args.length > 0 && args[0] == 'make'
+		projects.work(args) if args.length > 0 && args[0] == 'work'
+		projects.update(args) if args.length > 0 && args[0] == 'update'
 		usage if args.length == 0
 	end
 
