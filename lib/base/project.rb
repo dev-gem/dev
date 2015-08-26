@@ -166,7 +166,7 @@ class Project < Hash
 					rake_default.execute
 					FileUtils.mkdir_p(File.dirname(logfile)) if !File.exists?(File.dirname(logfile))
 					File.open(logfile,'w'){|f|f.write(rake_default.to_json)}
-					#puts rake_default.summary
+					update_status
 					rake_default
 				  end
 			   end
@@ -187,23 +187,52 @@ class Project < Hash
     	nil
     end
 
-    def status
-    	status='?'
+    def update_status
+    	status_logfile="#{Environment.dev_root}/log/#{self.fullname}/#{Environment.user}@#{Environment.machine}.status.json"
+    	status=Hash.new({'status'=>'?'})
     	wrk_logfile="#{Environment.dev_root}/log/#{self.fullname}/#{Environment.user}@#{Environment.machine}.json"
     	if(File.exists?(wrk_logfile))
     		rake_default=Command.new(JSON.parse(IO.read(wrk_logfile)))
-    		status='0'
-    		return 'X' if rake_default[:exit_code] != 0
-    	end
+    		status[:work_logfile]=wrk_logfile 
+    		status['status']='0' 
+    		status['status']='X' if rake_default[:exit_code] != 0
+        end
     	make_logfile="#{Environment.dev_root}/log/#{self.fullname}/#{latest_tag}/#{Environment.user}@#{Environment.machine}.json"
     	if(File.exists?(make_logfile))
     		rake_default=Command.new(JSON.parse(IO.read(make_logfile)))
-    		status='0'
-    		return 'X' if rake_default[:exit_code] != 0
+    		status[:make_logfile]=make_logfile 
+    		status['status']='0' 
+    		status['status']='X' if rake_default[:exit_code] != 0
     	else
-    		return '?' # outstanding make
+    		status['status']='?'
     	end
-    	status
+    	File.open(status_logfile,'w'){|f|f.write(rake_default.to_json)}
+    end
+
+    def status
+    	status_logfile="#{Environment.dev_root}/log/#{self.fullname}/#{Environment.user}@#{Environment.machine}.status.json"
+    	update_status if !File.exists? status_logfile
+    	if(File.exists?(status_logfile))
+    	  statusHash=JSON.parse(IO.read(status_logfile))
+    	  return statusHash['status'] if(statusHash.has_key?('status'))
+    	end
+    	'?'
+    	#status='?'
+    	#wrk_logfile="#{Environment.dev_root}/log/#{self.fullname}/#{Environment.user}@#{Environment.machine}.json"
+    	#if(File.exists?(wrk_logfile))
+    	#	rake_default=Command.new(JSON.parse(IO.read(wrk_logfile)))
+    	#	status='0'
+    	#	return 'X' if rake_default[:exit_code] != 0
+    	#end
+    	#make_logfile="#{Environment.dev_root}/log/#{self.fullname}/#{latest_tag}/#{Environment.user}@#{Environment.machine}.json"
+    	#if(File.exists?(make_logfile))
+    	#	rake_default=Command.new(JSON.parse(IO.read(make_logfile)))
+    	#	status='0'
+    	#	return 'X' if rake_default[:exit_code] != 0
+    	#else
+    	#	return '?' # outstanding make
+    	#end
+    	#status
     end
 
     def report
@@ -224,6 +253,7 @@ class Project < Hash
     			logfile="#{Environment.dev_root}/log/#{self.fullname}/#{Environment.user}@#{Environment.machine}.json"
     			FileUtils.mkdir_p(File.dirname(logfile)) if !File.exists?(File.dirname(logfile))
 				File.open(logfile,'w'){|f|f.write(rake_default.to_json)}
+				update_status
 				puts rake_default.summary
     	      end
     	    else
