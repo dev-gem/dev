@@ -11,7 +11,6 @@ task :build do
 	puts `gem build dev.gemspec`
 	raise 'build failed' if($?.to_i != 0)
 
-	#FileUtils.cp('dev.gemspec','dev.0.0.0.gemspec')
 	File.open('dev.0.0.0.gemspec','w'){|f|
 		f.write(IO.read('dev.gemspec').gsub(/version\s*=\s*'[\d.]+'/,"version='0.0.0'"))
 	}
