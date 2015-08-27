@@ -11,7 +11,7 @@ class Wix
             ext='exe' if(IO.read(wxs_file).include?('<Bundle'))
             extensions=''
             ['WixNetFxExtension','WixBalExtension','WixUtilExtension','WixUiExtension'].each{|e|
-                  extensions="#{extensions}-ext e "
+                  extensions="#{extensions}-ext #{e} "
             }
       	build_commands=Array.new if build_commands.nil?
       	build_commands << "candle #{wxs_file} #{extensions}"

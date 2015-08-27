@@ -8,7 +8,7 @@ describe Svn do
 
 		svn_repo="file:///#{File.dirname(__FILE__)}/svn_spec/svn_changes_test/change_repo"
 		Dir.chdir("#{File.dirname(__FILE__)}/svn_spec/svn_changes_test") do
-			FileUtils.rm_r('change_repo') if File.exists?('change_repo')
+			Dir.remove('change_repo') if File.exists?('change_repo')
 			`svnadmin create change_repo 2>&1`
 			`svn checkout #{svn_repo} ctrunk`
 			File.open('ctrunk/file1.txt','w'){|f|f.write('abc')}
@@ -24,11 +24,11 @@ describe Svn do
 				`svn commit -m'all'`
 				expect(Svn.has_changes?).to eq(false)
 			end
-			FileUtils.rm_r 'ctrunk'
-			FileUtils.rm_r 'change_repo'
+			Dir.remove 'ctrunk'
+			Dir.remove 'change_repo'
 
 		end		
-		FileUtils.rm_r "#{File.dirname(__FILE__)}/svn_spec"
+		Dir.remove "#{File.dirname(__FILE__)}/svn_spec"
 	end
 
 	it "should be able to publish files to a subversion repository" do
@@ -60,6 +60,6 @@ describe Svn do
 			Environment.remove('svn_test_repo')
 			expect(File.exists?('svn_test_repo')).to eq(false)
 		end
-		Environment.remove dir
+		Dir.remove dir
 	end
 end
