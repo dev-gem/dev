@@ -10,6 +10,11 @@ task :build do
 	Dir.glob('*.gem'){|f|File.delete f}
 	puts `gem build dev.gemspec`
 	raise 'build failed' if($?.to_i != 0)
+
+	FileUtils.cp('dev.gemspec','dev.0.0.0.gemspec')
+	File.open('dev.0.0.0.gemspec','w'){|f|
+		f.write(IO.read('dev.0.0.0.gemspec').gsub(/version\s*=\s*'[\d.]+'/,"version='0.0.0'"))
+	}
 end
 
 task :test do
@@ -41,6 +46,7 @@ task :publish do
 	require_relative('./lib/apps/git.rb')
     Git.tag "#{File.dirname(__FILE__)}","#{Gem::Specification.load('dev.gemspec').version.to_s}" if `git branch`.include?('* master') 
 	begin
+		puts 'gem yank dev 0.0.0'
 		puts `gem push dev-#{Gem::Specification.load('dev.gemspec').version.to_s}.gem`
 		FileUtils.rm(" dev-#{Gem::Specification.load('dev.gemspec').version.to_s}.gem")
 	rescue
