@@ -17,7 +17,7 @@ task :build do
 	}
 	puts `gem build dev.0.0.0.gemspec`
 	puts 'uninstalling all version of dev gem'
-	puts `gem uninstall dev -quiet -all -x`
+	puts `gem uninstall dev --quiet --all -x`
 	puts 'installing dev-0.0.0.gem'
 	puts `gem install dev-0.0.0.gem`
 	File.delete 'dev.0.0.0.gemspec'
