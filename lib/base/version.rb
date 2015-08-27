@@ -21,9 +21,9 @@ class Version
 
 	def self.update_file filename, version
 		if(File.exists?(filename))
-			text=IO.read(filename)
-			orig=text
-			text.gsub(//,'version="#{version}')
+			orig=IO.read(filename)
+			text=Version.update_text orig,version
+			File.open(filename,'w'){|f|f.write(text)} if(orig!=text)
 		end
 	end
 
