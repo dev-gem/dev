@@ -15,7 +15,8 @@ task :build do
 	File.open('dev.0.0.0.gemspec2','w'){|f|
 		f.write(IO.read('dev.gemspec').gsub(/version\s*=\s*'[\d.]+'/,"version='0.0.0'"))
 	}
-	#File.delete 'dev.0.0.0.gemspec2'
+	puts `gem build dev.0.0.0.gemspec`
+	File.delete 'dev.0.0.0.gemspec2'
 end
 
 task :test do
