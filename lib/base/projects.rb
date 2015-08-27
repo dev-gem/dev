@@ -8,12 +8,15 @@ require_relative('../apps/git.rb')
 require_relative('../apps/svn.rb')
 
 class Projects < Hash
-	#attr_accessor :filename
+	attr_accessor :dev
 
-	def initialize dev
+	def initialize dev=nil
 		@dev=dev
+		@dev=Dev.new if @dev.nil?
 		#@filename=''
 	end
+
+    #def dev
 
 	def filename
 		"#{@dev.get_env('DEV_ROOT')}/data/Projects.json"
