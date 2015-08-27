@@ -16,6 +16,11 @@ task :build do
 		f.write(IO.read('dev.gemspec').gsub(/version\s*=\s*'[\d.]+'/,"version='0.0.0'"))
 	}
 	puts `gem build dev.0.0.0.gemspec`
+	
+end
+
+task :install do
+	puts ':test'
 	puts 'uninstalling all version of dev gem'
 	puts `gem uninstall dev --quiet --all -x`
 	puts 'installing dev-0.0.0.gem'
