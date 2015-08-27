@@ -13,10 +13,7 @@ class Projects < Hash
 	def initialize dev=nil
 		@dev=dev
 		@dev=Dev.new if @dev.nil?
-		#@filename=''
 	end
-
-    #def dev
 
 	def filename
 		"#{@dev.get_env('DEV_ROOT')}/data/Projects.json"

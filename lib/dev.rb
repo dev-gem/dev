@@ -45,12 +45,12 @@ class Dev
 		@env[key]=value
 	end
 
-    #@projects=nil
     def projects
     	if(@projects.nil?)
     		@projects=Projects.new(self)
     		@projects.open
     	end
+    	@projects
     end
     
 	def execute args
