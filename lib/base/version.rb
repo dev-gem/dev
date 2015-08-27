@@ -2,10 +2,23 @@ class Version
 	def self.extract text
 		[/[Vv]ersion\s*=\s*['"]([\d.]+)['"]/,
 		 /Version\(\s*"([\d.]+)"\s*\)/].each{|regex|
-			scan=text.scan(regex)#/version\s*=\s*'([\d.]+)'/)#regex)
+			scan=text.scan(regex)
 			if(!scan.nil?)
 				return scan[0][0] if(scan.length > 0 && !scan[0].nil? && scan[0].length > 0)
 			end
+		}
+		nil
+	end
+
+	def self.extract_from_file filename
+		Version.extract IO.read(filename)
+	end
+
+	def self.extract_from_filelist filelist
+		version=nil
+		filelist.each{|f|
+			version=extract_from_file f
+			return version if !version.nil?
 		}
 		nil
 	end
@@ -25,6 +38,12 @@ class Version
 			text=Version.update_text orig,version
 			File.open(filename,'w'){|f|f.write(text)} if(orig!=text)
 		end
+	end
+
+	def self.update_filelist filelist,version
+		filelist.each{|f|
+			Version.update_file f,version
+		}
 	end
 
 	def self.read filename
