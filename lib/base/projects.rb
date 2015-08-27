@@ -28,13 +28,16 @@ class Projects < Hash
     end
 
 	def save
+		Dir.make File.dirname(filename) if !File.exists? File.dirname(filename)
 		File.open(filename,'w'){|f|f.write(JSON.pretty_generate(self))}
 	end
 
 	def open
-		#@filename=filename if filename.length > 0
-		JSON.parse(IO.read(filename)).each{|k,v| self[k]=v}
-		update_state
+		if File.exists? filename
+		  #@filename=filename if filename.length > 0
+		  JSON.parse(IO.read(filename)).each{|k,v| self[k]=v}
+		  update_state
+	    end
 	end
 
     def list filter=''
@@ -125,7 +128,7 @@ class Projects < Hash
     	  if(project.fullname.length > 0 && !self.has_key?(project.fullname))
 		   	puts "adding #{project.fullname}"
 		   	self[project.fullname]=project
-		   	self.save Projects.user_projects_filename
+		   	self.save #Projects.user_projects_filename
 		  end
 		end
     end

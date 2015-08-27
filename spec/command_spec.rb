@@ -75,8 +75,9 @@ describe Command do
   end
 
   it "should be able to execute rake command in specific directory" do
-    dir="#{File.dirname(__FILE__)}/command_spec/rake_test"
-    FileUtils.mkdir_p(dir) if(!File.exists?(dir))
+    dir="#{File.dirname(__FILE__)}/command_spec"
+    Dir.make dir
+    #FileUtils.mkdir_p(dir) if(!File.exists?(dir))
     File.open("#{dir}/rakefile.rb","w") { |f| 
         f.puts "task :default do"
         f.puts " puts 'rake_test'"
@@ -88,18 +89,21 @@ describe Command do
     cmd[:directory]=dir
     expect(File.exists?(cmd[:directory])).to eq(true)
     cmd.execute
-    FileUtils.rm_r("#{File.dirname(__FILE__)}/command_spec")
+    Dir.remove dir
+    #FileUtils.rm_r("#{File.dirname(__FILE__)}/command_spec")
   end
 
   it "should be able to rake" do
     dir="#{File.dirname(__FILE__)}/command_spec"
-    FileUtils.mkdir(dir) if(!File.exists?(dir))
+    Dir.make dir
+    #FileUtils.mkdir(dir) if(!File.exists?(dir))
     File.open("#{dir}/rakefile.rb","w") { |f| 
         f.puts "task :default do"
         f.puts " puts 'rake_test'"
         f.puts "end" 
     }
-    Environment.remove("#{File.dirname(__FILE__)}/command_spec")
+    Dir.remove dir
+    #Environment.remove("#{File.dirname(__FILE__)}/command_spec")
   end
 
   it "should fail when calling rake produces an error" do

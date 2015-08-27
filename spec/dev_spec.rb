@@ -18,6 +18,21 @@ describe Dev do
         Environment.remove('dev_spec')
     end
 
+    it "should be able to perform add of project" do
+        dir="#{File.dirname(__FILE__)}/dev_root"
+        Dir.remove dir
+        Dir.make dir
+        dev=Dev.new
+        dev.set_env 'DEV_ROOT', dir
+        dev.set_env 'DEBUG', 'true'
+        dev.execute('add http://github.com/dev-gem/HelloRake.git')
+        expect(File.exists?("#{dir}/data/Projects.json")).to eq(true)
+        expect(dev.projects.has_key?('github/dev-gem/HelloRake')).to eq(true)
+        dev.execute('work')
+        #expect(File.exists?()).to eq(true)
+        #Dir.remove dir
+    end
+
     #it "should be able to rake HelloRubyGem" do
     #    dir="#{File.dirname(__FILE__)}/dev_spec_HelloRubyGem"
     #    Environment.remove dir if File.exists? dir
