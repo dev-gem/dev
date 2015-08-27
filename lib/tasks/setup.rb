@@ -74,6 +74,17 @@ class Setup < Array
 					end
 				end
 			}
+			Dir.glob('**/wxs').each{|wxs|
+				current_version=IO.read(wxs).scan(/Version=\"([\d.]+)\"/)[0]
+				puts "#{wxs} current version=#{current_version}" if defined?(DEBUG)
+				if(current_version.include?('Version='))
+					target_version="Version=\"#{VERSION}\")="
+					if(current_version != target_version)
+						add "<%Text.replace_in_file('#{wxs}','#{current_version}','#{target_version}')%>"
+						add "<%Text.replace_in_file('Value=\"#{current_version}\"','Value=\"#{target_version}\"')%>"
+					end
+				end
+			}
 		end
 	end
 end

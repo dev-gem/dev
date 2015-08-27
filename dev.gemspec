@@ -15,7 +15,7 @@
 #
 Gem::Specification.new do |s|
 	s.name			= 'dev'
-	s.version		= "2.0.266"
+	s.version		= "2.0.267"
 	s.date			= '2015-08-27'
 	s.summary		= 'dev'
 	s.description	= 'development tasks'
