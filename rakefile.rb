@@ -48,7 +48,9 @@ task :publish do
 	require_relative('./lib/apps/git.rb')
     Git.tag "#{File.dirname(__FILE__)}","#{Gem::Specification.load('dev.gemspec').version.to_s}" if `git branch`.include?('* master') 
 	begin
-		puts `gem yank dev 0.0.0`
+		puts 'yanking dev-0.0.0.gem'
+		puts `gem yank dev -v 0.0.0`
+		puts 'pushing dev-0.0.0.gem'
 		puts `gem push dev-0.0.0.gem`
 		puts `gem push dev-#{Gem::Specification.load('dev.gemspec').version.to_s}.gem`
 		FileUtils.rm(" dev-#{Gem::Specification.load('dev.gemspec').version.to_s}.gem")
