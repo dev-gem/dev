@@ -12,13 +12,16 @@ end
 PROJECT=Project.new()
 
 class Dev
-	
-	def initialize
-		@env=nil
+	attr_accessor :projects,:history
+
+	def initialize env=nil
+		@env=Hash.new
 		@env_aliases={'HOME' => ['USERPROFILE'],
 		          'DEV_ROOT' => ['DEV_HOME','HOME','USERPROFILE']
 		}
-		@projects=nil
+		env.each{|k,v| @env[k.to_s]=v} if !env.nil?
+		@projects=Projects.new(self)
+		@history=History.new(self)
 	end
 
 	def reset
@@ -39,19 +42,6 @@ class Dev
 		end
 		value
 	end
-
-	def set_env key,value
-		@env=Hash.new if @env.nil?
-		@env[key]=value
-	end
-
-    def projects
-    	if(@projects.nil?)
-    		@projects=Projects.new(self)
-    		@projects.open
-    	end
-    	@projects
-    end
     
 	def execute args
 		if(args.kind_of?(String))

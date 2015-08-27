@@ -11,10 +11,11 @@ task :build do
 	puts `gem build dev.gemspec`
 	raise 'build failed' if($?.to_i != 0)
 
-	FileUtils.cp('dev.gemspec','dev.0.0.0.gemspec')
+	#FileUtils.cp('dev.gemspec','dev.0.0.0.gemspec')
 	File.open('dev.0.0.0.gemspec','w'){|f|
-		f.write(IO.read('dev.0.0.0.gemspec').gsub(/version\s*=\s*'[\d.]+'/,"version='0.0.0'"))
+		f.write(IO.read('dev.gemspec').gsub(/version\s*=\s*'[\d.]+'/,"version='0.0.0'"))
 	}
+	File.delete 'dev.0.0.0.gemspec'
 end
 
 task :test do

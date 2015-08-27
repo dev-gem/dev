@@ -10,10 +10,9 @@ describe Dev do
 
     it "should be able to modify it environment variables independently" do
         dev1=Dev.new
-        dev2=Dev.new
-        expect(dev1.get_env('DEV_ROOT')).to eq(dev2.get_env('DEV_ROOT'))
         FileUtils.mkdir('dev_spec') if !File.exists?('dev_spec')
-        dev2.set_env 'DEV_ROOT', "#{File.dirname(__FILE__)}/dev_spec"
+        dev2=Dev.new( { 'DEV_ROOT' => "#{File.dirname(__FILE__)}/dev_spec" } )
+        #dev2.set_env 'DEV_ROOT', "#{File.dirname(__FILE__)}/dev_spec"
         expect(dev1.get_env('DEV_ROOT')).not_to eq(dev2.get_env('DEV_ROOT'))
         Environment.remove('dev_spec')
     end
@@ -22,12 +21,16 @@ describe Dev do
         dir="#{File.dirname(__FILE__)}/dev_root"
         Dir.remove dir
         Dir.make dir
-        dev=Dev.new
-        dev.set_env 'DEV_ROOT', dir
-        dev.set_env 'DEBUG', 'true'
+        dev=Dev.new( { 'DEV_ROOT' => dir, 'DEBUG' => 'true'} )
+        #dev.set_env 'DEV_ROOT', dir
+        #dev.set_env 'DEBUG', 'true'
+        expect(dev.projects.filename).to eq("#{dir}/data/Projects.json")
+        expect(dev.projects.length).to eq(0)
         dev.execute('add http://github.com/dev-gem/HelloRake.git')
         expect(File.exists?("#{dir}/data/Projects.json")).to eq(true)
         expect(dev.projects.has_key?('github/dev-gem/HelloRake')).to eq(true)
+        expect(dev.projects.length).to eq(1)
+        expect(dev.history.get_work_command('github/dev-gem/HelloRake')).to eq (nil)
         dev.execute('work')
         #expect(File.exists?()).to eq(true)
         #Dir.remove dir

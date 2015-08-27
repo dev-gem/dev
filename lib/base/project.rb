@@ -26,6 +26,7 @@ class Project < Hash
 
 	def initialize value=''
 		@filename=''
+
 		self[:url]=Project.get_url
 		self[:fullname]=Project.get_fullname_from_url self[:url] if self[:url].length > 0
 		if value.is_a?(String)
