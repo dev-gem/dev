@@ -13,6 +13,7 @@ class Projects < Hash
 	def initialize dev=nil
 		@dev=dev
 		@dev=Dev.new if @dev.nil?
+		open
 	end
 
 	def filename
