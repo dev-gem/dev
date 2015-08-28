@@ -24,7 +24,7 @@ if(!defined?(NO_DEFAULT_TASK))
     end
     
     puts "[:default] completed in #{TIMER.elapsed_str}" if !Environment.default.colorize?
-    if @Environment.default.colorize?
+    if Environment.default.colorize?
       require 'ansi/code'
       puts "[" + ANSI.blue + ANSI.bright + ":default" + ANSI.reset + "] completed in #{TIMER.elapsed_str}"
     end
