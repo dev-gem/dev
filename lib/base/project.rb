@@ -57,11 +57,10 @@ class Project < Hash
 	def wrk_dir
 		"#{@env.wrk_dir}/#{self.fullname}"
 	end
-	def make_dir tag
+	def make_dir tag=''
+		"#{@env.make_dir}/#{self.fullname}-#{tag}" if tag.length==0
     	"#{@env.make_dir}/#{self.fullname}-#{tag}"
     end
-
-    
 
 	def pull
 		if(File.exists?(wrk_dir) && File.exists?("#{wrk_dir}/.git"))

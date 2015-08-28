@@ -79,8 +79,9 @@ class Projects < Hash
 	end
 
 	def make args
+		projects=get_projects args
+		puts "making #{projects.length} projects..."
 		get_projects(args).each{|project|
-			puts "  Project #{project[:fullname]}\n" if @env.debug?
 			project.make
 		}
 	end
