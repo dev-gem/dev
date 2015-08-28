@@ -238,10 +238,9 @@ class Command < Hash
       duration=""
       duration=getFormattedTimeSpan(self[:end_time]-self[:start_time])
       if(Environment.default.colorize?)
-        code=ANSI.green + '+ ' + ANSI.reset
-        code=ANSI.red   + '- ' + ANSI.reset if exit_code != 0
-        cinput = ANSI.yellow + self[:input] + ANSI.reset
-        cinput = ANSI.red + self[:input] + ANSI.reset
+        code=ANSI.green + '+ '
+        code=ANSI.red   + '- ' if exit_code != 0
+        cinput = self[:input] + ANSI.reset
         cdirectory = self[:directory]
         "#{code} #{cinput} (#{cdirectory}) [#{duration}]"
       else

@@ -10,14 +10,16 @@ task :setup do Tasks.execute_task :setup;end
 #
 class Setup < Array
 	def update
-		add Command.new( { :input => 'bundle install', :quiet => true}) if(File.exists?('Gemfile'))
+		add_quiet 'bundle install' if File.exists? 'Gemfile'
+		#add Command.new( { :input => 'bundle install', :quiet => true}) if(File.exists?('Gemfile'))
 
 		#['bin','data','log','make','publish','test'].each{|dir|
 		#	add "<%FileUtils.mkdir('#{Environment.default.devroot}/#{dir}')%>" if !File.exists? "#{Environment.dev_root}/#{dir}"
 		#}
 		
 		Dir.glob('*.gemspec').each{|gemspec_file|
-			add Command.new( { :input => "<%Gemspec.update('#{gemspec_file}')%>", :quiet => true} )
+			add_quiet "<%Gemspec.update('#{gemspec_file}')%>"
+			#add Command.new( { :input => "<%Gemspec.update('#{gemspec_file}')%>", :quiet => true} )
 		}
 
 		if(Dir.glob('**/packages.config').length > 0)
@@ -47,7 +49,7 @@ class Setup < Array
 							puts `git reset --hard #{v.split('@')[1]}`
 						end
 					else
-						add "git clone #{v} #{directory}"
+						add_quiet "git clone #{v} #{directory}"
 					end
 				end
 			}

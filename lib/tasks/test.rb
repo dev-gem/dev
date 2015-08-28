@@ -10,10 +10,9 @@ puts __FILE__ if defined?(DEBUG)
 desc 'performs test commands'
 task :test => [:build] do Tasks.execute_task :test;end
 
-
 class Test < Array
 	def update
-		add 'rspec --format documentation' if File.exists?('spec')
+		add_quiet 'rspec --format documentation' if File.exists?('spec')
 
 		if(defined?(NUNIT))
 			NUNIT.each{|nunit_dll|

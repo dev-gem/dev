@@ -28,7 +28,30 @@ class Array
     end
 
     def add command
-      self << command if(!include?(command))
+      self << command if !has_command? command
+
+      #self << command if(command.kind_of?(String) && !include?(command))
+      #if(command.kind_of?(Command))
+      #  has_command = false
+      #  self.each{|c|
+      #    if(c[:input] == command[:input]) has_command=true
+      #  }
+      #  self << command if !has_command
+      #end
+    end
+
+    def has_command? command
+      return true if(command.kind_of?(String) && !include?(command))
+      if(command.kind_of?(Command))
+        self.each{|c|
+           return true if(c[:input] == command[:input])
+        }
+      end
+      false
+    end
+
+    def add_quiet command
+      add Command.new({ :input => command, :quiet => true })
     end
 
     def to_html
