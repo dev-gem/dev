@@ -20,11 +20,11 @@ class Commit < Array
 					Commit.reset_commit_message
 					raise "commit.message required to perform commit"
 				else
-			  		add "git commit -m'all'"
+			  		add_quiet "git commit -m'all'"
 			  	end
 			  else
-			    add "git commit -a -v --file commit.message"
-			    add "<%Commit.reset_commit_message%>"
+			    add_quiet "git commit -a -v --file commit.message"
+			    add_quiet "<%Commit.reset_commit_message%>"
 			  end
 		    end 		
 		end
@@ -37,8 +37,8 @@ class Commit < Array
 					add 'svn commit -m"commit all"'
 				end
 			else
-				add 'svn commit --file commit.message'
-				add "<%Commit.reset_commit_message%>"
+				add_quiet 'svn commit --file commit.message'
+				add_quiet "<%Commit.reset_commit_message%>"
 			end
 		end
 	end
