@@ -28,5 +28,6 @@ Gem::Specification.new do |s|
 	s.license       = 'Apache 2.0'
 	s.add_runtime_dependency 'rake', '~> 10.1'
     s.add_runtime_dependency 'rspec', '~> 3.0'
+    s.add_runtime_dependency 'sqlite3', '~> 1.3.10'
     s.add_runtime_dependency 'rainbow', '~> 2.0'
 end
