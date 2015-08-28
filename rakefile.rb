@@ -78,4 +78,4 @@ task :show_projects , [:filter] do |t, args|
 	PROJECTS.show args[:filter] if args.has_key? :filter
 end
 
-task :default => [:build,:test,:add,:commit,:publish,:push]
+task :default => [:setup,:build,:test,:add,:commit,:publish,:push]

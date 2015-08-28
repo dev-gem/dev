@@ -1,0 +1,39 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    ansi (1.5.0)
+    bundle (0.0.1)
+      bundler
+    diff-lcs (1.2.5)
+    github-markup (1.4.0)
+    rake (10.4.2)
+    redcarpet (3.3.2)
+    rspec (3.3.0)
+      rspec-core (~> 3.3.0)
+      rspec-expectations (~> 3.3.0)
+      rspec-mocks (~> 3.3.0)
+    rspec-core (3.3.2)
+      rspec-support (~> 3.3.0)
+    rspec-expectations (3.3.1)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.3.0)
+    rspec-mocks (3.3.2)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.3.0)
+    rspec-support (3.3.0)
+    yard (0.8.7.6)
+
+PLATFORMS
+  x64-mingw32
+
+DEPENDENCIES
+  ansi
+  bundle
+  github-markup
+  rake
+  redcarpet
+  rspec
+  yard
+
+BUNDLED WITH
+   1.10.6
