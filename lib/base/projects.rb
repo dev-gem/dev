@@ -46,8 +46,13 @@ class Projects < Hash
     	filter=value.to_s if !value.nil? && value.kind_of?(String)
     	filter=value[0].to_s if !value.nil? && value.kind_of?(Array)
     	self.each{|k,v|
-    		projects << v if(filter.length==0 || k.include?(filter))
-    		v.env=@env
+    		if(filter.length==0 || k.include?(filter))
+    			if(v.kind_of?(Project))
+    			   projects << v
+    			   v.env=@env
+    			end
+    			
+    		end
     	}
     	projects
     end
