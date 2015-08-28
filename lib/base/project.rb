@@ -164,6 +164,18 @@ class Project < Hash
     	"#{@env.log_dir}/#{name}"
     end
 
+    def list
+        #puts "#{project.status} #{project.fullname}"
+        history=command_history
+        if(history.length==0)
+            puts "?      #{project.fullname}"
+        else
+            history.each{|c|
+                puts c.summary true
+            }
+        end
+    end
+
     def work
         clone
         checkout
