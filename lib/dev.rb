@@ -24,8 +24,14 @@ class Dev
 		@history=History.new(self)
 	end
 
-    def filename
-    	"#{@dev.get_env('DEV_ROOT')}/dev.sql"
+    #def filename
+    #	"#{@dev.get_env('DEV_ROOT')}/dev.sql"
+    #end
+
+    def log_dir
+    	dir="#{get_env('DEV_ROOT')}/log"
+    	FileUtils.mkdir_p dir if !File.exists? dir
+    	dir
     end
 
 	def reset

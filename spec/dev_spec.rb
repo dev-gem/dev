@@ -30,7 +30,7 @@ describe Dev do
         expect(File.exists?("#{dir}/data/Projects.json")).to eq(true)
         expect(dev.projects.has_key?('github/dev-gem/HelloRake')).to eq(true)
         expect(dev.projects.length).to eq(1)
-        #expect(dev.history.get_work_command('github/dev-gem/HelloRake')).to eq (nil)
+        expect(dev.history.get_wrk_command('github/dev-gem/HelloRake')).to eq (nil)
         #dev.execute('work')
         #expect(File.exists?()).to eq(true)
         #Dir.remove dir
