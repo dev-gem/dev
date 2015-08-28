@@ -59,7 +59,7 @@ class Projects < Hash
         puts "get_project filter '#{filter}'" if @env.debug?
     	self.each{|k,v|
     		puts " checking project #{k}" if @env.debug?
-    		puts " v.class #{v.class}"
+    		puts " v.class #{v.class}" if @env.debug?
     		if(filter.length==0 || k.include?(filter))
     			if(v.kind_of?(Project))
     			   projects << v
