@@ -95,7 +95,9 @@ class Projects < Hash
 	end
 
 	def make args
+		puts "Projects make #{args}\n" if @dev.debug?
 		get_projects(args).each{|project|
+			puts "  Project #{project[:fullname]}\n" if @dev.debug?
 			project.dev=@dev
 			project.make
 		}
