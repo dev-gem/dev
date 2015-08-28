@@ -4,6 +4,11 @@ require_relative('string.rb')
 
 class Environment < Hash
 
+  @@default=nil
+  def self.default
+    @@default=Environment.new if @@default.nil?
+  end
+
   def initialize env=nil
     @env=Hash.new
     @env_aliases={'HOME' => ['USERPROFILE'],
@@ -11,7 +16,9 @@ class Environment < Hash
                   'USERNAME' => ['USR']
     }
     env.each{|k,v| @env[k.to_s]=v} if !env.nil?
+    @@default=self if @@default.nil?
   end
+
 
   def root_dir
     get_env('DEV_ROOT')

@@ -32,7 +32,7 @@ class Publish < Array
 		puts 'publish glob, checking...' if defined? DEBUG
 		Dir.glob("#{Rake.application.original_dir}/**/*.{nupkg,msi,gem}").each{|publish_file|
 			puts "checking #{publish_file}" if defined? DEBUG
-			dest="#{env.publish_dir}/#{File.basename(publish_file)}"
+			dest="#{Environment.default.publish_dir}/#{File.basename(publish_file)}"
 			FileUtils.mkdir_p("#{Environment.dev_root}/publish") if !File.exists?("#{Environment.dev_root}/publish")
 			add "<%FileUtils.cp('#{publish_file}','#{dest}')%>" if(!File.exists?(dest))
 		}
