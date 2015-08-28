@@ -242,20 +242,24 @@ class Command < Hash
       result.fix(3)
     end
 
-    def summary
+    def summary include_directory=false
       duration=""
       duration=getFormattedTimeSpan(self[:end_time]-self[:start_time])
       if(Environment.default.colorize?)
         require 'ansi/code'
-        code=ANSI.green + '+ '
-        code=ANSI.red   + '- ' if exit_code != 0
-        cinput = self[:input] + ANSI.reset
-        cdirectory = self[:directory]
-        "#{code} #{cinput} (#{cdirectory}) [#{duration}]"
+        code=ANSI.green + '+ ' + ANSI.reset
+        code=ANSI.red   + '- ' + ANSI.reset if exit_code != 0
+        cinput = ANSI.green + self[:input] + ANSI.reset
+        cinput = ANSI.red   + self[:input] + ANSI.reset if exit_code != 0
+        cdirectory = ''
+        cdirectory = "(self[:directory])" if include_directory
+        "#{code} #{duration} #{cinput} #{cdirectory}"
       else
         code='  '
         code='- ' if exit_code != 0
-        "#{code} #{self[:input]} (#{self[:directory]}) [#{duration}]"
+        sdirectory = ''
+        sdirectory = "(self[:directory])" if include_directory
+        "#{code} #{duration} #{self[:input]} #{sdirectory}"
       end
       #status="OK   "
       #status="Error" if(!self.has_key?(:exit_code) || self[:exit_code] != 0)
