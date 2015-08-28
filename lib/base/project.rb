@@ -185,7 +185,13 @@ class Project < Hash
             rake_default=Command.new({:input =>'rake default',:quiet => true,:ignore_failure => true})
             if(last_work_mtime.nil? || last_work_mtime < Environment.get_latest_mtime(wrk_dir))
               Dir.chdir(wrk_dir) do
-                puts "working #{self.fullname}"
+                if(@env.colorize?)
+                    require 'ansi/code'
+                    puts "[" + ANSI.blue + ANSI.bright + fullname + ANSI.reset + ']'
+                else
+                    puts "[#{fullname}]"
+                end
+                #puts "working #{self.fullname}"
                 rake_default.execute
                 rake_default.save logfile
                 update_status
