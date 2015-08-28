@@ -17,7 +17,7 @@ class Build < Array
         #if(changed)
         	puts "Build scanning for gemspec files" if Environment.default.debug?
 			Dir.glob('*.gemspec'){|gemspec|
-	    		add "gem build #{gemspec}" if !File.exist?(Gemspec.gemfile gemspec)
+	    		add_quiet("gem build #{gemspec}") if !File.exist?(Gemspec.gemfile gemspec)
 	    	}
 	    	
 	    	puts "Build scanning for sln files" if Environment.default.debug?
@@ -27,7 +27,8 @@ class Build < Array
 	    		if(!build_commands.nil?)
 	    			build_commands.each{|c|
 	    				puts "  build command #{c} discovered." if Environment.default.debug?
-	    				self.add c
+	    				#self.add c
+	    				add_quiet(c)
 	    			}
 	    		else
 	    			puts "  no build command discovered." if Environment.default.debug?
@@ -39,7 +40,8 @@ class Build < Array
 	    		build_commands = Nuget.get_build_commands nuget_file
 	    		if(!build_commands.nil?)
 	    			build_commands.each{|c|
-	    				self.add c
+	    				add_quiet(c)
+	    				#self.add c
 	    			}
 	    		end
 	    	}
@@ -50,7 +52,8 @@ class Build < Array
 	    		  build_commands = Wix.get_build_commands wxs_file
 	    		  if(!build_commands.nil?)
 	    			build_commands.each{|c|
-	    				self.add c
+	    				#self.add c
+	    				add_quiet(c)
 	    			}
 	    		  end
 	    	    end
@@ -62,7 +65,8 @@ class Build < Array
 	    		  build_commands = Wix.get_build_commands wxs_file
 	    		  if(!build_commands.nil?)
 	    			build_commands.each{|c|
-	    				self.add c
+	    				#self.add c
+	    				add_quiet(c)
 	    			}
 	    		  end
 	    	    end
