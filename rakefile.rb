@@ -1,18 +1,21 @@
+#['bundle','ansi'].each{|g|
+#	if(!`gem list #{g}`.include?("#{g} ("))
+#		puts "installing #{g}"
+#		puts `gem install #{g}`
+#	end
+#}
 require 'rake/clean'
 require_relative('./lib/dev.rb')
 #require_relative('./lib/apps/git.rb')
 #require_relative('./lib/base/command.rb')
 
-`gem install bundle` if !`gem list bundle`.include?('bundle (')
+#{}`gem install bundle` if !`gem list bundle`.include?('bundle (')
+#	`gem install bundle` if !`gem list bundle`.include?('bundle (')
 
 CLEAN.include('*.gem','*.html')
 CLEAN.include('.yardopts') if File.exists?('.yardopts')
 CLOBBER.include('*.gem','lib/dev_*.rb')
 build_product= "dev-#{Gem::Specification.load('dev.gemspec').version}.gem"
-
-task :setup do
-	
-end
 
 task :build do
 	Dir.glob('*.gem'){|f|File.delete f}
