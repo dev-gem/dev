@@ -30,6 +30,7 @@ describe Project do
 
         # WORK
         expect(helloRake.work.exit_code).to eq(0)
+        expect(helloRake.command_history.length).to eq(2)
        # logfile=get_logfile ['make',tag]
         #dev=Dev.new( { 'DEV_ROOT' => dir, 'DEBUG' => 'true'} )
         #dev.execute('add http://github.com/dev-gem/HelloRake.git')

@@ -52,6 +52,10 @@ class Command < Hash
     end
 	end
 
+  def save filename
+    File.open(filename,'w'){|f|f.write(to_json)}
+  end
+
   def open filename=''
     @filename=filename if filename.length > 0
     self.clear

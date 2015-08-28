@@ -67,10 +67,7 @@ class Projects < Hash
     end
 
     def work args
-    	puts "Projects work #{args}\n" if @env.debug?
     	get_projects(args).each{|project|
-    		puts "  Project #{project[:fullname]}\n" if @env.debug?
-    		#project.env=@env
     		project.work
     	}
 	end
@@ -79,38 +76,14 @@ class Projects < Hash
     	get_projects(args).each{|project|
     		puts "#{project.status} #{project.fullname}"
     	}
-		#self.each{|k,v|
-		#	puts "#{v.status} #{k}" if(filter.length == 0 || k.include?(filter))
-		#}
 	end
 
 	def make args
-		puts "Projects make #{args}\n" if @env.debug?
 		get_projects(args).each{|project|
 			puts "  Project #{project[:fullname]}\n" if @env.debug?
 			project.make
 		}
-		#filter=''
-		#filter=args[1] if !args.nil? && args.length > 0
-		#self.each{|k,v|
-		#	if filter.nil? || filter.length==0 || k.include?(filter)
-		#		tag=v.latest_tag
-		#		if(tag.length > 0)
-		#		   logfile="#{Environment.dev_root}/log/#{v.fullname}/#{tag}/#{Environment.user}@#{Environment.machine}.json"
-		#		   if(!File.exists?(logfile))
-		#		     puts "making #{k} #{tag}" if(!File.exists?(logfile))
-		#		     rake_default=v.make tag
-		#		     puts rake_default.summary if !rake_default.nil?
-		#		   else
-		#		   	 rake_default=v.make tag
-		#		   	 puts rake_default.summary if !rake_default.nil? && rake_default[:exit_code] != 0
-		#		   end
-		#	    end
-		 #   end
-		#}
 	end
-
-	
 
 	def update args
 		filter=''
@@ -175,13 +148,7 @@ class Projects < Hash
 		   			end
 		   		}
 		   end
-		   self.save Projects.user_projects_filename
+		   self.save #Projects.user_projects_filename
 	    end
 	end
 end
-
-#PROJECTS=Projects.new
-#PROJECTS.open Projects.user_projects_filename if File.exists? Projects.user_projects_filename
-#current=Projects.current # this makes sure the current project is added to PROJECTS
-#PROJECTS[current.fullname]=current if(!current.nil? && !PROJECTS.has_key?(current.fullname) && current.wrk_dir == Rake.application.original_dir)
-#PROJECTS.save Projects.user_projects_filename if !File.exists? Projects.user_projects_filename
