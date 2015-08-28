@@ -164,25 +164,43 @@ class Project < Hash
     	"#{@env.log_dir}/#{name}"
     end
 
+    def work
+        clone
+        checkout
+        logfile=get_logfile ['work']
+        if(File.exists?(wrk_dir))
+            rake_default=Command.new({:input =>'rake default',:quiet => true,:ignore_failure => true})
+            if(last_work_mtime.nil? || last_work_mtime < Environment.get_latest_mtime(wrk_dir))
+              Dir.chdir(wrk_dir) do
+                puts "working #{self.fullname}"
+                rake_default.execute
+                rake_default.save logfile
+                update_status
+                puts rake_default.summary true
+              end
+            else
+                if(File.exists?(logfile))
+                    rake_default.open logfile
+                    puts rake_default.summary true if(rake_default[:exit_code] != 0)
+                end
+            end
+            rake_default
+        end
+    end
+
 	def make tag=''
-		puts "Project.make (#{self.fullname})\n" if @env.debug?
 		tag=latest_tag if tag.length==0
-		puts "tag #{tag}\n" if @env.debug?
+		puts "Project make tag #{tag}\n" if @env.debug?
 		return if tag.length==0
 		raise 'no tag specified' if tag.length==0
 
 		rake_default=nil
 		logfile=get_logfile ['make',tag]		
-		puts "make logfile: #{logfile}"
-		#logfile="#{@env.log_dir}/#{self.fullname}.make.#{tag}.json".gsub('/','.')
-		#logfile="#{@env.root_dir}/#{self.fullname}/#{tag}/#{@env.user}@#{@env.machine}.json"
 		if(File.exists?(logfile))
-			# load hash from json
-			rake_default=Command.new(JSON.parse(IO.read(logfile)))
-			#puts rake_default.summary
+            rake_default.open logfile
+            puts rake_default.summary true if(rake_default[:exit_code] != 0)
 		else
-			#FileUtils.mkdir("#{@dev.make_dir}") if !File.exists? "#{@env.root_dir}/make"
-			makedir=make_dir tag#{}"#{@env.make_dir}/make/#{self.fullname}-#{tag}"
+			makedir=make_dir tag
 			FileUtils.mkdir_p(File.dirname(makedir)) if !File.exists? File.dirname(makedir)
 			if(self[:url].include?('.git'))
 				if(!File.exists?(makedir))
@@ -192,7 +210,6 @@ class Project < Hash
 				if(File.exists?(makedir))
 				  puts "changing dir to #{makedir}" if @env.debug?
 				  Dir.chdir(makedir) do
-				  	#puts "making #{self.fullname}"
 					checkout=Command.new({:input=>"git checkout #{tag}",:quiet=>true})
 					checkout.execute
 					FileUtils.rm_r '.git'
@@ -201,15 +218,13 @@ class Project < Hash
 					rake_default[:ignore_failure]=true
 					#rake_default[:timeout]=5*60*1000
 					rake_default.execute
+                    rake_default.save logfile
+					#FileUtils.mkdir_p(File.dirname(logfile)) if !File.exists?(File.dirname(logfile))
 
-
-					#@dev.history.add_command rake_default
-					
-					FileUtils.mkdir_p(File.dirname(logfile)) if !File.exists?(File.dirname(logfile))
-
-					puts "writing make logfile: #{logfile}"
-					File.open(logfile,'w'){|f|f.write(rake_default.to_json)}
+					#puts "writing make logfile: #{logfile}"
+					#File.open(logfile,'w'){|f|f.write(rake_default.to_json)}
 					update_status
+                    puts rake_default.summary true
 					rake_default
 				  end
 			   end
@@ -283,29 +298,7 @@ class Project < Hash
     def report
     end
 
-    def work
-    	clone
-    	checkout
-    	logfile=get_logfile ['work']
-    	if(File.exists?(wrk_dir))
-    		rake_default=Command.new({:input =>'rake default',:quiet => true,:ignore_failure => true})
-    		if(last_work_mtime.nil? || last_work_mtime < Environment.get_latest_mtime(wrk_dir))
-    		  Dir.chdir(wrk_dir) do
-    		  	puts "working #{self.fullname}"
-				rake_default.execute
-				rake_default.save logfile
-				update_status
-				puts rake_default.summary true
-    	      end
-    	    else
-    	    	if(File.exists?(logfile))
-    	    		rake_default.open logfile
-    	    		puts rake_default.summary true if(rake_default[:exit_code] != 0)
-    	    	end
-    	    end
-    	    rake_default
-    	end
-    end
+    
 
     def update
     	clone
