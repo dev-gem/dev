@@ -190,7 +190,7 @@ class Command < Hash
     #end
 
     def self.execute command
-      cmd = Command.new(command) if command.kind_of?(String)
+      cmd = Command.new({ :input => command, :quiet => true}) if command.kind_of?(String)
       cmd = command if command.kind_of?(Command)
       cmd.execute
       cmd[:exit_code]
