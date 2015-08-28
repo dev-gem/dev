@@ -4,7 +4,7 @@ class Array
     attr_accessor :env
     def intialize env=nil
       @env=env
-      @env=Environment.enw if @env.nil?
+      @env=Environment.new() if @env.nil?
     end
 
     def execute value=nil
