@@ -216,6 +216,7 @@ class Project < Hash
 		rake_default=Command.new({:input => 'rake default',:quiet => true,:ignore_failure => true})
 		logfile=get_logfile ['make',tag]		
 		if(File.exists?(logfile))
+            puts "Project make logfile #{logfile} exists." if @env.debug?
             rake_default.open logfile
             puts rake_default.summary true if(rake_default[:exit_code] != 0)
 		else
@@ -226,28 +227,23 @@ class Project < Hash
 				   clone=Command.new({:input=>"git clone #{self[:url]} #{makedir}",:quiet=>true})
 				   clone.execute
 			    end
-				if(File.exists?(makedir))
+            end
+			if(File.exists?(makedir))
 				  puts "changing dir to #{makedir}" if @env.debug?
 				  Dir.chdir(makedir) do
 					checkout=Command.new({:input=>"git checkout #{tag}",:quiet=>true})
 					checkout.execute
 					FileUtils.rm_r '.git'
-					#rake_default=Command.new('rake default')
-					#rake_default[:quiet]=true
-					#rake_default[:ignore_failure]=true
-					#rake_default[:timeout]=5*60*1000
 					rake_default.execute
                     rake_default.save logfile
-					#FileUtils.mkdir_p(File.dirname(logfile)) if !File.exists?(File.dirname(logfile))
-
-					#puts "writing make logfile: #{logfile}"
-					#File.open(logfile,'w'){|f|f.write(rake_default.to_json)}
 					update_status
                     puts rake_default.summary true
 					rake_default
 				  end
-			   end
+            else
+                puts "Project make make_dir #{makedir} does not exist." if @env.debug?
 			end
+			
 			begin
 			    FileUtils.rm_r makedir
 		    rescue
