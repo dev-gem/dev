@@ -1,9 +1,10 @@
 puts __FILE__ if defined?(DEBUG)
-
+require_relative '../base/array.rb'
 desc 'performs publish commands'
 task :publish do Tasks.execute_task :publish; end
 
 class Publish < Array
+
 	def update
 
         #FileUtils.mkdir_p("#{@env.publish_dirroot}/publish") if !File.exists?("#{Environment.dev_root}/publish")
