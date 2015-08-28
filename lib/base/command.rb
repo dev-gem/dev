@@ -235,11 +235,11 @@ class Command < Hash
       seconds = timespan.round
       if(seconds > 99)
         minutes=(seconds/60).round
-        result="#{minutes}m"
+        result="#{minutes} m"
       else
-        result="#{seconds}s" # 99s 
+        result="#{seconds} s" # 99s 
       end
-      result.fix(3)
+      result.fix(4)
     end
 
     def summary include_directory=false
@@ -247,16 +247,16 @@ class Command < Hash
       duration=getFormattedTimeSpan(self[:end_time]-self[:start_time])
       if(Environment.default.colorize?)
         require 'ansi/code'
-        code=ANSI.green + '+ ' + ANSI.reset
-        code=ANSI.red   + '- ' + ANSI.reset if exit_code != 0
+        #code=ANSI.green + '+ ' + ANSI.reset
+        #code=ANSI.red   + '- ' + ANSI.reset if exit_code != 0
         cinput = ANSI.green + self[:input] + ANSI.reset
         cinput = ANSI.red   + self[:input] + ANSI.reset if exit_code != 0
         cdirectory = ''
         cdirectory = "(self[:directory])" if include_directory
-        "#{code} #{duration} #{cinput} #{cdirectory}"
+        "  #{duration} #{cinput} #{cdirectory}"
       else
-        code='  '
-        code='- ' if exit_code != 0
+        code=' '
+        code='X' if exit_code != 0
         sdirectory = ''
         sdirectory = "(self[:directory])" if include_directory
         "#{code} #{duration} #{self[:input]} #{sdirectory}"
