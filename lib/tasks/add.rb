@@ -34,7 +34,7 @@ class Add < Array
 				if(File.exists?('.git'))
 					SOURCE.each{|f|
 						if(File.exists?(f) && File.file?(f))
-						  status=`git status #{f} --short`
+						  status=Command.output("git status #{f} --short")
 						  if status.include?('??') || status.include?(' M ')
 							#puts "git add #{f} -v"
 							add_quiet "git add #{f} -v" 
