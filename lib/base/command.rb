@@ -6,6 +6,7 @@ require_relative('timeout.rb')
 require_relative('timer.rb')
 require_relative('array.rb')
 require_relative('hash.rb')
+require_relative('string.rb')
 BUFFER_SIZE=1024 if(!defined?(BUFFER_SIZE))
             
 # = Command
@@ -230,8 +231,15 @@ class Command < Hash
     end
 
     def getFormattedTimeSpan timespan
+      result=''
       seconds = timespan.round
-      seconds.to_s + " sec"
+      if(seconds > 99)
+        minutes=(seconds/60).round
+        result="#{minutes}m"
+      else
+        result="#{seconds}s" # 99s 
+      end
+      result.fix(3)
     end
 
     def summary
