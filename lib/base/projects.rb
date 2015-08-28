@@ -42,19 +42,20 @@ class Projects < Hash
 
     def get_projects value=''
     	puts "get_projects #{value.to_s}" if @env.debug?
-    	puts "total project count #{self.length}" if @env.debug?
+    	puts "get_project total project count #{self.length}" if @env.debug?
     	projects=Array.new
     	filter=''
     	filter=value.to_s if !value.nil? && value.kind_of?(String)
     	filter=value[0].to_s if !value.nil? && value.kind_of?(Array) && !value[0].to_s.include?('=')
 
+        puts "get_project filter '#{filter}'" if @env.debug?
     	self.each{|k,v|
+    		puts " checking project #{k}" if @env.debug?
     		if(filter.length==0 || k.include?(filter))
     			if(v.kind_of?(Project))
     			   projects << v
     			   v.env=@env
     			end
-    			
     		end
     	}
     	projects
