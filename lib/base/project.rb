@@ -154,6 +154,7 @@ class Project < Hash
     	log_filenames(tags).each{|logfile|
     		commands << Command.new(JSON.parse(IO.read(logfile)))
     	}
+        commands
     end
 
     def get_logfile tags

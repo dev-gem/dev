@@ -86,16 +86,15 @@ class Projects < Hash
 
     def work args
     	projects=get_projects args
-		puts "working #{projects.length} projects..."
+		puts "working #{projects.length} projects..." if @env.debug?
     	projects.each{|project|
     		project.work
     	}
 	end
 
     def list args
-    	puts "list #{args}\n" if @env.debug?
     	projects=get_projects args
-		puts "listing #{projects.length} projects..."
+		puts "listing #{projects.length} projects..." if @env.debug?
     	projects.each{|project|
     		project.list
     		
@@ -104,7 +103,7 @@ class Projects < Hash
 
 	def make args
 		projects=get_projects args
-		puts "making #{projects.length} projects..."
+		puts "making #{projects.length} projects..." if @env.debug?
 		projects.each{|project|
 			project.make
 		}
