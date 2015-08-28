@@ -10,6 +10,7 @@ describe Environment do
     expect(File.exist?(env.home_dir)).to eq(true)
     expect(File.exist?(env.log_dir)).to eq(true)
     expect(File.exist?(env.make_dir)).to eq(true)
+    expect(File.exist?(env.publish_dir)).to eq(true)
     expect(File.exist?(env.wrk_dir)).to eq(true)
     expect(env.machine.length).to be > 0
     expect(env.user.length).to be > 0

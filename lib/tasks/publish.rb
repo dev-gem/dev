@@ -6,7 +6,7 @@ task :publish do Tasks.execute_task :publish; end
 class Publish < Array
 	def update
 
-        FileUtils.mkdir_p("#{Environment.dev_root}/publish") if !File.exists?("#{Environment.dev_root}/publish")
+        #FileUtils.mkdir_p("#{@env.publish_dirroot}/publish") if !File.exists?("#{Environment.dev_root}/publish")
 		if(File.exists?('.git') && defined?(VERSION))
 			add "<%Git.tag('#{Rake.application.original_dir}','#{VERSION}')%>"
 		end
@@ -31,7 +31,7 @@ class Publish < Array
 		puts 'publish glob, checking...' if defined? DEBUG
 		Dir.glob("#{Rake.application.original_dir}/**/*.{nupkg,msi,gem}").each{|publish_file|
 			puts "checking #{publish_file}" if defined? DEBUG
-			dest="#{Environment.dev_root}/publish/#{File.basename(publish_file)}"
+			dest="#{@env.publish_dir}/#{File.basename(publish_file)}"
 			FileUtils.mkdir_p("#{Environment.dev_root}/publish") if !File.exists?("#{Environment.dev_root}/publish")
 			add "<%FileUtils.cp('#{publish_file}','#{dest}')%>" if(!File.exists?(dest))
 		}

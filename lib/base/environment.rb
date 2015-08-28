@@ -33,6 +33,12 @@ class Environment < Hash
     dir
   end
 
+  def publish_dir
+    dir="#{get_env('DEV_ROOT')}/publish"
+    FileUtils.mkdir_p dir if !File.exists? dir
+    dir
+  end
+
   def wrk_dir
     dir="#{get_env('DEV_ROOT')}/wrk"
     FileUtils.mkdir_p dir if !File.exists? dir
