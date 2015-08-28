@@ -1,4 +1,7 @@
 require 'rake/clean'
+require_relative('./lib/dev.rb')
+#require_relative('./lib/apps/git.rb')
+#require_relative('./lib/base/command.rb')
 
 CLEAN.include('*.gem','*.html')
 CLEAN.include('.yardopts') if File.exists?('.yardopts')
