@@ -1,30 +1,12 @@
 require_relative('../lib/dev.rb')
 
 describe Dev do
-
-    it "should support some basic environment variables" do
-        dev1=Dev.new
-        expect(File.exists?(dev1.get_env('HOME'))).to eq(true)
-        expect(File.exists?(dev1.get_env('DEV_ROOT'))).to eq(true)
-        expect(dev1.debug?).to eq(false)
-    end
-
-    it "should be able to modify it environment variables independently" do
-        dev1=Dev.new
-        FileUtils.mkdir('dev_spec') if !File.exists?('dev_spec')
-        dev2=Dev.new( { 'DEV_ROOT' => "#{File.dirname(__FILE__)}/dev_spec", 'DEBUG'=>'true' } )
-        expect(dev2.debug?).to eq(true)
-        #dev2.set_env 'DEV_ROOT', "#{File.dirname(__FILE__)}/dev_spec"
-        expect(dev1.get_env('DEV_ROOT')).not_to eq(dev2.get_env('DEV_ROOT'))
-        Environment.remove('dev_spec')
-    end
-
     it "should be able to perform add of project" do
         dir="#{File.dirname(__FILE__)}/dev_root"
         Dir.remove dir
         Dir.make dir
         dev=Dev.new( { 'DEV_ROOT' => dir, 'DEBUG' => 'true'} )
-        expect(dev.debug?).to eq(true)
+        expect(dev.env.debug?).to eq(true)
         expect(dev.projects.filename).to eq("#{dir}/data/Projects.json")
         expect(dev.projects.length).to eq(0)
         dev.execute('add http://github.com/dev-gem/HelloRake.git')
@@ -39,7 +21,7 @@ describe Dev do
         dev.execute('make')
         #expect(dev.history.get_commands('github/dev-gem/HelloRake').length).to eq(2)
         #expect(File.exists?()).to eq(true)
-        #Dir.remove dir
+        Dir.remove dir
     end
 
     #it "should be able to rake HelloRubyGem" do

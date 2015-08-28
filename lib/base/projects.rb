@@ -8,22 +8,22 @@ require_relative('../apps/git.rb')
 require_relative('../apps/svn.rb')
 
 class Projects < Hash
-	attr_accessor :dev
+	attr_accessor :env
 
-	def initialize dev=nil
-		@dev=dev
-		@dev=Dev.new if @dev.nil?
+	def initialize env=nil
+		@env=env if env.kind_of?(Environment)
+		@env=Environment.new if @env.nil?
 		open
 	end
 
 	def filename
-		"#{@dev.get_env('DEV_ROOT')}/data/Projects.json"
+		"#{@env.root_dir}/data/Projects.json"
 	end
 
     def update_state
     	self.each{|k,v|
     		self[k]=Project.new(v) if(v.is_a?(String))
-    		self[k]=Project.new(v) if(!v.is_a?(Project) && v.is_a?(Hash))
+    		#self[k]=Project.new(v) if(!v.is_a?(Project) && v.is_a?(Hash))
     		self[k][:fullname]=k
     	}
     end
@@ -35,7 +35,6 @@ class Projects < Hash
 
 	def open
 		if File.exists? filename
-		  #@filename=filename if filename.length > 0
 		  JSON.parse(IO.read(filename)).each{|k,v| self[k]=v}
 		  update_state
 	    end
@@ -48,39 +47,30 @@ class Projects < Hash
     	filter=value[0].to_s if !value.nil? && value.kind_of?(Array)
     	self.each{|k,v|
     		projects << v if(filter.length==0 || k.include?(filter))
+    		v.env=@env
     	}
     	projects
     end
 
     def add args
-    	puts "add #{args}\n" if @dev.debug?
+    	puts "add #{args}\n" if @env.debug?
     	url=args[0]
-    	puts "url #{url}\n" if @dev.debug?
+    	puts "url #{url}\n" if @env.debug?
     	project=Project.new(url)
     	project[:fullname]=args[1] if args.length > 1
-    	puts "fullname #{project[:fullname]}\n" if @dev.debug?
+    	puts "fullname #{project[:fullname]}\n" if @env.debug?
     	if(!self.has_key?(project[:fullname]) && project[:fullname].length > 0)
     		puts "adding #{project.fullname}\n"
     		self[project.fullname]=project
     		self.save
     	end
-    	#if(args.length > 1)
-
-    	#  project=Project.new(args[1])
-    	#  project[:fullname] = args[2] if args.length > 2
-    	#  if(project.fullname.length > 0 && !self.has_key?(project.fullname))
-		#   	puts "adding #{project.fullname}"
-		#   	self[project.fullname]=project
-		#   	self.save #Projects.user_projects_filename
-		#  end
-		#end
     end
 
     def work args
-    	puts "Projects work #{args}\n" if @dev.debug?
+    	puts "Projects work #{args}\n" if @env.debug?
     	get_projects(args).each{|project|
-    		puts "  Project #{project[:fullname]}\n" if @dev.debug?
-    		project.dev=@dev
+    		puts "  Project #{project[:fullname]}\n" if @env.debug?
+    		#project.env=@env
     		project.work
     	}
 	end
@@ -95,10 +85,9 @@ class Projects < Hash
 	end
 
 	def make args
-		puts "Projects make #{args}\n" if @dev.debug?
+		puts "Projects make #{args}\n" if @env.debug?
 		get_projects(args).each{|project|
-			puts "  Project #{project[:fullname]}\n" if @dev.debug?
-			project.dev=@dev
+			puts "  Project #{project[:fullname]}\n" if @env.debug?
 			project.make
 		}
 		#filter=''

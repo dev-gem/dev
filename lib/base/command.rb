@@ -1,5 +1,6 @@
 puts __FILE__ if defined?(DEBUG)
 
+require 'time'
 require 'open3'
 require_relative('timeout.rb')
 require_relative('timer.rb')
@@ -61,6 +62,10 @@ class Command < Hash
 
   def quiet?
     (self.has_key?(:quiet) && self[:quiet])
+  end
+
+  def exit_code
+    self[:exit_code]
   end
 
 	def execute value=nil

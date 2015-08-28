@@ -4,58 +4,126 @@ require_relative('string.rb')
 
 class Environment < Hash
 
-  @@debug=true if defined?(DEBUG)
-  @@debug=false if !defined?(DEBUG)
-  @@development_root=nil
-
-  def initialize
-    self[:home]=Environment.home
-    self[:machine]=Environment.machine
-    self[:user]=Environment.user
-  end
-
-  def self.set_development_root value
-    @@development_root=value
-    if(!value.nil?)
-      FileUtils.mkdir_p value if(!File.exists?(value))
-      ['bin','data','log','make','publish','test'].each{|dir|
-        #FileUtils.mkdir_p("#{value}/#{dir}") if !File.exists? "#{value}/#{dir}"
-      }
-    end
-  end
-
-  def self.debug
-    @@debug
-  end
-
-  def self.home 
-    ["USERPROFILE","HOME"].each {|v|
-      return ENV[v].gsub('\\','/') unless ENV[v].nil?
+  def initialize env=nil
+    @env=Hash.new
+    @env_aliases={'HOME' => ['USERPROFILE'],
+                  'DEV_ROOT' => ['DEV_HOME','HOME','USERPROFILE'],
+                  'USERNAME' => ['USR']
     }
-    dir="~"
-    dir=ENV["HOME"] unless ENV["HOME"].nil?
-    dir=ENV["USERPROFILE"].gsub('\\','/') unless ENV["USERPROFILE"].nil?
-    return dir
+    env.each{|k,v| @env[k.to_s]=v} if !env.nil?
   end
 
-  def self.configuration
-    config="#{Environment.home}/dev.config.rb"
-    if(!File.exists?(config))
-      text=IO.read("#{File.dirname(__FILE__)}/../dev.config.rb")
-      File.open(config,'w'){|f|f.write(text)}
+  def root_dir
+    get_env('DEV_ROOT')
+  end
+ 
+  def home_dir
+    get_env('HOME')
+  end
+
+  def log_dir
+    dir="#{get_env('DEV_ROOT')}/log"
+    FileUtils.mkdir_p dir if !File.exists? dir
+    dir
+  end
+
+  def make_dir
+    dir="#{get_env('DEV_ROOT')}/make"
+    FileUtils.mkdir_p dir if !File.exists? dir
+    dir
+  end
+
+  def wrk_dir
+    dir="#{get_env('DEV_ROOT')}/wrk"
+    FileUtils.mkdir_p dir if !File.exists? dir
+    dir
+  end
+
+  def machine
+    return ENV['COMPUTERNAME'] if !ENV['COMPUTERNAME'].nil? 
+    machine = `hostname`
+    machine = machine.split('.')[0] if machine.include?('.')
+    return machine.strip
+  end
+
+  def user
+    get_env('USERNAME')
+    #return ENV['USER'] if !ENV['USER'].nil?  #on Unix
+    #ENV['USERNAME']
+  end
+
+  def get_env key
+    if(!@env.nil? && @env.has_key?(key))
+      return @env[key] 
+      end
+    value = ENV[key]
+    if(value.nil?)
+      if(@env_aliases.has_key?(key))
+        @env_aliases[key].each{|akey|
+          value=get_env(akey) if value.nil?
+        }
+      end
     end
-    config
+    value
   end
 
-  def self.machine
-     if !ENV['COMPUTERNAME'].nil? 
-	   return ENV['COMPUTERNAME']
-	 end
-
-     machine = `hostname`
-     machine = machine.split('.')[0] if machine.include?('.')
-	 return machine.strip
+  def debug?
+    return true if get_env('DEBUG')=='true'
+    false
   end
+
+  #@@debug=true if defined?(DEBUG)
+  #@@debug=false if !defined?(DEBUG)
+  #@@development_root=nil
+
+  #def initialize
+    #self[:home]=Environment.home
+    #self[:machine]=Environment.machine
+    #self[:user]=Environment.user
+  #end
+
+  #def self.set_development_root value
+  #  @@development_root=value
+  #  if(!value.nil?)
+  #    FileUtils.mkdir_p value if(!File.exists?(value))
+  #    ['bin','data','log','make','publish','test'].each{|dir|
+  #      #FileUtils.mkdir_p("#{value}/#{dir}") if !File.exists? "#{value}/#{dir}"
+  #    }
+  #  end
+  #end
+
+  #def self.debug
+  #  @@debug
+  #end
+
+  #def self.home 
+  #  ["USERPROFILE","HOME"].each {|v|
+  #    return ENV[v].gsub('\\','/') unless ENV[v].nil?
+  #  }
+  #  dir="~"
+  #  dir=ENV["HOME"] unless ENV["HOME"].nil?
+  #  dir=ENV["USERPROFILE"].gsub('\\','/') unless ENV["USERPROFILE"].nil?
+  #  return dir
+  #end
+
+  #def self.configuration
+  #  config="#{Environment.home}/dev.config.rb"
+  #  if(!File.exists?(config))
+  #    text=IO.read("#{File.dirname(__FILE__)}/../dev.config.rb")
+  #    File.open(config,'w'){|f|f.write(text)}
+  #  end
+  #  config
+  #end
+
+  #def self.machine
+  #   if !ENV['COMPUTERNAME'].nil? 
+	#   return ENV['COMPUTERNAME']
+	# end
+
+  #   machine = `hostname`
+  #   machine = machine.split('.')[0] if machine.include?('.')
+	# return machine.strip
+  #end
 
   def self.remove directory
     if(File.exists?(directory))
@@ -67,21 +135,21 @@ class Environment < Hash
     end
   end
 
-  def self.user
-  	return ENV['USER'] if !ENV['USER'].nil?  #on Unix
-    ENV['USERNAME']
-  end
+  #def self.user
+ # 	return ENV['USER'] if !ENV['USER'].nil?  #on Unix
+ #   ENV['USERNAME']
+  #end
 
-  def self.dev_root
-    if(!@@development_root.nil?)
-      return @@development_root
-    end
-    ["DEV_HOME","DEV_ROOT"].each {|v|
-      return ENV[v].gsub('\\','/') unless ENV[v].nil?
-    }
-    dir=home
-   return dir
-  end
+  #def self.dev_root
+  #  if(!@@development_root.nil?)
+  #    return @@development_root
+  #  end
+  #  ["DEV_HOME","DEV_ROOT"].each {|v|
+  #    return ENV[v].gsub('\\','/') unless ENV[v].nil?
+  #  }
+  #  dir=home
+  # return dir
+  #end
 
   def self.check
     puts 'checking commands...'

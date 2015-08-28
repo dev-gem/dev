@@ -35,6 +35,7 @@ describe Svn do
 		dir="#{File.dirname(__FILE__)}/svn_spec"
 		FileUtils.mkdir(dir) if(!File.exists?(dir))
 		svn_repo="file:///#{File.dirname(__FILE__)}/svn_spec/svn_test_repo"
+		sleep(1)
 		Dir.chdir(dir) do
 			FileUtils.rm_r('svn_test_repo') if File.exists?('svn_test_repo')
 			`svnadmin create svn_test_repo 2>&1`

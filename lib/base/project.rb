@@ -2,10 +2,11 @@ puts __FILE__ if defined?(DEBUG)
 
 require 'json'
 require_relative('../apps/svn.rb')
+require_relative('environment.rb')
 require_relative('string.rb')
 
 class Project < Hash
-	attr_accessor :filename,:dev
+	attr_accessor :filename,:env
 
 	def self.get_url directory=Rake.application.original_dir
 	  url=''
@@ -17,7 +18,7 @@ class Project < Hash
 	end
 
 	def self.get_fullname directory
-	    directory.gsub(Environment.dev_root,'').gsub('/wrk','')
+	    directory.gsub(@dev.root_dir,'').gsub('/wrk','')
 	end
 
 	def self.get_fullname_from_url url
@@ -26,7 +27,7 @@ class Project < Hash
 
 	def initialize value=''
 		@filename=''
-
+        @env=Environment.new
 		self[:url]=Project.get_url
 		self[:fullname]=Project.get_fullname_from_url self[:url] if self[:url].length > 0
 		if value.is_a?(String)
@@ -54,8 +55,10 @@ class Project < Hash
     end
 
 	def wrk_dir
-		"#{@dev.wrk_dir}/#{self.fullname}"
+		"#{@env.wrk_dir}/#{self.fullname}"
 	end
+
+    
 
 	def pull
 		if(File.exists?(wrk_dir) && File.exists?("#{wrk_dir}/.git"))
@@ -67,8 +70,8 @@ class Project < Hash
 	end
 
 	def clone
-		puts "project.clone" if @dev.debug?
-		puts "wrk_dir=#{wrk_dir}" if @dev.debug?
+		puts "project.clone" if @env.debug?
+		puts "wrk_dir=#{wrk_dir}" if @env.debug?
 		if(!File.exists?(wrk_dir) && self[:url].include?('.git'))
 			puts "cloning #{self[:url]} to #{self.wrk_dir}"
 			puts `git clone #{self[:url]} #{self.wrk_dir}`
@@ -104,8 +107,8 @@ class Project < Hash
 	end
 
     def latest_tag update=false
-		FileUtils.mkdir("#{Environment.dev_root}/make") if !File.exists? "#{Environment.dev_root}/make"
-		makedir="#{Environment.dev_root}/make/#{self.fullname}"
+		#FileUtils.mkdir("#{@dev_root}/make") if !File.exists? "#{@env.root_dir}/make"
+		makedir="#{@env.make_dir}/#{self.fullname}"
     	FileUtils.mkdir_p(File.dirname(makedir)) if !File.exists?(File.dirname(makedir))
         if(File.exists?(makedir))
         	Dir.chdir(makedir) do
@@ -131,24 +134,63 @@ class Project < Hash
     end
 
     def make_dir tag
-    	"#{Environment.dev_root}/make/#{self.fullname}-#{tag}"
+    	"#{@env.root_dir}/make/#{self.fullname}-#{tag}"
+    end
+
+    def log_filenames tags=nil
+    	tags=Array.new if tags.nil?
+    	filenames=Array.new
+    	Dir.chdir(@env.log_dir) do
+    		dotname=fullname.gsub('/','.')
+    		Dir.glob("#{dotname}*.json").each{|f|
+    			if(tags.length==0)
+    				filenames << "#{@env.log_dir}/#{f}"
+    			else
+    				has_tags=true
+    				tags.each{|tag|
+    					has_tags=false if !f.include? tag
+    				}
+    				filenames << "#{@env.log_dir}/#{f}" if has_tags
+    			end
+    		}
+    	end
+    	filenames
+    end
+
+    def command_history tags=nil
+    	commands=Array.new
+    	log_filenames(tags).each{|logfile|
+    		commands << Command.new(JSON.parse(IO.read(logfile)))
+    	}
+    end
+
+    def get_logfile tags
+    	tagstring=''
+    	tagstring=tags if tags.kind_of?(String)
+    	tagstring=tags.join('.') if tags.kind_of?(Array)
+    	name="#{self.fullname}.#{tagstring}.json".gsub('/','.')
+    	"#{@env.log_dir}/#{name}"
     end
 
 	def make tag=''
+		puts "Project.make (#{self.fullname})\n" if @env.debug?
 		tag=latest_tag if tag.length==0
-
+		puts "tag #{tag}\n" if @env.debug?
 		return if tag.length==0
 		raise 'no tag specified' if tag.length==0
 
 		rake_default=nil
-		logfile="#{Environment.dev_root}/log/#{self.fullname}/#{tag}/#{Environment.user}@#{Environment.machine}.json"
+		logfile=get_logfile ['make',tag]		
+		puts "make logfile: #{logfile}"
+		#logfile="#{@env.log_dir}/#{self.fullname}.make.#{tag}.json".gsub('/','.')
+		#logfile="#{@env.root_dir}/#{self.fullname}/#{tag}/#{@env.user}@#{@env.machine}.json"
 		if(File.exists?(logfile))
 			# load hash from json
 			rake_default=Command.new(JSON.parse(IO.read(logfile)))
 			#puts rake_default.summary
 		else
-			FileUtils.mkdir("#{Environment.dev_root}/make") if !File.exists? "#{Environment.dev_root}/make"
-			makedir="#{Environment.dev_root}/make/#{self.fullname}-#{tag}"
+			#FileUtils.mkdir("#{@dev.make_dir}") if !File.exists? "#{@env.root_dir}/make"
+			makedir=make_dir tag#{}"#{@env.make_dir}/make/#{self.fullname}-#{tag}"
 			FileUtils.mkdir_p(File.dirname(makedir)) if !File.exists? File.dirname(makedir)
 			if(self[:url].include?('.git'))
 				if(!File.exists?(makedir))
@@ -156,6 +198,7 @@ class Project < Hash
 				   clone.execute
 			    end
 				if(File.exists?(makedir))
+				  puts "changing dir to #{makedir}" if @env.debug?
 				  Dir.chdir(makedir) do
 				  	#puts "making #{self.fullname}"
 					checkout=Command.new({:input=>"git checkout #{tag}",:quiet=>true})
@@ -167,9 +210,12 @@ class Project < Hash
 					#rake_default[:timeout]=5*60*1000
 					rake_default.execute
 
-					@dev.history.add_command rake_default
+
+					#@dev.history.add_command rake_default
 					
 					FileUtils.mkdir_p(File.dirname(logfile)) if !File.exists?(File.dirname(logfile))
+
+					puts "writing make logfile: #{logfile}"
 					File.open(logfile,'w'){|f|f.write(rake_default.to_json)}
 					update_status
 					rake_default
@@ -185,7 +231,7 @@ class Project < Hash
 	end
 
     def last_work_mtime
-    	logfile="#{Environment.dev_root}/log/#{self.fullname}/#{Environment.user}@#{Environment.machine}.json"
+    	logfile="#{@env.root_dir}/log/#{self.fullname}/#{@env.user}@#{@env.machine}.json"
     	if File.exists? logfile
     		return File.mtime(logfile)
     	end
@@ -193,16 +239,16 @@ class Project < Hash
     end
 
     def update_status
-    	status_logfile="#{Environment.dev_root}/log/#{self.fullname}/#{Environment.user}@#{Environment.machine}.status.json"
+    	status_logfile="#{@env.root_dir}/log/#{self.fullname}/#{@env.user}@#{@env.machine}.status.json"
     	status=Hash.new({'status'=>'?'})
-    	wrk_logfile="#{Environment.dev_root}/log/#{self.fullname}/#{Environment.user}@#{Environment.machine}.json"
+    	wrk_logfile="#{@env.root_dir}/log/#{self.fullname}/#{@env.user}@#{@env.machine}.json"
     	if(File.exists?(wrk_logfile))
     		rake_default=Command.new(JSON.parse(IO.read(wrk_logfile)))
     		status[:work_logfile]=wrk_logfile 
     		status['status']='0' 
     		status['status']='X' if rake_default[:exit_code] != 0
         end
-    	make_logfile="#{Environment.dev_root}/log/#{self.fullname}/#{latest_tag}/#{Environment.user}@#{Environment.machine}.json"
+    	make_logfile="#{@env.root_dir}/log/#{self.fullname}/#{latest_tag}/#{@env.user}@#{@env.machine}.json"
     	if(File.exists?(make_logfile))
     		rake_default=Command.new(JSON.parse(IO.read(make_logfile)))
     		status[:make_logfile]=make_logfile 
@@ -216,7 +262,7 @@ class Project < Hash
     end
 
     def status
-    	status_logfile="#{Environment.dev_root}/log/#{self.fullname}/#{Environment.user}@#{Environment.machine}.status.json"
+    	status_logfile="#{@env.root_dir}/log/#{self.fullname}/#{@env.user}@#{@env.machine}.status.json"
     	update_status if !File.exists? status_logfile
     	if(File.exists?(status_logfile))
     	  statusHash=JSON.parse(IO.read(status_logfile))
@@ -224,13 +270,13 @@ class Project < Hash
     	end
     	'?'
     	#status='?'
-    	#wrk_logfile="#{Environment.dev_root}/log/#{self.fullname}/#{Environment.user}@#{Environment.machine}.json"
+    	#wrk_logfile="#{@env.root_dir}/log/#{self.fullname}/#{@env.user}@#{@env.machine}.json"
     	#if(File.exists?(wrk_logfile))
     	#	rake_default=Command.new(JSON.parse(IO.read(wrk_logfile)))
     	#	status='0'
     	#	return 'X' if rake_default[:exit_code] != 0
     	#end
-    	#make_logfile="#{Environment.dev_root}/log/#{self.fullname}/#{latest_tag}/#{Environment.user}@#{Environment.machine}.json"
+    	#make_logfile="#{@env.root_dir}/log/#{self.fullname}/#{latest_tag}/#{@env.user}@#{@env.machine}.json"
     	#if(File.exists?(make_logfile))
     	#	rake_default=Command.new(JSON.parse(IO.read(make_logfile)))
     	#	status='0'
@@ -256,15 +302,18 @@ class Project < Hash
 				rake_default[:ignore_failure]=true
 				rake_default.execute
     			#Command.exit_code('rake default')
-    			@dev.history.add_command rake_default
-    			logfile="#{Environment.dev_root}/log/#{self.fullname}/#{Environment.user}@#{Environment.machine}.json"
+
+    			history=History.new(@env)
+    			history.add_command rake_default
+
+    			logfile="#{@env.root_dir}/log/#{self.fullname}/#{@env.user}@#{@env.machine}.json"
     			FileUtils.mkdir_p(File.dirname(logfile)) if !File.exists?(File.dirname(logfile))
 				File.open(logfile,'w'){|f|f.write(rake_default.to_json)}
 				update_status
 				puts rake_default.summary
     	      end
     	    else
-    	    	logfile="#{Environment.dev_root}/log/#{self.fullname}/#{Environment.user}@#{Environment.machine}.json"
+    	    	logfile="#{@env.root_dir}/log/#{self.fullname}/#{@env.user}@#{@env.machine}.json"
     	    	if(File.exists?(logfile))
     	    		rake_default=Command.new('rake default')
     	    		rake_default.open logfile
