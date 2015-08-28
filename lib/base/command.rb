@@ -261,9 +261,6 @@ class Command < Hash
         sdirectory = "(self[:directory])" if include_directory
         "#{code} #{duration} #{self[:input]} #{sdirectory}"
       end
-      #status="OK   "
-      #status="Error" if(!self.has_key?(:exit_code) || self[:exit_code] != 0)
-      #{}"#{status} '#{self[:input]}' (#{self[:directory]}) #{self[:exit_code].to_s} [#{duration}]"
     end
 
     def to_html

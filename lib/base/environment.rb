@@ -14,7 +14,7 @@ class Environment < Hash
     @env=Hash.new
     @env_aliases={'HOME' => ['USERPROFILE'],
                   'DEV_ROOT' => ['DEV_HOME','HOME','USERPROFILE'],
-                  'USERNAME' => ['USR']
+                  'USERNAME' => ['USER','USR']
     }
     env.each{|k,v| @env[k.to_s]=v} if !env.nil?
     @@default=self if @@default.nil?
