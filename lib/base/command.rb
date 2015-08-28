@@ -72,6 +72,13 @@ class Command < Hash
     self[:exit_code]
   end
 
+  def output
+    self[:output]
+  end
+  def error
+    self[:error]
+  end
+
 	def execute value=nil
 
     if(!value.nil? && value.is_a?(Hash))
@@ -192,6 +199,7 @@ class Command < Hash
     def self.execute command
       cmd = Command.new({ :input => command, :quiet => true}) if command.kind_of?(String)
       cmd = command if command.kind_of?(Command)
+      cmd = Command.new(command) if command.kind_of?(Hash)
       cmd.execute
       cmd[:exit_code]
       cmd

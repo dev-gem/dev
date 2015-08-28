@@ -1,5 +1,5 @@
 puts __FILE__ if defined?(DEBUG)
-
+require_relative('command.rb')
 
 class Gemspec
 	def self.update gemspec_file
@@ -19,11 +19,19 @@ class Gemspec
 		return spec.version.to_s
     end
 
+    def self.latest_published_version gemname
+    	scan=`gem list -r #{gemname}`.scan(/^dev\s*\(([\d.]+)\)/)
+		if(!scan.nil?)
+			return scan[0][0] if(scan.length > 0 && !scan[0].nil? && scan[0].length > 0)
+		end
+		''
+    end
+
     def self.published_version gemspec_file
   		published_version=''
     	spec=Gem::Specification.load(gemspec_file)
 		begin
-		  published_version = `gem list -r #{spec.name}`.scan(/\((\d+.\d+.\d+)\)/)[0][0]
+		  published_version = latest_published_version spec.name# `gem list -r #{spec.name}`.scan(/\((\d+.\d+.\d+)\)/)[0][0]
 		rescue
 		  published_version=''
 		end
