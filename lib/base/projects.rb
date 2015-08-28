@@ -97,7 +97,8 @@ class Projects < Hash
     	projects=get_projects args
 		puts "listing #{projects.length} projects..."
     	projects.each{|project|
-    		puts "#{project.status} #{project.fullname}"
+    		project.list
+    		
     	}
 	end
 
