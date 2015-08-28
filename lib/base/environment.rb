@@ -87,12 +87,15 @@ class Environment < Hash
   end
 
   def colorize?
-    if(`gem list win32console`.include?('win32console'))
-      require 'ansi/code'
-      return true
+    colorize=true
+    if windows?
+      if(`gem list win32console`.include?('win32console'))
+        require 'ansi/code'
+      else
+        colorize=false
+      end
     end
-    false if windows?
-    true
+    colorize
   end
 
   def windows?
