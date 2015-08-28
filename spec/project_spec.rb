@@ -21,11 +21,15 @@ describe Project do
         helloRake=Project.new('https://github.com/dev-gem/HelloRake.git')
         helloRake.env=Environment.new({ 'DEV_ROOT' => dir, 'DEBUG' => 'true'})
         expect(helloRake.env.debug?).to eq(true)
-        #expect(helloRake.log_filenames.length).to eq(0)
+
+        # MAKE
         expect(helloRake.command_history.length).to eq(0)
         expect(helloRake.make('0.0.0').exit_code).to eq(0)
         expect(File.exists?(helloRake.get_logfile(['make','0.0.0']))).to eq(true)
         expect(helloRake.command_history.length).to eq(1)
+
+        # WORK
+        expect(helloRake.work.exit_code).to eq(0)
        # logfile=get_logfile ['make',tag]
         #dev=Dev.new( { 'DEV_ROOT' => dir, 'DEBUG' => 'true'} )
         #dev.execute('add http://github.com/dev-gem/HelloRake.git')

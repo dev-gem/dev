@@ -57,6 +57,9 @@ class Project < Hash
 	def wrk_dir
 		"#{@env.wrk_dir}/#{self.fullname}"
 	end
+	def make_dir tag
+    	"#{@env.make_dir}/#{self.fullname}-#{tag}"
+    end
 
     
 
@@ -133,9 +136,7 @@ class Project < Hash
         ''
     end
 
-    def make_dir tag
-    	"#{@env.root_dir}/make/#{self.fullname}-#{tag}"
-    end
+    
 
     def log_filenames tags=nil
     	tags=Array.new if tags.nil?
@@ -231,7 +232,8 @@ class Project < Hash
 	end
 
     def last_work_mtime
-    	logfile="#{@env.root_dir}/log/#{self.fullname}/#{@env.user}@#{@env.machine}.json"
+    	logfile=get_logfile ['work']
+    	#logfile="#{@env.root_dir}/log/#{self.fullname}/#{@env.user}@#{@env.machine}.json"
     	if File.exists? logfile
     		return File.mtime(logfile)
     	end
@@ -293,11 +295,13 @@ class Project < Hash
     def work
     	clone
     	checkout
+    	logfile=get_logfile ['work']
     	if(File.exists?(wrk_dir))
+    		rake_default=Command.new('rake default')
     		if(last_work_mtime.nil? || last_work_mtime < Environment.get_latest_mtime(wrk_dir))
     		  Dir.chdir(wrk_dir) do
     		  	puts "working #{self.fullname}"
-    		  	rake_default=Command.new('rake default')
+    		  	
 				rake_default[:quiet]=true
 				rake_default[:ignore_failure]=true
 				rake_default.execute
@@ -306,20 +310,22 @@ class Project < Hash
     			history=History.new(@env)
     			history.add_command rake_default
 
-    			logfile="#{@env.root_dir}/log/#{self.fullname}/#{@env.user}@#{@env.machine}.json"
+    			
+    			#logfile="#{@env.root_dir}/log/#{self.fullname}/#{@env.user}@#{@env.machine}.json"
     			FileUtils.mkdir_p(File.dirname(logfile)) if !File.exists?(File.dirname(logfile))
 				File.open(logfile,'w'){|f|f.write(rake_default.to_json)}
 				update_status
 				puts rake_default.summary
     	      end
     	    else
-    	    	logfile="#{@env.root_dir}/log/#{self.fullname}/#{@env.user}@#{@env.machine}.json"
+    	    	#logfile="#{@env.root_dir}/log/#{self.fullname}/#{@env.user}@#{@env.machine}.json"
     	    	if(File.exists?(logfile))
-    	    		rake_default=Command.new('rake default')
+    	    		#rake_default=Command.new('rake default')
     	    		rake_default.open logfile
     	    		puts rake_default.summary if(rake_default[:exit_code] != 0)
     	    	end
     	    end
+    	    rake_default
     	end
     end
 
