@@ -218,7 +218,7 @@ class Project < Hash
 		if(File.exists?(logfile))
             puts "Project make logfile #{logfile} exists." if @env.debug?
             rake_default.open logfile
-            puts rake_default.summary true if(rake_default[:exit_code] != 0)
+            puts rake_default.summary true# if(rake_default[:exit_code] != 0)
 		else
 			makedir=make_dir tag
 			FileUtils.mkdir_p(File.dirname(makedir)) if !File.exists? File.dirname(makedir)
