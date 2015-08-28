@@ -15,19 +15,22 @@ class Build < Array
 
 		#changed = true
         #if(changed)
-        	puts "Build scanning for sln files" if Environment.default.debug?
+        	puts "Build scanning for gemspec files" if Environment.default.debug?
 			Dir.glob('*.gemspec'){|gemspec|
 	    		add "gem build #{gemspec}" if !File.exist?(Gemspec.gemfile gemspec)
 	    	}
 	    	
 	    	puts "Build scanning for sln files" if Environment.default.debug?
 	    	SLN_FILES.each{|sln_file|
-
+	    		puts "  #{sln_file}" if Environment.default.debug?
 	    		build_commands = MSBuild.get_build_commands sln_file
 	    		if(!build_commands.nil?)
 	    			build_commands.each{|c|
+	    				puts "  build command #{c} discovered." if Environment.default.debug?
 	    				self.add c
 	    			}
+	    		else
+	    			puts "  no build command discovered." if Environment.default.debug?
 	    		end
 	    	}
 
