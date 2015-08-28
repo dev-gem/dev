@@ -8,7 +8,7 @@ class Pull < Array
 	def update
 		if(Internet.available?)
 			if(File.exists?('.git') && `git config --list`.include?('user.name='))
-				self <<  'git pull' if Git.branch != 'develop'
+				add_quiet('git pull') if Git.branch == '* master'
 			end
 		end
 	end

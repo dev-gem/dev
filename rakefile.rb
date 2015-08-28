@@ -1,16 +1,5 @@
-#['bundle','ansi'].each{|g|
-#	if(!`gem list #{g}`.include?("#{g} ("))
-#		puts "installing #{g}"
-#		puts `gem install #{g}`
-#	end
-#}
-require 'rake/clean'
+#require 'rake/clean'
 require_relative('./lib/dev.rb')
-#require_relative('./lib/apps/git.rb')
-#require_relative('./lib/base/command.rb')
-
-#{}`gem install bundle` if !`gem list bundle`.include?('bundle (')
-#	`gem install bundle` if !`gem list bundle`.include?('bundle (')
 
 CLEAN.include('*.gem','*.html')
 CLEAN.include('.yardopts') if File.exists?('.yardopts')
@@ -19,56 +8,20 @@ build_product= "dev-#{Gem::Specification.load('dev.gemspec').version}.gem"
 
 task :build do
 	Dir.glob('*.gem'){|f|File.delete f}
-
 	puts Command.execute('gem build dev.gemspec').summary
-	#puts `gem build dev.gemspec`
-	#raise 'build failed' if($?.to_i != 0)
-
 	File.open('dev.0.0.0.gemspec','w'){|f|
 		f.write(IO.read('dev.gemspec').gsub(/version\s*=\s*'[\d.]+'/,"version='0.0.0'"))
 	}
 	puts Command.execute('gem build dev.0.0.0.gemspec').summary
-	#puts `gem build dev.0.0.0.gemspec`
-	#puts ':install'
-	#puts 'uninstalling all version of dev gem'
 	puts Command.execute('gem uninstall dev --quiet --all -x').summary
-	#puts `gem uninstall dev --quiet --all -x`
-	#puts 'installing dev-0.0.0.gem'
-	#puts `gem install dev-0.0.0.gem`
 	puts Command.execute('gem install dev-0.0.0.gem').summary
 	File.delete 'dev.0.0.0.gemspec'
 end
 
-
-#task :test do
-	#puts `rspec --format documentation`
-	#puts `rspec --profile`
-	#puts `rspec`
-	#raise 'rspec failed' if($?.to_i != 0)
-#end
-
-#task :add do
-#	puts `git add -A`
-#end 
-
-#task :commit =>[:add] do
-#	puts `git commit -m'all'`
-#end
-
-#task :pull do
-#	puts `git pull` if `git branch`.include?('* master')
-#end
-
-#task :push do
-#	puts `git push`  if `git branch`.include?('* master')
-#end 
-
 task :publish do
-	#require_relative('./lib/apps/git.rb')
     Git.tag "#{File.dirname(__FILE__)}","#{Gem::Specification.load('dev.gemspec').version.to_s}" if `git branch`.include?('* master') 
 	begin
 		put Command.execute("gem push dev-#{Gem::Specification.load('dev.gemspec').version.to_s}.gem").summary
-		#puts `gem push dev-#{Gem::Specification.load('dev.gemspec').version.to_s}.gem`
 		FileUtils.rm(" dev-#{Gem::Specification.load('dev.gemspec').version.to_s}.gem")
 	rescue
 	end
