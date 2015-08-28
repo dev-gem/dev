@@ -42,6 +42,7 @@ class Projects < Hash
 
     def get_projects value=''
     	puts "get_projects #{value.to_s}" if @env.debug?
+    	puts "total project count #{self.length}" if @env.debug?
     	projects=Array.new
     	filter=''
     	filter=value.to_s if !value.nil? && value.kind_of?(String)
