@@ -7,6 +7,7 @@ class Environment < Hash
   @@default=nil
   def self.default
     @@default=Environment.new if @@default.nil?
+    @@default
   end
 
   def initialize env=nil
