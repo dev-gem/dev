@@ -41,43 +41,85 @@ class Projects < Hash
 	    end
 	end
 
-    def list filter=''
-		self.each{|k,v|
-			puts "#{v.status} #{k}" if(filter.length == 0 || k.include?(filter))
-		}
+    def get_projects value=''
+    	projects=Array.new
+    	filter=''
+    	filter=value.to_s if !value.nil? && value.kind_of?(String)
+    	filter=value[0].to_s if !value.nil? && value.kind_of?(Array)
+    	self.each{|k,v|
+    		projects << v if(filter.length==0 || k.include?(filter))
+    	}
+    	projects
+    end
+
+    def add args
+    	puts "add #{args}\n" if @dev.debug?
+    	url=args[0]
+    	puts "url #{url}\n" if @dev.debug?
+    	project=Project.new(url)
+    	project[:fullname]=args[1] if args.length > 1
+    	puts "fullname #{project[:fullname]}\n" if @dev.debug?
+    	if(!self.has_key?(project[:fullname]) && project[:fullname].length > 0)
+    		puts "adding #{project.fullname}\n"
+    		self[project.fullname]=project
+    		self.save
+    	end
+    	#if(args.length > 1)
+
+    	#  project=Project.new(args[1])
+    	#  project[:fullname] = args[2] if args.length > 2
+    	#  if(project.fullname.length > 0 && !self.has_key?(project.fullname))
+		#   	puts "adding #{project.fullname}"
+		#   	self[project.fullname]=project
+		#   	self.save #Projects.user_projects_filename
+		#  end
+		#end
+    end
+
+    def work args
+    	puts "Projects work #{args}\n" if @dev.debug?
+    	get_projects(args).each{|project|
+    		puts "  Project #{project[:fullname]}\n" if @dev.debug?
+    		project.dev=@dev
+    		project.work
+    	}
+	end
+
+    def list args #filter=''
+    	get_projects(args).each{|project|
+    		puts "#{project.status} #{project.fullname}"
+    	}
+		#self.each{|k,v|
+		#	puts "#{v.status} #{k}" if(filter.length == 0 || k.include?(filter))
+		#}
 	end
 
 	def make args
-		filter=''
-		filter=args[1] if !args.nil? && args.length > 0
-		self.each{|k,v|
-			if filter.nil? || filter.length==0 || k.include?(filter)
-				tag=v.latest_tag
-				if(tag.length > 0)
-				   logfile="#{Environment.dev_root}/log/#{v.fullname}/#{tag}/#{Environment.user}@#{Environment.machine}.json"
-				   if(!File.exists?(logfile))
-				     puts "making #{k} #{tag}" if(!File.exists?(logfile))
-				     rake_default=v.make tag
-				     puts rake_default.summary if !rake_default.nil?
-				   else
-				   	 rake_default=v.make tag
-				   	 puts rake_default.summary if !rake_default.nil? && rake_default[:exit_code] != 0
-				   end
-			    end
-		    end
+		get_projects(args).each{|project|
+			project.dev=@dev
+			project.make
 		}
+		#filter=''
+		#filter=args[1] if !args.nil? && args.length > 0
+		#self.each{|k,v|
+		#	if filter.nil? || filter.length==0 || k.include?(filter)
+		#		tag=v.latest_tag
+		#		if(tag.length > 0)
+		#		   logfile="#{Environment.dev_root}/log/#{v.fullname}/#{tag}/#{Environment.user}@#{Environment.machine}.json"
+		#		   if(!File.exists?(logfile))
+		#		     puts "making #{k} #{tag}" if(!File.exists?(logfile))
+		#		     rake_default=v.make tag
+		#		     puts rake_default.summary if !rake_default.nil?
+		#		   else
+		#		   	 rake_default=v.make tag
+		#		   	 puts rake_default.summary if !rake_default.nil? && rake_default[:exit_code] != 0
+		#		   end
+		#	    end
+		 #   end
+		#}
 	end
 
-	def work args
-		filter=nil
-		filter=args[1] if !args.nil? && args.length > 0
-		self.each{|k,v|
-			if filter.nil? || filter.length==0 || k.to_s.include?(filter)
-				last_work_time=nil
-			 	v.work
-		    end
-		}
-	end
+	
 
 	def update args
 		filter=''
@@ -122,17 +164,7 @@ class Projects < Hash
 		self.each{|k,v| v.rake if v.respond_to?("rake".to_sym)}
 	end
 
-    def add args
-    	if(args.length > 1)
-    	  project=Project.new(args[1])
-    	  project[:fullname] = args[2] if args.length > 2
-    	  if(project.fullname.length > 0 && !self.has_key?(project.fullname))
-		   	puts "adding #{project.fullname}"
-		   	self[project.fullname]=project
-		   	self.save #Projects.user_projects_filename
-		  end
-		end
-    end
+    
 
 	def import pattern=''
 		wrk="#{Environment.dev_root}/wrk"

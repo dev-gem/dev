@@ -93,18 +93,18 @@ describe Command do
     #FileUtils.rm_r("#{File.dirname(__FILE__)}/command_spec")
   end
 
-  it "should be able to rake" do
-    dir="#{File.dirname(__FILE__)}/command_spec"
-    Dir.make dir
+  #it "should be able to rake" do
+  #  dir="#{File.dirname(__FILE__)}/command_spec"
+  #  Dir.make dir
     #FileUtils.mkdir(dir) if(!File.exists?(dir))
-    File.open("#{dir}/rakefile.rb","w") { |f| 
-        f.puts "task :default do"
-        f.puts " puts 'rake_test'"
-        f.puts "end" 
-    }
-    Dir.remove dir
+  #  File.open("#{dir}/rakefile.rb","w") { |f| 
+  #      f.puts "task :default do"
+  #      f.puts " puts 'rake_test'"
+  #      f.puts "end" 
+  #  }
+  #  Dir.remove dir
     #Environment.remove("#{File.dirname(__FILE__)}/command_spec")
-  end
+  #end
 
   it "should fail when calling rake produces an error" do
     dir="#{File.dirname(__FILE__)}/command_spec"

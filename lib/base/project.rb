@@ -5,7 +5,7 @@ require_relative('../apps/svn.rb')
 require_relative('string.rb')
 
 class Project < Hash
-	attr_accessor :filename
+	attr_accessor :filename,:dev
 
 	def self.get_url directory=Rake.application.original_dir
 	  url=''
@@ -54,8 +54,7 @@ class Project < Hash
     end
 
 	def wrk_dir
-		FileUtils.mkdir("#{Environment.dev_root}/wrk") if !File.exists? "#{Environment.dev_root}/wrk"
-		"#{Environment.dev_root}/wrk/#{self.fullname}"
+		"#{@dev.wrk_dir}/#{self.fullname}"
 	end
 
 	def pull
@@ -68,6 +67,8 @@ class Project < Hash
 	end
 
 	def clone
+		puts "project.clone" if @dev.debug?
+		puts "wrk_dir=#{wrk_dir}" if @dev.debug?
 		if(!File.exists?(wrk_dir) && self[:url].include?('.git'))
 			puts "cloning #{self[:url]} to #{self.wrk_dir}"
 			puts `git clone #{self[:url]} #{self.wrk_dir}`
@@ -165,6 +166,9 @@ class Project < Hash
 					rake_default[:ignore_failure]=true
 					#rake_default[:timeout]=5*60*1000
 					rake_default.execute
+
+					@dev.history.add_command rake_default
+					
 					FileUtils.mkdir_p(File.dirname(logfile)) if !File.exists?(File.dirname(logfile))
 					File.open(logfile,'w'){|f|f.write(rake_default.to_json)}
 					update_status
@@ -252,6 +256,7 @@ class Project < Hash
 				rake_default[:ignore_failure]=true
 				rake_default.execute
     			#Command.exit_code('rake default')
+    			@dev.history.add_command rake_default
     			logfile="#{Environment.dev_root}/log/#{self.fullname}/#{Environment.user}@#{Environment.machine}.json"
     			FileUtils.mkdir_p(File.dirname(logfile)) if !File.exists?(File.dirname(logfile))
 				File.open(logfile,'w'){|f|f.write(rake_default.to_json)}

@@ -14,7 +14,7 @@ class History
 	def get_commands pattern
 		commands=Array.new
 		Dir.chdir(@dev.log_dir) do
-			Dir.glob("*#{pattern}*.*.json").each{|logfile|
+			Dir.glob("*#{pattern.gsub('/','-')}*.*").each{|logfile|
 				commands << Command.new(JSON.parse(IO.read(logfile)))
 			}
 		end
@@ -22,12 +22,17 @@ class History
 	end
 
 	def add_command command
-		filename="#{@dev.log_dir}/#{command[:input]}.#{command[:exit_code]}/#{command[:directory].gsub(':','').gsub('/','-')}.json"
-		File.open(filename,'w'){|f|f.write(rake_default.to_json)}
+		code="0"
+		code="X" if command[:exit_code] !=0
+		directory=command[:directory].gsub(@dev.root_dir,'').gsub('/','-')
+		name="#{command[:input]}.#{code}.#{directory}.json"
+		filename="#{@dev.log_dir}/#{name}"
+		puts "add command #{filename}" if @dev.debug?
+		File.open(filename,'w'){|f|f.write(command.to_json)}
 	end
 
 	def get_wrk_command project_fullname
-		commands=get_commands("rk-#{project_fullname}".gsub('/','-'))
+		commands=get_commands("#{project_fullname}".gsub('/','-'))
 		return commands[0] if commands.length > 0
 		nil
 	end
