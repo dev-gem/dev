@@ -20,7 +20,12 @@ class Environment < Hash
     @@default=self if @@default.nil?
   end
 
+  #####Begin LEGACY support
+  def self.dev_root
+    default.root_dir
+  end
 
+  #####End LEGACY support
   def root_dir
     get_env('DEV_ROOT')
   end
