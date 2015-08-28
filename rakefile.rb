@@ -52,20 +52,20 @@ task :commit =>[:add] do
 	puts `git commit -m'all'`
 end
 
-task :pull do
-	puts `git pull` if `git branch`.include?('* master')
-end
+#task :pull do
+#	puts `git pull` if `git branch`.include?('* master')
+#end
 
-task :push do
-	puts `git push`  if `git branch`.include?('* master')
-end 
+#task :push do
+#	puts `git push`  if `git branch`.include?('* master')
+#end 
 
 task :publish do
-	puts ':publish'
-	require_relative('./lib/apps/git.rb')
+	#require_relative('./lib/apps/git.rb')
     Git.tag "#{File.dirname(__FILE__)}","#{Gem::Specification.load('dev.gemspec').version.to_s}" if `git branch`.include?('* master') 
 	begin
-		puts `gem push dev-#{Gem::Specification.load('dev.gemspec').version.to_s}.gem`
+		put Command.execute("gem push dev-#{Gem::Specification.load('dev.gemspec').version.to_s}.gem").summary
+		#puts `gem push dev-#{Gem::Specification.load('dev.gemspec').version.to_s}.gem`
 		FileUtils.rm(" dev-#{Gem::Specification.load('dev.gemspec').version.to_s}.gem")
 	rescue
 	end
