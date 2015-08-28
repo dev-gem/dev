@@ -52,13 +52,13 @@ task :commit =>[:add] do
 	puts `git commit -m'all'`
 end
 
-task :pull do
-	puts `git pull` if `git branch`.include?('* master')
-end
+#task :pull do
+#	puts `git pull` if `git branch`.include?('* master')
+#end
 
-task :push do
-	puts `git push`  if `git branch`.include?('* master')
-end 
+#task :push do
+#	puts `git push`  if `git branch`.include?('* master')
+#end 
 
 task :publish do
 	#require_relative('./lib/apps/git.rb')
