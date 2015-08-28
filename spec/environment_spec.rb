@@ -3,7 +3,7 @@ require_relative '../lib/base/environment.rb'
 describe Environment do
 
   it "should support some basic environment variables" do
-    env=Environment.new
+    env=Environment.new({'DEBUG' => false})
     expect(File.exists?(env.get_env('HOME'))).to eq(true)
     expect(File.exists?(env.get_env('DEV_ROOT'))).to eq(true)
     expect(env.debug?).to eq(false)
