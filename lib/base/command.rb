@@ -252,13 +252,13 @@ class Command < Hash
         cinput = ANSI.green + self[:input] + ANSI.reset
         cinput = ANSI.red   + self[:input] + ANSI.reset if exit_code != 0
         cdirectory = ''
-        cdirectory = "(self[:directory])" if include_directory
+        cdirectory = "(#{self[:directory]})" if include_directory
         "  #{duration} #{cinput} #{cdirectory}"
       else
         code=' '
         code='X' if exit_code != 0
         sdirectory = ''
-        sdirectory = "(self[:directory])" if include_directory
+        sdirectory = "(#{self[:directory]})" if include_directory
         "#{code} #{duration} #{self[:input]} #{sdirectory}"
       end
     end
