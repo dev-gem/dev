@@ -235,11 +235,11 @@ class Command < Hash
       seconds = timespan.round
       if(seconds > 99)
         minutes=(seconds/60).round
-        result="#{minutes} m"
+        result="#{minutes}m"
       else
-        result="#{seconds} s" # 99s 
+        result="#{seconds}s" # 99s 
       end
-      result.fix(4)
+      result.fix(3)
     end
 
     def summary include_directory=false
