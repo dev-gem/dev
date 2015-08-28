@@ -17,7 +17,12 @@ class Array
           value.each{|k,v|self[i][k]=v}
         end
 
-        self[i].execute if(self[i].is_a?(Command))
+        #self[i].execute if(self[i].is_a?(Command))
+        if(self[i].is_a?(Command))
+          self[i].execute
+          puts self[i].summary
+        end
+
         i=i+1
       end
     end

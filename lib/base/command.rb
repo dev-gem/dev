@@ -236,11 +236,22 @@ class Command < Hash
 
     def summary
       duration=""
-      duration=getFormattedTimeSpan(self[:end_time]-self[:start_time])# + " - " if(!self[:end_time].nil?)
-      #duration + "#{self[:exit_code].to_s} #{self[:input]} (#{self[:directory]})"
-      status="OK   "
-      status="Error" if(!self.has_key?(:exit_code) || self[:exit_code] != 0)
-      "#{status} '#{self[:input]}' (#{self[:directory]}) #{self[:exit_code].to_s} [#{duration}]"
+      duration=getFormattedTimeSpan(self[:end_time]-self[:start_time])
+      if(Environment.default.colorize?)
+        code=ANSI.green + '+ ' + ANSI.reset
+        code=ANSI.red   + '- ' + ANSI.reset if exit_code != 0
+        cinput = ANSI.yellow + self[:input] + ANSI.reset
+        cinput = ANSI.red + self[:input] + ANSI.reset
+        cdirectory = self[:directory]
+        "#{code} #{cinput} (#{cdirectory}) [#{duration}]"
+      else
+        code='  '
+        code='- ' if exit_code != 0
+        "#{code} #{self[:input]} (#{self[:directory]}) [#{duration}]"
+      end
+      #status="OK   "
+      #status="Error" if(!self.has_key?(:exit_code) || self[:exit_code] != 0)
+      #{}"#{status} '#{self[:input]}' (#{self[:directory]}) #{self[:exit_code].to_s} [#{duration}]"
     end
 
     def to_html
