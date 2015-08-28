@@ -79,7 +79,9 @@ class Projects < Hash
 
     def list args #filter=''
     	puts "list #{args}\n" if @env.debug?
-    	get_projects(args).each{|project|
+    	projects=get_projects args
+		puts "listing #{projects.length} projects..."
+    	projects.each{|project|
     		puts "#{project.status} #{project.fullname}"
     	}
 	end
