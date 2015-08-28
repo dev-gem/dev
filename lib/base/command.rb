@@ -183,10 +183,17 @@ class Command < Hash
      return dir
     end
 
+    def self.execute_quiet command
+      cmd=Command.new({ :input => command, :quiet => true, :ignore_failure => true})
+      cmd.execute
+      cmd
+    end
+
     def self.execute command
       cmd = Command.new(command)
       cmd.execute
       cmd[:exit_code]
+      cmd
     end
 
     def self.exit_code command

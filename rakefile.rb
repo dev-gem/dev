@@ -11,6 +11,8 @@ build_product= "dev-#{Gem::Specification.load('dev.gemspec').version}.gem"
 task :build do
 	puts ':build'
 	Dir.glob('*.gem'){|f|File.delete f}
+
+	puts Command.execute('gem build dev.gemspec').summary
 	puts `gem build dev.gemspec`
 	raise 'build failed' if($?.to_i != 0)
 
