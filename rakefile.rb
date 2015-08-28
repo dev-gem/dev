@@ -3,23 +3,34 @@ require_relative('./lib/dev.rb')
 #require_relative('./lib/apps/git.rb')
 #require_relative('./lib/base/command.rb')
 
+#require 'paint'
+#Paint['Ruby',:red]
+
+# gem install ansi'
+require 'ansi/code'
+puts ANSI.red + "ruby" + ANSI.reset
+
 CLEAN.include('*.gem','*.html')
 CLEAN.include('.yardopts') if File.exists?('.yardopts')
 CLOBBER.include('*.gem','lib/dev_*.rb')
 build_product= "dev-#{Gem::Specification.load('dev.gemspec').version}.gem"
 
+task :setup do
+	puts ':setup'
+end
+
 task :build do
-	puts ':build'
+	puts 'task ' + ANSI.blue + ANSI.bright + ':build' + ANSI.reset
 	Dir.glob('*.gem'){|f|File.delete f}
 
 	puts Command.execute('gem build dev.gemspec').summary
-	puts `gem build dev.gemspec`
-	raise 'build failed' if($?.to_i != 0)
+	#puts `gem build dev.gemspec`
+	#raise 'build failed' if($?.to_i != 0)
 
-	File.open('dev.0.0.0.gemspec','w'){|f|
-		f.write(IO.read('dev.gemspec').gsub(/version\s*=\s*'[\d.]+'/,"version='0.0.0'"))
-	}
-	puts `gem build dev.0.0.0.gemspec`
+	#File.open('dev.0.0.0.gemspec','w'){|f|
+	#	f.write(IO.read('dev.gemspec').gsub(/version\s*=\s*'[\d.]+'/,"version='0.0.0'"))
+	#}
+	#puts `gem build dev.0.0.0.gemspec`
 	
 end
 

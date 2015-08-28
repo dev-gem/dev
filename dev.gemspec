@@ -28,5 +28,5 @@ Gem::Specification.new do |s|
 	s.license       = 'Apache 2.0'
 	s.add_runtime_dependency 'rake', '~> 10.1'
     s.add_runtime_dependency 'rspec', '~> 3.0'
-    s.add_runtime_dependency 'rainbow', '~> 2.0'
+    s.add_runtime_dependency 'ansi', '~> 1.5'
 end

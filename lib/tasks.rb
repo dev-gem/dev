@@ -1,6 +1,7 @@
 puts __FILE__ if defined?(DEBUG)
 
 require 'rake'
+require 'ansi/code'
 
 class Tasks
 	@@quiet=false
