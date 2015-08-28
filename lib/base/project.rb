@@ -40,21 +40,15 @@ class Project < Hash
 		end
 	end
 
-    def url
-    	self[:url]
-    end
-    def fullname
-    	self[:fullname]
-    end
+    def url; self[:url]; end
+    def fullname; self[:fullname]; end
 
     def name
     	parts=fullname.split('/')
     	parts[parts.length-1]
     end
 
-	def wrk_dir
-		"#{@env.wrk_dir}/#{self.fullname}"
-	end
+	def wrk_dir; "#{@env.wrk_dir}/#{self.fullname}"; end
 	def make_dir tag=''
 		"#{@env.make_dir}/#{self.fullname}-#{tag}" if tag.length==0
     	"#{@env.make_dir}/#{self.fullname}-#{tag}"
@@ -301,12 +295,12 @@ class Project < Hash
 				rake_default.execute
 				rake_default.save logfile
 				update_status
-				puts rake_default.summary
+				puts rake_default.summary true
     	      end
     	    else
     	    	if(File.exists?(logfile))
     	    		rake_default.open logfile
-    	    		puts rake_default.summary if(rake_default[:exit_code] != 0)
+    	    		puts rake_default.summary true if(rake_default[:exit_code] != 0)
     	    	end
     	    end
     	    rake_default
