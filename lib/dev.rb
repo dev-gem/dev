@@ -8,7 +8,7 @@ require_relative('commands.rb')
 PROJECT=Project.new()
 
 class Dev
-	attr_accessor :env,:projects,:history
+	attr_accessor :env,:projects,:commands
 
 	def initialize env=nil
 		#env.each{|k,v| @env[k.to_s]=v} if !env.nil?
@@ -17,7 +17,7 @@ class Dev
 
 		#@env=Environment.new(env)
 		@projects=Projects.new(@env)
-		@history=History.new(@env)
+		@commands=Commands.new(@env)
 	end
     
 	def execute args

@@ -14,7 +14,7 @@ describe Dev do
         expect(dev.projects.has_key?('github/dev-gem/HelloRake')).to eq(true)
         expect(dev.projects.length).to eq(1)
         expect(dev.projects.get_projects.length).to eq(1)
-        expect(dev.history.get_wrk_command('github/dev-gem/HelloRake')).to eq (nil)
+        #expect(dev.history.get_wrk_command('github/dev-gem/HelloRake')).to eq (nil)
         dev.execute('work')
         #expect(dev.history.get_wrk_command('github/dev-gem/HelloRake')).not_to eq (nil)
         #expect(dev.history.get_commands('github/dev-gem/HelloRake').length).to eq(1)

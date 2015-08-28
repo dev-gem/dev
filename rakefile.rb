@@ -3,12 +3,7 @@ require_relative('./lib/dev.rb')
 #require_relative('./lib/apps/git.rb')
 #require_relative('./lib/base/command.rb')
 
-#require 'paint'
-#Paint['Ruby',:red]
 
-# gem install ansi'
-require 'ansi/code'
-puts ANSI.red + "ruby" + ANSI.reset
 
 CLEAN.include('*.gem','*.html')
 CLEAN.include('.yardopts') if File.exists?('.yardopts')
@@ -20,21 +15,16 @@ task :setup do
 end
 
 task :build do
-	puts 'task ' + ANSI.blue + ANSI.bright + ':build' + ANSI.reset
 	Dir.glob('*.gem'){|f|File.delete f}
 
 	puts Command.execute('gem build dev.gemspec').summary
 	#puts `gem build dev.gemspec`
 	#raise 'build failed' if($?.to_i != 0)
 
-	#File.open('dev.0.0.0.gemspec','w'){|f|
-	#	f.write(IO.read('dev.gemspec').gsub(/version\s*=\s*'[\d.]+'/,"version='0.0.0'"))
-	#}
-	#puts `gem build dev.0.0.0.gemspec`
-	
-end
-
-task :install do
+	File.open('dev.0.0.0.gemspec','w'){|f|
+		f.write(IO.read('dev.gemspec').gsub(/version\s*=\s*'[\d.]+'/,"version='0.0.0'"))
+	}
+	puts `gem build dev.0.0.0.gemspec`
 	puts ':install'
 	puts 'uninstalling all version of dev gem'
 	puts `gem uninstall dev --quiet --all -x`
@@ -42,6 +32,7 @@ task :install do
 	puts `gem install dev-0.0.0.gem`
 	File.delete 'dev.0.0.0.gemspec'
 end
+
 
 task :test do
 	puts ':test'
@@ -84,4 +75,4 @@ task :show_projects , [:filter] do |t, args|
 	PROJECTS.show args[:filter] if args.has_key? :filter
 end
 
-task :default => [:build,:install,:test,:add,:commit,:publish,:push]
+task :default => [:build,:test,:add,:commit,:publish,:push]

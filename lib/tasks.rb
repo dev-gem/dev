@@ -1,16 +1,19 @@
 puts __FILE__ if defined?(DEBUG)
 
 require 'rake'
-require 'ansi/code'
+#require 'ansi/code'
 
 class Tasks
-	@@quiet=false
+	attr_accessor :env
+	@@default=nil
 
-    def self.quiet
-    	@@quiet
-    end
+	def initialize env=nil
+		@@default=self
+		@env=env
+		@env=Environment.new if @env.nil?
+	end
 
-    def self.execute value
+    def execute value
 	  if(value.respond_to?(:execute))
 	    value.update if value.respond_to?(:update)
 	    value.execute
@@ -25,13 +28,19 @@ class Tasks
 	    end
 	end
 
-	def self.execute_task task
+	def execute_task task
 		if(defined?(COMMANDS))
 			if(COMMANDS.has_key?(task))
-				puts "[:#{task}]" if(!Tasks.quiet)
-		  		Tasks.execute(COMMANDS[task])
+				puts "[:#{task}]" if !@env.colorize?
+				puts "[" + ANSI.blue + ANSI.bright + ":#{task}" + ANSI.reset + "]" if @env.colorize?
+		  		execute(COMMANDS[task])
 		    end
 		end
+	end
+
+	def self.execute_task task
+		@@default=Tasks.new if @@default.nil?
+		@@default.execute_task task
 	end
 end
 

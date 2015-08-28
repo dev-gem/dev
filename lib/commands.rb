@@ -7,8 +7,10 @@ Dir.glob("#{File.dirname(__FILE__)}/tasks/*.rb").each{|rb|
   require(rb)
 }
 class Commands < Hash
-
-	def initialize directory=Dir.pwd
+	attr_accessor :env
+	def initialize env=nil,directory=Rake.application.original_dir
+		@env=env
+		@env=Environment.new() if @env.nil?
 		Dir.chdir(directory) do
 		  self[:pull]=Pull.new
 		  self[:update]=Update.new

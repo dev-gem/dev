@@ -2,6 +2,7 @@ puts __FILE__ if defined?(DEBUG)
 
 desc 'performs build commands'
 task :build do Tasks.execute_task :build;end
+#task :build do Tasks.execute_task :build;end
 
 SLN_FILES=FileList.new('*.sln','*/*.sln','*/*/*.sln')
 NUGET_FILES=FileList.new('**/*.nuspec')

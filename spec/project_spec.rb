@@ -31,24 +31,7 @@ describe Project do
         # WORK
         expect(helloRake.work.exit_code).to eq(0)
         expect(helloRake.command_history.length).to eq(2)
-       # logfile=get_logfile ['make',tag]
-        #dev=Dev.new( { 'DEV_ROOT' => dir, 'DEBUG' => 'true'} )
-        #dev.execute('add http://github.com/dev-gem/HelloRake.git')
-        #helloRake=dev.projects['github.com/dev-gem/HelloRake']
-        expect(helloRake).not_to eq(nil)
 
-
-        #expect(File.exists?("#{dir}/data/Projects.json")).to eq(true)
-        #expect(dev.projects.has_key?('github/dev-gem/HelloRake')).to eq(true)
-        #expect(dev.projects.length).to eq(1)
-        #expect(dev.projects.get_projects.length).to eq(1)
-        #expect(dev.history.get_wrk_command('github/dev-gem/HelloRake')).to eq (nil)
-        #dev.execute('work')
-        #expect(dev.history.get_wrk_command('github/dev-gem/HelloRake')).not_to eq (nil)
-        #expect(dev.history.get_commands('github/dev-gem/HelloRake').length).to eq(1)
-        #dev.execute('make')
-        #expect(dev.history.get_commands('github/dev-gem/HelloRake').length).to eq(2)
-        #expect(File.exists?()).to eq(true)
         Dir.remove dir
     end
 

@@ -72,6 +72,19 @@ class Environment < Hash
     false
   end
 
+  def colorize?
+    if(`gem list win32console`.include?('win32console'))
+      require 'ansi/code'
+      return true
+    end
+    false if windows?
+    true
+  end
+
+  def windows?
+    Gem.win_platform?
+  end
+
   #@@debug=true if defined?(DEBUG)
   #@@debug=false if !defined?(DEBUG)
   #@@development_root=nil

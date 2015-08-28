@@ -1,6 +1,12 @@
 puts __FILE__ if defined?(DEBUG)
 
 class Array
+    attr_accessor :env
+    def intialize env=nil
+      @env=env
+      @env=Environment.enw if @env.nil?
+    end
+
     def execute value=nil
       i=0
       while i < self.length
