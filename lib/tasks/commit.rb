@@ -4,7 +4,7 @@ desc 'commits source files to git or subversion'
 if(File.exists?('git'))
   task :commit=>[:add] do Tasks.execute_task :commit; end
 else
-  task :commit do Tasks.execute_task :commit;end
+  task :commit=>[:add] do Tasks.execute_task :commit;end
 end
 
 class Commit < Array

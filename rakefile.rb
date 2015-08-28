@@ -47,13 +47,13 @@ end
 	#raise 'rspec failed' if($?.to_i != 0)
 #end
 
-task :add do
-	puts `git add -A`
-end 
+#task :add do
+#	puts `git add -A`
+#end 
 
-task :commit =>[:add] do
-	puts `git commit -m'all'`
-end
+#task :commit =>[:add] do
+#	puts `git commit -m'all'`
+#end
 
 #task :pull do
 #	puts `git pull` if `git branch`.include?('* master')
