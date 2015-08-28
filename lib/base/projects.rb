@@ -44,7 +44,7 @@ class Projects < Hash
     	projects=Array.new
     	filter=''
     	filter=value.to_s if !value.nil? && value.kind_of?(String)
-    	filter=value[0].to_s if !value.nil? && value.kind_of?(Array)
+    	filter=value[0].to_s if !value.nil? && value.kind_of?(Array) && !value[0].to_s.include?('=')
     	self.each{|k,v|
     		if(filter.length==0 || k.include?(filter))
     			if(v.kind_of?(Project))
@@ -78,6 +78,7 @@ class Projects < Hash
 	end
 
     def list args #filter=''
+    	puts "list #{args}\n" if @env.debug?
     	get_projects(args).each{|project|
     		puts "#{project.status} #{project.fullname}"
     	}
