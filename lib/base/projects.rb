@@ -35,7 +35,15 @@ class Projects < Hash
 
 	def open
 		if File.exists? filename
-		  JSON.parse(IO.read(filename)).each{|k,v| self[k]=v}
+		  JSON.parse(IO.read(filename)).each{|k,v|
+		  	if(v.kind_of?(Project))
+		  		self[k]=v
+		  	else
+		  		self[k]=Project.new(v)
+		  	end
+		     #self[k]=Project.new(v) if v.kind_of?(Hash)
+		   #self[k]=v
+		}
 		  update_state
 	    end
 	end
