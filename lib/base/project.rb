@@ -213,7 +213,7 @@ class Project < Hash
 		return if tag.length==0
 		raise 'no tag specified' if tag.length==0
 
-		rake_default=nil
+		rake_default=Command.new({:input => 'rake default',:quiet => true,:ignore_failure => true})
 		logfile=get_logfile ['make',tag]		
 		if(File.exists?(logfile))
             rake_default.open logfile
@@ -232,9 +232,9 @@ class Project < Hash
 					checkout=Command.new({:input=>"git checkout #{tag}",:quiet=>true})
 					checkout.execute
 					FileUtils.rm_r '.git'
-					rake_default=Command.new('rake default')
-					rake_default[:quiet]=true
-					rake_default[:ignore_failure]=true
+					#rake_default=Command.new('rake default')
+					#rake_default[:quiet]=true
+					#rake_default[:ignore_failure]=true
 					#rake_default[:timeout]=5*60*1000
 					rake_default.execute
                     rake_default.save logfile
