@@ -2,6 +2,7 @@ puts __FILE__ if defined?(DEBUG)
 
 require_relative('info.rb')
 require_relative('../base/array.rb')
+require_relative('../base/environment.rb')
 require_relative('../base/projects.rb')
 require_relative('../base/timer.rb')
 
@@ -23,9 +24,9 @@ if(!defined?(NO_DEFAULT_TASK))
     end
     
     puts "[:default] completed in #{TIMER.elapsed_str}" if !Environment.default.colorize?
-    if @env.colorize?
+    if @Environment.default.colorize?
       require 'ansi/code'
-      puts "[" + ANSI.blue + ANSI.bright + ":default" + ANSI.reset + "] completed in #{TIMER.elapsed_str}" if @env.colorize?
+      puts "[" + ANSI.blue + ANSI.bright + ":default" + ANSI.reset + "] completed in #{TIMER.elapsed_str}"
     end
 
   end # :default
