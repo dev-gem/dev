@@ -81,6 +81,10 @@ class Environment < Hash
     value
   end
 
+  def set_env key,value
+    @env[key]=value
+  end
+
   def debug?
     return true if get_env('DEBUG')=='true'
     false

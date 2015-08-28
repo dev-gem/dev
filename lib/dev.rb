@@ -11,17 +11,23 @@ class Dev
 	attr_accessor :env,:projects,:commands
 
 	def initialize env=nil
-		#env.each{|k,v| @env[k.to_s]=v} if !env.nil?
 		@env=Environment.new(env) if !env.nil? && env.kind_of?(Hash)
 		@env=Environment.new() if @env.nil?
-
-		#@env=Environment.new(env)
 		@projects=Projects.new(@env)
 		@commands=Commands.new(@env)
 	end
     
 	def execute args
 		args=args.split(' ') if(args.kind_of?(String))
+
+		args.each{|arg|
+		 	if(arg.include?('='))
+		 		words=arg.split('=')
+		 		if(words.length==2)
+		 			@env.set_env(words[0],words[1])
+		 		end
+		 	end
+		}
 		if args.length == 0
 	       usage if args.length == 0
 	    else
