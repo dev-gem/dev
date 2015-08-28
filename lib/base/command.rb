@@ -238,6 +238,7 @@ class Command < Hash
       duration=""
       duration=getFormattedTimeSpan(self[:end_time]-self[:start_time])
       if(Environment.default.colorize?)
+        require 'ansi/code'
         code=ANSI.green + '+ '
         code=ANSI.red   + '- ' if exit_code != 0
         cinput = self[:input] + ANSI.reset
