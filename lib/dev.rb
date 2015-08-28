@@ -12,7 +12,7 @@ end
 PROJECT=Project.new()
 
 class Dev
-	attr_accessor :projects,:history
+	attr_accessor :projects,:history,:db
 
 	def initialize env=nil
 		@env=Hash.new
@@ -23,6 +23,10 @@ class Dev
 		@projects=Projects.new(self)
 		@history=History.new(self)
 	end
+
+    def filename
+    	"#{@dev.get_env('DEV_ROOT')}/dev.sql"
+    end
 
 	def reset
 		@projects=nil
