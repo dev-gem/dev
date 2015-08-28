@@ -19,7 +19,7 @@ task :build do
 end
 
 task :install do
-	puts ':test'
+	puts ':install'
 	puts 'uninstalling all version of dev gem'
 	puts `gem uninstall dev --quiet --all -x`
 	puts 'installing dev-0.0.0.gem'
@@ -68,4 +68,4 @@ task :show_projects , [:filter] do |t, args|
 	PROJECTS.show args[:filter] if args.has_key? :filter
 end
 
-task :default => [:build,:test,:add,:commit,:publish,:push]
+task :default => [:build,:install,:test,:add,:commit,:publish,:push]
