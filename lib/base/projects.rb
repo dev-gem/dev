@@ -84,6 +84,9 @@ class Projects < Hash
     	end
     end
 
+    def help args
+    end
+    
     def work args
     	projects=get_projects args
 		puts "working #{projects.length} projects..." if @env.debug?

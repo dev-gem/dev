@@ -25,7 +25,6 @@ class Dev
 		 		words=arg.split('=')
 		 		if(words.length==2)
 		 			ENV[words[0]]=words[1]
-		 			#@env.set_env(words[0],words[1])
 		 		end
 		 	end
 		}

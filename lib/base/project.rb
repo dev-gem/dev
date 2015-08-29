@@ -8,6 +8,21 @@ require_relative('string.rb')
 class Project < Hash
 	attr_accessor :filename,:env
 
+    def initialize value=''
+        @filename=''
+        @env=Environment.new
+        self[:url]=Project.get_url
+        self[:fullname]=Project.get_fullname_from_url self[:url] if self[:url].length > 0
+        if value.is_a?(String)
+            self[:url] = value if value.is_a?(String) && value.length > 0
+            self[:fullname] = Project.get_fullname_from_url self[:url]
+        elsif(value.is_a?(Hash))
+            value.each{|k,v|self[k.to_sym]=v}
+        else
+            self[:fullname]=Project.get_fullname_from_url self[:url] if self[:url].length > 0
+        end
+    end
+    
 	def self.get_url directory=Rake.application.original_dir
 	  url=''
 	  Dir.chdir(directory) do#Rake.application.original_dir) do
@@ -25,20 +40,7 @@ class Project < Hash
 		return url.gsub('http://','').gsub('https://','').gsub('.com/','/').gsub('.git','')
 	end
 
-	def initialize value=''
-		@filename=''
-        @env=Environment.new
-		self[:url]=Project.get_url
-		self[:fullname]=Project.get_fullname_from_url self[:url] if self[:url].length > 0
-		if value.is_a?(String)
-		    self[:url] = value if value.is_a?(String) && value.length > 0
-		    self[:fullname] = Project.get_fullname_from_url self[:url]
-		elsif(value.is_a?(Hash))
-			value.each{|k,v|self[k.to_sym]=v}
-		else
-			self[:fullname]=Project.get_fullname_from_url self[:url] if self[:url].length > 0
-		end
-	end
+	
 
     def url; self[:url]; end
     def fullname; self[:fullname]; end
