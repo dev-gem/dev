@@ -35,6 +35,9 @@ describe Project do
         # CLOBBER
         expect(helloRake.clobber.exit_code).to eq(0)
         expect(File.exists?(helloRake.wrk_dir)).to eq(false)
+        #expect(Dir.empty?(File.dirname(helloRake.wrk_dir))).to eq(true)
+        expect(File.exists?(File.dirname(helloRake.wrk_dir))).to eq(false)
+
         Dir.remove dir
     end
 
