@@ -243,7 +243,7 @@ class Environment < Hash
   end
 
   def self.get_latest_mtime directory
-    mtime=nil
+    mtime=Time.new(1980)
     Dir.chdir(directory)  do
       Dir.glob('**/*.*').each{|f|
         mtime=File.mtime(f) if mtime.nil? || File.mtime(f) > mtime
