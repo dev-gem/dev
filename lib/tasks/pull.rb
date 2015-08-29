@@ -1,6 +1,3 @@
-puts __FILE__ if defined?(DEBUG)
-
-
 desc 'performs a git pull'
 task :pull do Tasks.execute_task :pull; end
 
