@@ -107,6 +107,10 @@ class Environment < Hash
     colorize
   end
 
+  def show_success?
+    true
+  end
+
   def windows?
     Gem.win_platform?
   end

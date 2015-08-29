@@ -47,7 +47,15 @@ class Dev
 
 	def usage
 		puts 'Usage:'
-		puts ' list [pattern]'
+		puts 'dev <subcommand>'
+		puts ''
+		puts 'Available subcommands'
+		puts ' help'
+		puts ' list'
+		puts ' make'
+		puts ' work'
+		puts ''
+		puts "Type 'dev help <subcommand>' for help on a specific subcommand.'"
 	end
 end
 

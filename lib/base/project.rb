@@ -191,7 +191,6 @@ class Project < Hash
                 else
                     puts "[#{fullname}]"
                 end
-                #puts "working #{self.fullname}"
                 rake_default.execute
                 rake_default.save logfile
                 update_status
@@ -200,7 +199,7 @@ class Project < Hash
             else
                 if(File.exists?(logfile))
                     rake_default.open logfile
-                    puts rake_default.summary true if(rake_default[:exit_code] != 0)
+                    puts rake_default.summary true if(rake_default[:exit_code] != 0 || @env.show_success?)
                 end
             end
             rake_default
@@ -218,7 +217,7 @@ class Project < Hash
 		if(File.exists?(logfile))
             puts "Project make logfile #{logfile} exists." if @env.debug?
             rake_default.open logfile
-            puts rake_default.summary true# if(rake_default[:exit_code] != 0)
+            puts rake_default.summary true if(rake_default[:exit_code] != 0) || @env.show_success?
 		else
 			makedir=make_dir tag
 			FileUtils.mkdir_p(File.dirname(makedir)) if !File.exists? File.dirname(makedir)
