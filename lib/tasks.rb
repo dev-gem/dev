@@ -1,8 +1,3 @@
-puts __FILE__ if defined?(DEBUG)
-
-require 'rake'
-#require 'ansi/code'
-
 class Tasks
 	attr_accessor :env
 	@@default=nil

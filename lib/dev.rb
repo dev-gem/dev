@@ -46,10 +46,9 @@ class Dev
 	end
 
 	def usage
-		puts 'Usage:'
-		puts 'dev <subcommand>'
+		puts 'usage: dev <subcommand> [options]'
 		puts ''
-		puts 'Available subcommands'
+		puts 'available subcommands'
 		puts ' help'
 		puts ' list'
 		puts ' make'
