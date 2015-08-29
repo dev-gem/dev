@@ -123,7 +123,7 @@ class Projects < Hash
 		}
 	end
 
-	def clobber
+	def clobber args
 		projects=get_projects args
 		puts "clobbering #{projects.length} projects..." if @env.debug?
 		projects.each{|project|
