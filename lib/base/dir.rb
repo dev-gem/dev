@@ -17,10 +17,8 @@ class Dir
   end
   def self.empty? directory
     if((Dir.entries(directory) - %w{ . .. }).empty?)
-      puts "directory #{directory} is empty" 
       return true
     end
-    puts "directory #{directory} is not empty"
     false
   end
 end
