@@ -35,7 +35,7 @@ class Environment < Hash
   end
 
   def log_dir
-    dir="#{get_env('DEV_ROOT')}/log"
+    dir="#{get_env('DEV_ROOT')}/log/#{user}@#{machine}"
     FileUtils.mkdir_p dir if !File.exists? dir
     dir
   end
