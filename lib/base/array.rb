@@ -1,5 +1,3 @@
-puts __FILE__ if defined?(DEBUG)
-
 class Array
     attr_accessor :env
     def intialize env=nil
