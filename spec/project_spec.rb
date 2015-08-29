@@ -32,6 +32,9 @@ describe Project do
         expect(helloRake.work.exit_code).to eq(0)
         expect(helloRake.command_history.length).to eq(2)
 
+        # CLOBBER
+        expect(helloRake.clobber.exit_code).to eq(0)
+        expect(File.exists?(helloRake.wrk_dir)).to eq(false)
         Dir.remove dir
     end
 

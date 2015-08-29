@@ -176,6 +176,8 @@ class Project < Hash
     end
 
     def clobber
+        clobberCmd=Command.new('clobber')
+        clobberCmd[:exit_code]=0
         if(File.exists?(wrk_dir))
             Dir.remove wrk_dir,true
             puts "removed #{wrk_dir}"
@@ -184,6 +186,7 @@ class Project < Hash
             Dir.remove make_dir,true
             puts "removed #{make_dir}"
         end
+        clobberCmd
     end
 
     def work
