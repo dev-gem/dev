@@ -40,8 +40,6 @@ class Project < Hash
 		return url.gsub('http://','').gsub('https://','').gsub('.com/','/').gsub('.git','')
 	end
 
-	
-
     def url; self[:url]; end
     def fullname; self[:fullname]; end
 
@@ -179,11 +177,11 @@ class Project < Hash
 
     def clobber
         if(File.exists?(wrk_dir))
-            Dir.remove wrk_dir
+            Dir.remove wrk_dir,true
             puts "removed #{wrk_dir}"
         end
         if(File.exists?(make_dir))
-            Dir.remove make_dir
+            Dir.remove make_dir,true
             puts "removed #{make_dir}"
         end
     end
