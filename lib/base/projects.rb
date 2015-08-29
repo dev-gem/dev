@@ -129,6 +129,7 @@ class Projects < Hash
 		projects.each{|project|
 			begin
 			    project.clobber
+			    Dir.remove_empty @env.wrk_dir
 		    rescue => error
 		    	puts "error raised during clobber #{project.fullname}"
 		    	puts "--------------------------------------------"
