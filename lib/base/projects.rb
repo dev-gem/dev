@@ -123,6 +123,21 @@ class Projects < Hash
 		}
 	end
 
+	def clobber
+		projects=get_projects args
+		puts "clobbering #{projects.length} projects..." if @env.debug?
+		projects.each{|project|
+			begin
+			    project.clobber
+		    rescue => error
+		    	puts "error raised during clobber #{project.fullname}"
+		    	puts "--------------------------------------------"
+		    	puts error
+		    	puts "--------------------------------------------"
+		    end
+		}
+    end
+
 	def update args
 		filter=''
 		filter=args[1] if !args.nil? && args.length > 0

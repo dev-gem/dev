@@ -52,7 +52,7 @@ class Project < Hash
 
 	def wrk_dir; "#{@env.wrk_dir}/#{self.fullname}"; end
 	def make_dir tag=''
-		"#{@env.make_dir}/#{self.fullname}-#{tag}" if tag.length==0
+		"#{@env.make_dir}/#{self.fullname}" if tag.length==0
     	"#{@env.make_dir}/#{self.fullname}-#{tag}"
     end
 
@@ -174,6 +174,17 @@ class Project < Hash
             history.each{|c|
                 puts c.summary true
             }
+        end
+    end
+
+    def clobber
+        if(File.exists?(wrk_dir))
+            Dir.remove wrk_dir
+            puts "removed #{wrk_dir}"
+        end
+        if(File.exists?(make_dir))
+            Dir.remove make_dir
+            puts "removed #{make_dir}"
         end
     end
 
@@ -325,8 +336,6 @@ class Project < Hash
     	tags
     end
 
-	def clobber
-
-	end
+	
 end
 
