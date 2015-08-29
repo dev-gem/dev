@@ -14,7 +14,7 @@ class Publish < Array
 			if(File.exists?('.git'))
 				if(`git branch`.include?('* master'))
 					Dir.glob('*.gemspec').each{|gemspec_file|
-						add_quiet "gem push #{Gemspec.gemfile(gemspec_file)}" if !Gemspec.published? gemspec_file
+						add_passive "gem push #{Gemspec.gemfile(gemspec_file)}" if !Gemspec.published? gemspec_file
 					}
 				end
 			end
