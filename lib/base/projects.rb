@@ -88,7 +88,14 @@ class Projects < Hash
     	projects=get_projects args
 		puts "working #{projects.length} projects..." if @env.debug?
     	projects.each{|project|
-    		project.work
+    		begin
+    		    project.work
+    		rescue => error
+		    	puts "error raised during work #{project.fullname}"
+		    	puts "--------------------------------------------"
+		    	puts error
+		    	puts "--------------------------------------------"
+		    end
     	}
 	end
 
@@ -105,7 +112,14 @@ class Projects < Hash
 		projects=get_projects args
 		puts "making #{projects.length} projects..." if @env.debug?
 		projects.each{|project|
-			project.make
+			begin
+			    project.make
+		    rescue => error
+		    	puts "error raised during make #{project.fullname}"
+		    	puts "--------------------------------------------"
+		    	puts error
+		    	puts "--------------------------------------------"
+		    end
 		}
 	end
 

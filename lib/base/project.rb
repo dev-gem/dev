@@ -103,7 +103,6 @@ class Project < Hash
 	end
 
     def latest_tag update=false
-		#FileUtils.mkdir("#{@dev_root}/make") if !File.exists? "#{@env.root_dir}/make"
 		makedir="#{@env.make_dir}/#{self.fullname}"
     	FileUtils.mkdir_p(File.dirname(makedir)) if !File.exists?(File.dirname(makedir))
         if(File.exists?(makedir))
@@ -254,10 +253,7 @@ class Project < Hash
 
     def last_work_mtime
     	logfile=get_logfile ['work']
-    	#logfile="#{@env.root_dir}/log/#{self.fullname}/#{@env.user}@#{@env.machine}.json"
-    	if File.exists? logfile
-    		return File.mtime(logfile)
-    	end
+    	return File.mtime(logfile) if File.exists? logfile
     	nil
     end
 
@@ -292,28 +288,10 @@ class Project < Hash
     	  return statusHash['status'] if(statusHash.has_key?('status'))
     	end
     	'?'
-    	#status='?'
-    	#wrk_logfile="#{@env.root_dir}/log/#{self.fullname}/#{@env.user}@#{@env.machine}.json"
-    	#if(File.exists?(wrk_logfile))
-    	#	rake_default=Command.new(JSON.parse(IO.read(wrk_logfile)))
-    	#	status='0'
-    	#	return 'X' if rake_default[:exit_code] != 0
-    	#end
-    	#make_logfile="#{@env.root_dir}/log/#{self.fullname}/#{latest_tag}/#{@env.user}@#{@env.machine}.json"
-    	#if(File.exists?(make_logfile))
-    	#	rake_default=Command.new(JSON.parse(IO.read(make_logfile)))
-    	#	status='0'
-    	#	return 'X' if rake_default[:exit_code] != 0
-    	#else
-    	#	return '?' # outstanding make
-    	#end
-    	#status
     end
 
     def report
     end
-
-    
 
     def update
     	clone
