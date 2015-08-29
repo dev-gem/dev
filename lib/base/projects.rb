@@ -20,13 +20,12 @@ class Projects < Hash
 		"#{@env.root_dir}/data/Projects.json"
 	end
 
-    def update_state
-    	self.each{|k,v|
-    		self[k]=Project.new(v) if(v.is_a?(String))
-    		#self[k]=Project.new(v) if(!v.is_a?(Project) && v.is_a?(Hash))
-    		self[k][:fullname]=k
-    	}
-    end
+    #def update_state
+    #	self.each{|k,v|
+    #		self[k]=Project.new(v) if(v.is_a?(String))
+    #		self[k][:fullname]=k
+    #	}
+    #end
 
 	def save
 		Dir.make File.dirname(filename) if !File.exists? File.dirname(filename)
@@ -41,10 +40,8 @@ class Projects < Hash
 		  	else
 		  		self[k]=Project.new(v)
 		  	end
-		     #self[k]=Project.new(v) if v.kind_of?(Hash)
-		   #self[k]=v
 		}
-		  update_state
+		  #update_state
 	    end
 	end
 
@@ -155,16 +152,13 @@ class Projects < Hash
 		self.each{|k,v| v.rake if v.respond_to?("rake".to_sym)}
 	end
 
-    
-
 	def import pattern=''
-		wrk="#{Environment.dev_root}/wrk"
+		wrk=@env.wrk_dir
 		if File.exists?(wrk)
 		   Dir.chdir(wrk) do
 		   		Dir.glob('**/rakefile.rb').each{|rakefile|
 		   			rakedir=File.dirname(rakefile)
 		   			url = Project.get_url rakedir
-		   			#puts "checking #{url}"
 		   			project = Project.new(Project.get_url(rakedir))
 		   			project[:fullname]=Project.get_fullname rakedir if(project.fullname.include?(':'))
 		   			if(pattern.length==0 || project.fullname.include?(pattern))
@@ -175,7 +169,7 @@ class Projects < Hash
 		   			end
 		   		}
 		   end
-		   self.save #Projects.user_projects_filename
+		   self.save
 	    end
 	end
 end
