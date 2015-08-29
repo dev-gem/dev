@@ -22,7 +22,7 @@ class Project < Hash
             self[:fullname]=Project.get_fullname_from_url self[:url] if self[:url].length > 0
         end
     end
-    
+
 	def self.get_url directory=Rake.application.original_dir
 	  url=''
 	  Dir.chdir(directory) do#Rake.application.original_dir) do
@@ -168,10 +168,9 @@ class Project < Hash
     end
 
     def list
-        #puts "#{project.status} #{project.fullname}"
         history=command_history
         if(history.length==0)
-            puts "?      #{project.fullname}"
+            puts "?      #{fullname}"
         else
             history.each{|c|
                 puts c.summary true
