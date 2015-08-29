@@ -21,6 +21,7 @@ class Dir
         Dir.chdir(directory) do
           Dir.glob('*').select {|f| File.directory? f}.each{|d|
             Dir.remove_empty(d,true)
+            remove d if (Dir.entries(d) - %w{ . .. }).empty?
           }
         end
       end
