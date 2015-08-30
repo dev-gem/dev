@@ -8,6 +8,8 @@ describe Project do
 
 	it "should be able to automatically initialize properties from url constructor" do
 		hellogem=Project.new('http://github.com/dev-gem/HelloRubyGem.git')
+		hellogem.env.set_env('SUPPRESS_CONSOLE_OUTPUT','true')
+
 		expect(hellogem.url).to eq('http://github.com/dev-gem/HelloRubyGem.git')
 		expect(hellogem.fullname).to eq('github/dev-gem/HelloRubyGem')
 		expect(hellogem.name).to eq('HelloRubyGem')
@@ -19,8 +21,7 @@ describe Project do
         Dir.remove dir
         Dir.make dir
         helloRake=Project.new('https://github.com/dev-gem/HelloRake.git')
-        helloRake.env=Environment.new({ 'DEV_ROOT' => dir, 'DEBUG' => 'true'})
-        expect(helloRake.env.debug?).to eq(true)
+        helloRake.env=Environment.new({ 'DEV_ROOT' => dir, 'SUPPRESS_CONSOLE_OUTPUT' => 'true'})
 
         # MAKE
         expect(helloRake.command_history.length).to eq(0)
@@ -39,32 +40,4 @@ describe Project do
 
         Dir.remove dir
     end
-
-	#it "should be able to make a specific tag" do
-	#	hellogem=Project.new('http://github.com/dev-gem/HelloRubyGem.git')
-	#	makedir="#{Environment.dev_root}/make/github/dev-gem/HelloRubyGem-0.0.0"
-	#	FileUtils.rm_r(makedir) if File.exists? makedir
-
-	#	logfile="#{Environment.dev_root}/log/#{hellogem.fullname}/0.0.0/#{Environment.user}@#{Environment.machine}.json"
-	#	File.delete(logfile) if File.exists? logfile
-
-	#	publish_file="#{Environment.dev_root}/publish/HelloRubyGem-0.0.0.gem"
-    #    File.delete publish_file if File.exists? publish_file
-
-	#	make=hellogem.make('0.0.0')
-	#	expect(File.exists?(makedir)).to eq(false),"#{makedir} exists after hello.make('0.0.0')"
-	#	expect(File.exists?(publish_file)).to eq(true), "#{publish_file} does not exist after rake default"
-	#	if(make[:exit_code] != 0)
-	#		expect(false).to eq(true),"hellogem.make('0.0.0') exit code=#{make[:exit_code]}\n#{make[:output]}\n#{make[:error]}"
-	#	end
-	#	expect(make[:exit_code]).to eq(0),"hellogem.make('0.0.0') failed."
-	#	expect(File.exists?(logfile)).to eq(true), "#{logfile} does not exists after hellogem.make('0.0.0')"
-	#	hellogem.clobber
-	#	expect(File.exists?(makedir)).to eq(false)
-	#end
-
-	it "should be able to list tags" do
-		hellogem=Project.new('http://github.com/dev-gem/HelloRubyGem.git')
-		#expect(hellogem.tags.include?('0.0.0')).to eq(true), 'hellogem.tags did not include '0.0.0'
-	end
 end

@@ -141,6 +141,7 @@ describe Command do
 
   it "should be able to execute an array of commands" do
     help=['git --help','rake --help','ruby --help']
+    help.env=Environment.new({ 'SUPPRESS_CONSOLE_OUTPUT' => 'true' })
     help.execute({:quiet => true})
     File.open('help.html','w'){|f|f.write(help.to_html)}
   end
@@ -149,6 +150,8 @@ describe Command do
     commands=Hash.new
     commands[:help]=['git --help','rake --help','ruby --help']
     commands[:version]=['git --version','rake --version','ruby --version']
+    commands[:help].env=Environment.new({ 'SUPPRESS_CONSOLE_OUTPUT' => 'true' })
+    commands[:version].env=Environment.new({ 'SUPPRESS_CONSOLE_OUTPUT' => 'true' })
     commands.execute({:quiet => true})
     File.open('commands.html','w'){|f|f.write(commands.to_html)}
   end

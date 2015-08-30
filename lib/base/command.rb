@@ -1,5 +1,3 @@
-puts __FILE__ if defined?(DEBUG)
-
 require 'time'
 require 'open3'
 require_relative('timeout.rb')
@@ -7,6 +5,8 @@ require_relative('timer.rb')
 require_relative('array.rb')
 require_relative('hash.rb')
 require_relative('string.rb')
+require_relative('environment.rb')
+require_relative('dir.rb')
 BUFFER_SIZE=1024 if(!defined?(BUFFER_SIZE))
             
 # = Command

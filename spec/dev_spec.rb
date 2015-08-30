@@ -3,13 +3,13 @@ require_relative('../lib/dev.rb')
 describe Dev do
 
     it "should fail when passed an unrecognized argument" do
-        dev=Dev.new
+        dev=Dev.new({ 'SUPPRESS_CONSOLE_OUTPUT' => 'true'})
         expect(dev.execute('unknown')).to eq(1)
         expect(dev.env.output.include?('unknown command')).to eq true
     end
 
     it "should display usage when no args are passed to execute" do
-        dev=Dev.new
+        dev=Dev.new({ 'SUPPRESS_CONSOLE_OUTPUT' => 'true'})
         expect(dev.execute('')).to eq(0)
         expect(dev.env.output.include?('usage:')).to eq(true)
     end
@@ -18,8 +18,8 @@ describe Dev do
         dir="#{File.dirname(__FILE__)}/dev_root"
         Dir.remove dir
         Dir.make dir
-        dev=Dev.new( { 'DEV_ROOT' => dir, 'DEBUG' => 'true'} )
-        expect(dev.env.debug?).to eq(true)
+        dev=Dev.new( { 'DEV_ROOT' => dir, 'SUPPRESS_CONSOLE_OUTPUT' => 'true'} )
+        #expect(dev.env.debug?).to eq(true)
         expect(dev.projects.filename).to eq("#{dir}/data/Projects.json")
         expect(dev.projects.length).to eq(0)
         dev.execute('add http://github.com/dev-gem/HelloRake.git')
@@ -41,7 +41,7 @@ describe Dev do
         dir="#{File.dirname(__FILE__)}/dev_spec"
         Dir.remove dir
         Dir.make dir
-        dev=Dev.new( { 'DEV_ROOT' => dir } )
+        dev=Dev.new( { 'DEV_ROOT' => dir, 'SUPPRESS_CONSOLE_OUTPUT' => 'true' } )
         dev.execute('add http://github.com/dev-gem/HelloRake.git')
         expect(dev.execute('work HelloRake')).to eq 0 
         dev.env.output=''

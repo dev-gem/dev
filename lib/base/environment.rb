@@ -109,7 +109,7 @@ class Environment < Hash
   end
 
   def out message
-      puts message
+      puts message if !get_env('SUPPRESS_CONSOLE_OUTPUT')
       @output=@output+message+'\n'
   end
 

@@ -68,14 +68,11 @@ class Projects < Hash
     end
 
     def add args
-    	puts "add #{args}\n" if @env.debug?
     	url=args[0]
-    	puts "url #{url}\n" if @env.debug?
     	project=Project.new(url)
     	project[:fullname]=args[1] if args.length > 1
-    	puts "fullname #{project[:fullname]}\n" if @env.debug?
     	if(!self.has_key?(project[:fullname]) && project[:fullname].length > 0)
-    		puts "adding #{project.fullname}\n"
+    		@env.out "adding #{project.fullname}\n"
     		self[project.fullname]=project
     		self.save
     	end
