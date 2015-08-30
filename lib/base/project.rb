@@ -215,6 +215,12 @@ class Project < Hash
         if(wrk_history.length > 0)
             @env.out wrk_history[0].info
         end
+        make_history=command_history ['make', latest_tag]
+        out_property "make status","?" if make_history.length == 0
+        out_property "make status", make_history[0].summary if make_history.length > 0
+        if(make_history.length >0)
+            @env.out make_history[0].info
+        end
         infoCmd
     end
 
@@ -257,8 +263,8 @@ class Project < Hash
     end
 
 	def make tag=''
-		tag=latest_tag if tag.length==0
-		return if tag.length==0
+		tag=latest_tag true if tag.length==0
+		#return if tag.length==0
 		raise 'no tag specified' if tag.length==0
 
 		rake_default=Command.new({:input => 'rake default',:quiet => true,:ignore_failure => true})

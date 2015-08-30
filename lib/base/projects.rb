@@ -129,9 +129,11 @@ class Projects < Hash
 	def make args
 		projects=get_projects args
 		puts "making #{projects.length} projects..." if @env.debug?
+		exit_code=0
 		projects.each{|project|
 			begin
-			    project.make
+			    result=project.make
+			    exit_code=result.exit_code if(result.exit_code!=0)
 		    rescue => error
 		    	puts "error raised during make #{project.fullname}"
 		    	puts "--------------------------------------------"
@@ -139,6 +141,7 @@ class Projects < Hash
 		    	puts "--------------------------------------------"
 		    end
 		}
+		exit_code
 	end
 
 	def clobber args
