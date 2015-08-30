@@ -274,12 +274,12 @@ class Command < Hash
     end 
 
     def info 
-      result=' ' + format_property('input',self[:input]) + '\n'
-      result=result + ' ' + format_property('directory',self[:directory])  + '\n'
-      result=result + ' ' + format_property('exit_code',self[:exit_code]) + '\n'
-      result=result + ' ' + format_property('duration',getFormattedTimeSpan(self[:end_time]-self[:start_time])) + '\n'
-      result=result + ' ' + format_property('output','') + '\n'
-      result=result + self[:output] + '\n'
+      result=' ' + format_property('input',self[:input]) + "\n"
+      result=result + ' ' + format_property('directory',self[:directory])  + "\n"
+      result=result + ' ' + format_property('exit_code',self[:exit_code]) + "\n"
+      result=result + ' ' + format_property('duration',getFormattedTimeSpan(self[:end_time]-self[:start_time])) + "\n"
+      result=result + ' ' + format_property('output','') + "\n"
+      result=result + self[:output] + "\n"
     end
 
     def to_html

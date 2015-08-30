@@ -95,12 +95,7 @@ class Project < Hash
 		end
 	end
 
-	def info
-		@env.out "Project #{name}"
-		@env.out "#{'fullname'.fix(13)}: #{self.fullname}"
-		@env.out "#{'url'.fix(13)}: #{self[:url]}"
-		@env.out "#{'version'.fix(13)}: #{VERSION}" if defined? VERSION
-	end
+	
 
     def latest_tag update=false
 		makedir="#{@env.make_dir}/#{self.fullname}"
@@ -209,16 +204,23 @@ class Project < Hash
     def out_property name,value
         if(@env.colorize?)
             require 'ansi/code'
-            @env.out "#{name}: " + ANSI.cyan + ANSI.bright + value.to_s.strip + ANSI.reset
+            @env.out "#{name}: " + ANSI.white + ANSI.bold + value.to_s.strip + ANSI.reset
         else
             @env.out "#{name}: #{value}"
         end
     end
 
+    #def info
+    #    @env.out "Project #{name}"
+    #    @env.out "#{'fullname'.fix(13)}: #{self.fullname}"
+    #    @env.out "#{'url'.fix(13)}: #{self[:url]}"
+    #    @env.out "#{'version'.fix(13)}: #{VERSION}" if defined? VERSION
+    #end
     def info
         infoCmd=Command.new({ :input => 'info', :exit_code => 0 })
-        out_cyan '========================================================='
-        out_cyan fullname
+        #out_cyan '========================================================='
+        #out_cyan fullname
+        out_property "fullname", fullname
         out_property "url", url
         wrk_history=command_history ['work']
         out_property "work status", "?" if wrk_history.length == 0
