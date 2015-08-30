@@ -174,14 +174,13 @@ class Project < Hash
             status=0
             history.each{|c|
                 status=c.exit_code if c.exit_code != 0
-                #@env.out c.summary true
             }
             if(status==0)
                 @env.out "       #{fullname}"
             else
                 if(@env.colorize?)
                     require 'ansi/code'
-                    @env.out ANSI.yellow + "?      #{fullname}" + ANSI.reset
+                    @env.out ANSI.blue + "X      #{fullname}" + ANSI.reset
                 else
                     @env.out "X      #{fullname}"
                 end
