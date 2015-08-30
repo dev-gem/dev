@@ -20,6 +20,7 @@ class Dev
 	def execute args
 		args=args.split(' ') if(args.kind_of?(String))
 
+        # parse arguments that are of the form KEY=VALUE
 		args.each{|arg|
 		 	if(arg.include?('='))
 		 		words=arg.split('=')
@@ -28,6 +29,7 @@ class Dev
 		 		end
 		 	end
 		}
+
 		if args.length == 0
 	       usage if args.length == 0
 	    else
@@ -43,6 +45,9 @@ class Dev
 		   projects.info(subargs) if subcommand=='info'
 		   projects.work(subargs) if subcommand=='work'
 		   projects.update(subargs) if subcommand=='update'
+
+		   puts "unknown command: '#{subcommand}'"
+		   1
 		end
 	end
 
