@@ -35,11 +35,12 @@ class Dev
 		   subargs=Array.new
 		   subargs=args[1,args.length-1] if args.length > 1
 
-		   projects.add(subargs) if subcommand=='add'
+		   return projects.add(subargs) if subcommand=='add'
 		   projects.clobber(subargs) if subcommand=='clobber'
 		   projects.import(subargs) if subcommand=='import'
 		   projects.list(subargs) if subcommand=='list'
 		   projects.make(subargs) if subcommand=='make'
+		   projects.info(subargs) if subcommand=='info'
 		   projects.work(subargs) if subcommand=='work'
 		   projects.update(subargs) if subcommand=='update'
 		end
@@ -52,6 +53,7 @@ class Dev
 		puts ' help'
 		puts ' list'
 		puts ' make'
+		puts ' info'
 		puts ' work'
 		puts ''
 		puts "Type 'dev help <subcommand>' for help on a specific subcommand.'"
