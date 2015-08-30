@@ -250,7 +250,7 @@ class Command < Hash
         cduration = ANSI.reset + duration
         #code=ANSI.green + '+ ' + ANSI.reset
         #code=ANSI.red   + '- ' + ANSI.reset if exit_code != 0
-        cinput = ANSI.green + self[:input] + ANSI.reset
+        cinput = ANSI.reset + self[:input] + ANSI.reset
         cinput = ANSI.red   + self[:input] + ANSI.reset if exit_code != 0
         cdirectory = ''
         cdirectory = "(#{self[:directory]})" if include_directory

@@ -184,10 +184,19 @@ class Project < Hash
         end
     end
 
+    def out_cyan message
+        if(@env.colorize?)
+            require 'ansi/code'
+            puts ANSI.cyan + ANSI.bright + message + ANSI.reset
+        else
+            puts "#{message}"
+        end
+    end
+
     def out_property name,value
         if(@env.colorize?)
             require 'ansi/code'
-            puts "#{name}: " + ANSI.yellow + ANSI.bright + value.to_s.strip + ANSI.reset
+            puts "#{name}: " + ANSI.cyan + ANSI.bright + value.to_s.strip + ANSI.reset
         else
             puts "#{name}: #{value}"
         end
@@ -195,7 +204,8 @@ class Project < Hash
 
     def info
         infoCmd=Command.new({ :input => 'info', :exit_code => 0 })
-        out_brackets fullname
+        out_cyan '========================================================='
+        out_cyan fullname
         out_property "url", url
         wrk_history=command_history ['work']
         out_property "work status", "?" if wrk_history.length == 0
