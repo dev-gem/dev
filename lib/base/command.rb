@@ -293,7 +293,7 @@ class Command < Hash
       error=['']
       error=self[:error].strip.split("\n") if !self[:error].nil?
       if(error.length <= 1) 
-        result=result + format_property('error'.fix(15),error) + "\n"
+        result=result + format_property('error'.fix(15),error[0]) + "\n"
         #result=result + format_property('error'.fix(15),'') + "\n" if(error.length==0)
         #result=result + format_property('error'.fix(15),error) + "\n" if(error.length==1)
       else
