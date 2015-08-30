@@ -281,7 +281,7 @@ class Command < Hash
       output=['']
       output=self[:output].strip.split("\n") if !self[:output].nil?
       if(output.length <= 1)
-        result=result + format_property('output'.fix(15),output) + "\n" 
+        result=result + format_property('output'.fix(15),output[0]) + "\n" 
         #result=result + format_property('output'.fix(15),'') + "\n" if(output.length==0)
         #result=result + format_property('output'.fix(15),output) + "\n" if(output.length==1)
       else
@@ -293,7 +293,7 @@ class Command < Hash
       error=['']
       error=self[:error].strip.split("\n") if !self[:error].nil?
       if(error.length <= 1) 
-        result=result + format_property('output'.fix(15),output) + "\n"
+        result=result + format_property('error'.fix(15),error) + "\n"
         #result=result + format_property('error'.fix(15),'') + "\n" if(error.length==0)
         #result=result + format_property('error'.fix(15),error) + "\n" if(error.length==1)
       else
