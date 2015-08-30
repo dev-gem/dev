@@ -102,7 +102,7 @@ class Project < Hash
     	FileUtils.mkdir_p(File.dirname(makedir)) if !File.exists?(File.dirname(makedir))
         if(File.exists?(makedir))
         	Dir.chdir(makedir) do
-        	  Command.exit_code('git pull')
+        	  Command.exit_code('git pull') if update
             end
         else
         	if(update)
@@ -220,17 +220,17 @@ class Project < Hash
         infoCmd=Command.new({ :input => 'info', :exit_code => 0 })
         #out_cyan '========================================================='
         #out_cyan fullname
-        out_property "fullname", fullname
-        out_property "url", url
+        out_property "fullname".fix(15), fullname
+        out_property "url".fix(15), url
         wrk_history=command_history ['work']
-        out_property "work status", "?" if wrk_history.length == 0
-        out_property "work status", wrk_history[0].summary if wrk_history.length > 0
+        out_property "work status".fix(15), "?" if wrk_history.length == 0
+        out_property "work status".fix(15), wrk_history[0].summary if wrk_history.length > 0
         if(wrk_history.length > 0)
             @env.out wrk_history[0].info
         end
         make_history=command_history ['make', latest_tag]
-        out_property "make status","?" if make_history.length == 0
-        out_property "make status", make_history[0].summary if make_history.length > 0
+        out_property "make status".fix(15),"?" if make_history.length == 0
+        out_property "make status".fix(15), make_history[0].summary if make_history.length > 0
         if(make_history.length >0)
             @env.out make_history[0].info
         end

@@ -274,12 +274,20 @@ class Command < Hash
     end 
 
     def info 
-      result=' ' + format_property('input',self[:input]) + "\n"
-      result=result + ' ' + format_property('directory',self[:directory])  + "\n"
-      result=result + ' ' + format_property('exit_code',self[:exit_code]) + "\n"
-      result=result + ' ' + format_property('duration',getFormattedTimeSpan(self[:end_time]-self[:start_time])) + "\n"
-      result=result + ' ' + format_property('output','') + "\n"
-      result=result + self[:output] + "\n"
+      result=format_property('input'.fix(15),self[:input]) + "\n"
+      result=result + format_property('directory'.fix(15),self[:directory])  + "\n"
+      result=result + format_property('exit_code'.fix(15),self[:exit_code]) + "\n"
+      result=result + format_property('duration'.fix(15),getFormattedTimeSpan(self[:end_time]-self[:start_time])) + "\n"
+      #if(self[:output].strip.length > 0)
+        result=result + format_property('output=>','') + "\n"
+        result=result + self[:output] + "\n"
+        result=result + format_property('<=output','') + "\n"
+      #end
+      #if(self[:error].strip.length > 0)
+        result=result + format_property('error=>','') + "\n"
+        result=result + self[:error] + "\n"
+        result=result + format_property('<=error','') + "\n"
+      #end
     end
 
     def to_html

@@ -41,6 +41,10 @@ describe Dev do
         expect(dev.execute('work HelloRake')).to eq 0 
         dev.env.output=''
         expect(dev.execute('info')).to eq 0
+        if(!dev.env.output.include?('ok'))
+            puts 'info output:'
+            puts dev.env.output
+        end
         expect(dev.env.output.include?('ok')).to eq true 
         Dir.remove dir
     end
