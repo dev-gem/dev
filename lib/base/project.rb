@@ -181,7 +181,7 @@ class Project < Hash
             else
                 if(@env.colorize?)
                     require 'ansi/code'
-                    @env.out ANSI.red + "?      #{fullname}" + ANSI.reset
+                    @env.out ANSI.yellow + "?      #{fullname}" + ANSI.reset
                 else
                     @env.out "X      #{fullname}"
                 end
