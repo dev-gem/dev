@@ -29,7 +29,7 @@ class Tasks
 				puts ":#{task}" if !@env.colorize?
 				if @env.colorize?
 					require 'ansi/code'
-				   puts  ANSI.cyan + ":#{task}" + ANSI.reset if @env.colorize?
+				   puts  ANSI.white + ANSI.bold + ":#{task}" + ANSI.reset if @env.colorize?
 			    end
 		  		execute(COMMANDS[task])
 		    end

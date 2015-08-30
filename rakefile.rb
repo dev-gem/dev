@@ -34,4 +34,27 @@ task :show_projects , [:filter] do |t, args|
 	PROJECTS.show args[:filter] if args.has_key? :filter
 end
 
+task :show_colors do
+	require 'ansi/code'
+	puts ANSI.black "==black"
+	puts ANSI.black + ANSI.bright + "==light black"
+	puts ANSI.red "==red"
+	puts ANSI.red + ANSI.bright + "==light red"
+	puts ANSI.green "==green"
+	puts ANSI.green + ANSI.bright + "==light green"
+	puts ANSI.green + ANSI.faint + "==faint green"
+	puts ANSI.green + ANSI.dark + "==dark green"
+	puts ANSI.yellow "==yellow"
+	puts ANSI.yellow + ANSI.bright + "==light yellow"
+	puts ANSI.blue "==blue"
+	puts ANSI.blue + ANSI.bright + "==light blue"
+	puts ANSI.magenta "==magenta"
+	puts ANSI.magenta + ANSI.bright + "==light magenta"
+	puts ANSI.cyan "==cyan"
+	puts ANSI.cyan + ANSI.bright + "==light cyan"
+	puts ANSI.white "==white"
+	puts ANSI.white + ANSI.bright + "==light white"
+	puts ANSI.reset
+end
+
 task :default => [:setup,:build,:test,:add,:commit,:publish,:push]
