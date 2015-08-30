@@ -36,24 +36,24 @@ end
 
 task :show_colors do
 	require 'ansi/code'
-	puts ANSI.black "==black"
-	puts ANSI.black + ANSI.bright + "==light black"
-	puts ANSI.red "==red"
-	puts ANSI.red + ANSI.bright + "==light red"
-	puts ANSI.green "==green"
-	puts ANSI.green + ANSI.bright + "==light green"
-	puts ANSI.green + ANSI.faint + "==faint green"
-	puts ANSI.green + ANSI.dark + "==dark green"
-	puts ANSI.yellow "==yellow"
-	puts ANSI.yellow + ANSI.bright + "==light yellow"
-	puts ANSI.blue "==blue"
-	puts ANSI.blue + ANSI.bright + "==light blue"
-	puts ANSI.magenta "==magenta"
-	puts ANSI.magenta + ANSI.bright + "==light magenta"
-	puts ANSI.cyan "==cyan"
-	puts ANSI.cyan + ANSI.bright + "==light cyan"
-	puts ANSI.white "==white"
-	puts ANSI.white + ANSI.bright + "==light white"
+	puts ANSI.black "==black" + ANSI.reset
+	puts ANSI.black + ANSI.bright + "==light black"  + ANSI.reset
+	puts ANSI.red "==red"  + ANSI.reset
+	puts ANSI.red + ANSI.bright + "==light red"  + ANSI.reset
+	puts ANSI.green "==green"  + ANSI.reset
+	puts ANSI.green + ANSI.bright + "==light green"  + ANSI.reset
+	puts ANSI.green + ANSI.faint + "==faint green"  + ANSI.reset
+	puts ANSI.green + ANSI.dark + "==dark green"  + ANSI.reset
+	puts ANSI.yellow "==yellow"  + ANSI.reset
+	puts ANSI.yellow + ANSI.bright + "==light yellow"  + ANSI.reset
+	puts ANSI.blue "==blue"  + ANSI.reset
+	puts ANSI.blue + ANSI.bright + "==light blue"  + ANSI.reset
+	puts ANSI.magenta "==magenta"  + ANSI.reset
+	puts ANSI.magenta + ANSI.bright + "==light magenta"  + ANSI.reset
+	puts ANSI.cyan "==cyan"  + ANSI.reset
+	puts ANSI.cyan + ANSI.bright + "==light cyan"  + ANSI.reset
+	puts ANSI.white "==white"  + ANSI.reset
+	puts ANSI.white + ANSI.bright + "==light white"  + ANSI.reset
 	puts ANSI.reset
 end
 
