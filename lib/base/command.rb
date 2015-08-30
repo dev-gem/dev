@@ -279,25 +279,23 @@ class Command < Hash
       result=result + format_property('exit_code'.fix(15),self[:exit_code]) + "\n"
       result=result + format_property('duration'.fix(15),getFormattedTimeSpan(self[:end_time]-self[:start_time])) + "\n"
       output=self[:output].strip.split("\n")
-      if(output.length ==0) 
+      if(output.length <= 1) 
         result=result + format_property('output'.fix(15),output) + "\n"
       else
         result=result + format_property('output'.fix(15),'') + "\n"
         output.each{|line|
           result=result + ' '.fix(16) + line + "\n"
         }
-        #result=result + "<=output".fix(16) + "\n"
       end
-      #if(self[:output].strip.length > 0)
-        result=result + format_property('output=>','') + "\n"
-        result=result + self[:output] + "\n"
-        result=result + format_property('<=output','') + "\n"
-      #end
-      #if(self[:error].strip.length > 0)
-        result=result + format_property('error=>','') + "\n"
-        result=result + self[:error] + "\n"
-        result=result + format_property('<=error','') + "\n"
-      #end
+      error=self[:error].strip.split("\n")
+      if(error.length <= 1) 
+        result=result + format_property('error'.fix(15),error) + "\n"
+      else
+        result=result + format_property('error'.fix(15),'') + "\n"
+        error.each{|line|
+          result=result + ' '.fix(16) + line + "\n"
+        }
+      end
     end
 
     def to_html
