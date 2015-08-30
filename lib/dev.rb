@@ -39,13 +39,13 @@ class Dev
 		   subargs=args[1,args.length-1] if args.length > 1
 
 		   return projects.add(subargs) if subcommand=='add'
-		   projects.clobber(subargs) if subcommand=='clobber'
-		   projects.import(subargs) if subcommand=='import'
-		   projects.list(subargs) if subcommand=='list'
-		   projects.make(subargs) if subcommand=='make'
+		   return projects.clobber(subargs) if subcommand=='clobber'
+		   return projects.import(subargs) if subcommand=='import'
+		   return projects.list(subargs) if subcommand=='list'
+		   return projects.make(subargs) if subcommand=='make'
 		   return projects.info(subargs) if subcommand=='info'
 		   return projects.work(subargs) if subcommand=='work'
-		   projects.update(subargs) if subcommand=='update'
+		   return projects.update(subargs) if subcommand=='update'
 
 		   @env.out "unknown command: '#{subcommand}'"
 		   1
