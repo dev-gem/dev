@@ -15,6 +15,7 @@ class Dev
 		@env=Environment.new() if @env.nil?
 		@projects=Projects.new(@env)
 		@commands=Commands.new(@env)
+		@output=''
 	end
     
 	def execute args
@@ -31,7 +32,7 @@ class Dev
 		}
 
 		if args.length == 0
-	       usage if args.length == 0
+	       return usage
 	    else
 		   subcommand=args[0] if args.length > 0
 		   subargs=Array.new
@@ -42,26 +43,29 @@ class Dev
 		   projects.import(subargs) if subcommand=='import'
 		   projects.list(subargs) if subcommand=='list'
 		   projects.make(subargs) if subcommand=='make'
-		   projects.info(subargs) if subcommand=='info'
-		   projects.work(subargs) if subcommand=='work'
+		   return projects.info(subargs) if subcommand=='info'
+		   return projects.work(subargs) if subcommand=='work'
 		   projects.update(subargs) if subcommand=='update'
 
-		   puts "unknown command: '#{subcommand}'"
+		   @env.out "unknown command: '#{subcommand}'"
 		   1
 		end
 	end
 
+    
+
 	def usage
-		puts 'usage: dev <subcommand> [options]'
-		puts ''
-		puts 'available subcommands'
-		puts ' help'
-		puts ' list'
-		puts ' make'
-		puts ' info'
-		puts ' work'
-		puts ''
-		puts "Type 'dev help <subcommand>' for help on a specific subcommand.'"
+		@env.out 'usage: dev <subcommand> [options]'
+		@env.out ''
+		@env.out 'available subcommands'
+		@env.out ' help'
+		@env.out ' list'
+		@env.out ' make'
+		@env.out ' info'
+		@env.out ' work'
+		@env.out ''
+		@env.out "Type 'dev help <subcommand>' for help on a specific subcommand.'"
+		0
 	end
 end
 

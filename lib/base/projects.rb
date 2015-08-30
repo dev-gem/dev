@@ -87,9 +87,11 @@ class Projects < Hash
     def work args
     	projects=get_projects args
 		puts "working #{projects.length} projects..." if @env.debug?
+		exit_code=0
     	projects.each{|project|
     		begin
-    		    project.work
+    		    result=project.work
+    		    exit_code=result.exit_code if(result.exit_code!=0)
     		rescue => error
 		    	puts "error raised during work #{project.fullname}"
 		    	puts "--------------------------------------------"
@@ -97,6 +99,25 @@ class Projects < Hash
 		    	puts "--------------------------------------------"
 		    end
     	}
+    	exit_code
+	end
+
+	def info args
+		projects=get_projects args
+		puts "collecting info for #{projects.length} projects..." if @env.debug?
+		exit_code=0
+    	projects.each{|project|
+    		begin
+    		    result=project.info
+    		    exit_code=result.exit_code if(result.exit_code!=0)
+    		rescue => error
+		    	puts "error raised during work #{project.fullname}"
+		    	puts "--------------------------------------------"
+		    	puts error
+		    	puts "--------------------------------------------"
+		    end
+    	}
+    	exit_code
 	end
 
     def list args

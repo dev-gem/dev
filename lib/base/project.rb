@@ -175,6 +175,37 @@ class Project < Hash
         end
     end
 
+    def out_brackets message
+        if(@env.colorize?)
+            require 'ansi/code'
+            puts "[" + ANSI.blue + ANSI.bright + message + ANSI.reset + ']'
+        else
+            puts "[#{message}]"
+        end
+    end
+
+    def out_property name,value
+        if(@env.colorize?)
+            require 'ansi/code'
+            puts "#{name}: " + ANSI.yellow + ANSI.bright + value.to_s.strip + ANSI.reset
+        else
+            puts "#{name}: #{value}"
+        end
+    end
+
+    def info
+        infoCmd=Command.new({ :input => 'info', :exit_code => 0 })
+        out_brackets fullname
+        out_property "url", url
+        wrk_history=command_history ['work']
+        out_property "work status", "?" if wrk_history.length == 0
+        out_property "work status", wrk_history[0].summary if wrk_history.length > 0
+        if(wrk_history.length > 0)
+            @env.out wrk_history[0].info
+        end
+        infoCmd
+    end
+
     def clobber
         clobberCmd=Command.new('clobber')
         clobberCmd[:exit_code]=0
@@ -197,12 +228,13 @@ class Project < Hash
             rake_default=Command.new({:input =>'rake default',:quiet => true,:ignore_failure => true})
             if(last_work_mtime.nil? || last_work_mtime < Environment.get_latest_mtime(wrk_dir))
               Dir.chdir(wrk_dir) do
-                if(@env.colorize?)
-                    require 'ansi/code'
-                    puts "[" + ANSI.blue + ANSI.bright + fullname + ANSI.reset + ']'
-                else
-                    puts "[#{fullname}]"
-                end
+                out_brackets fullname
+                #if(@env.colorize?)
+                #    require 'ansi/code'
+                #    puts "[" + ANSI.blue + ANSI.bright + fullname + ANSI.reset + ']'
+                #else
+                #    puts "[#{fullname}]"
+                #end
                 rake_default.execute
                 rake_default.save logfile
                 update_status

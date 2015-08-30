@@ -247,13 +247,14 @@ class Command < Hash
       duration=getFormattedTimeSpan(self[:end_time]-self[:start_time])
       if(Environment.default.colorize?)
         require 'ansi/code'
+        cduration = ANSI.reset + duration
         #code=ANSI.green + '+ ' + ANSI.reset
         #code=ANSI.red   + '- ' + ANSI.reset if exit_code != 0
         cinput = ANSI.green + self[:input] + ANSI.reset
         cinput = ANSI.red   + self[:input] + ANSI.reset if exit_code != 0
         cdirectory = ''
         cdirectory = "(#{self[:directory]})" if include_directory
-        "  #{duration} #{cinput} #{cdirectory}"
+        "  #{cduration} #{cinput} #{cdirectory}"
       else
         code=' '
         code='X' if exit_code != 0
@@ -261,6 +262,24 @@ class Command < Hash
         sdirectory = "(#{self[:directory]})" if include_directory
         "#{code} #{duration} #{self[:input]} #{sdirectory}"
       end
+    end
+
+    def format_property name,value
+        if(Environment.default.colorize?)
+            require 'ansi/code'
+            return "#{name}: " + ANSI.yellow + ANSI.bright + value.to_s.strip + ANSI.reset
+        else
+            return "#{name}: #{value}"
+        end
+    end 
+
+    def info 
+      result=' ' + format_property('input',self[:input]) + '\n'
+      result=result + ' ' + format_property('directory',self[:directory])  + '\n'
+      result=result + ' ' + format_property('exit_code',self[:exit_code]) + '\n'
+      result=result + ' ' + format_property('duration',getFormattedTimeSpan(self[:end_time]-self[:start_time])) + '\n'
+      result=result + ' ' + format_property('output','') + '\n'
+      result=result + self[:output] + '\n'
     end
 
     def to_html
