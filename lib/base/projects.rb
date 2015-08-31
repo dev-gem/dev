@@ -208,7 +208,7 @@ class Projects < Hash
 		wrk=@env.wrk_dir
 		if File.exists?(wrk)
 		   Dir.chdir(wrk) do
-		   	    puts "scanning {wrk} for imports..."
+		   	    puts "scanning #{wrk} for imports..."
 		   		Dir.glob('**/rakefile.rb').each{|rakefile|
 		   			rakedir=File.dirname(rakefile)
 		   			url = Project.get_url rakedir
