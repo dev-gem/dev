@@ -1,5 +1,3 @@
-puts __FILE__ if defined?(DEBUG)
-
 desc 'performs setup commands'
 task :setup do Tasks.execute_task :setup;end
 
@@ -9,6 +7,11 @@ task :setup do Tasks.execute_task :setup;end
 # SVN_EXPORT={ 'System.Data.SQLite/1.0.93.0' => 'https://third-party.googlecode.com/svn/trunk/System.Data.SQLite/1.0.93.0' }
 #
 class Setup < Array
+
+	#def initialize value=nil
+	#	env=value if value.kind_of? Environment
+	#end
+
 	def update
 		add_quiet 'bundle install' if File.exists? 'Gemfile'
 		#add Command.new( { :input => 'bundle install', :quiet => true}) if(File.exists?('Gemfile'))
