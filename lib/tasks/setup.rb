@@ -29,7 +29,7 @@ class Setup < Array
 
 		if(Dir.glob('**/packages.config').length > 0)
 			Dir.glob('*.sln').each{|sln_file|
-				add "nuget restore #{sln_file}"
+				add_quiet "nuget restore #{sln_file}"
 			}
 		end
 
@@ -38,9 +38,18 @@ class Setup < Array
 			SVN_EXPORTS.each{|k,v|
 				dest="#{Command.dev_root}/dep/#{k}"
 				if(!File.exists?(dest))
+				  puts "#{Command.dev_root}/dep/#{k} does not exists" if env.debug?
 			      FileUtils.mkdir_p(File.dirname(dest)) if !File.exists?(File.dirname(dest))
-			      add "svn export #{v} #{dest}" if !dest.include?("@")
-				  add "svn export #{v} #{dest}@" if dest.include?("@")
+			      if(!dest.include?("@"))
+			      	puts "adding svn export #{v} #{dest}" if env.debug?
+			      	add_quiet "svn export #{v} #{dest}"
+			      end
+			      if(dest.include?("@"))
+			      	puts "adding svn export #{v} #{dest}@" if env.debug?
+			      	add_quiet "svn export #{v} #{dest}@"
+			      end
+			      #add "svn export #{v} #{dest}" if !dest.include?("@")
+				  #add "svn export #{v} #{dest}@" if dest.include?("@")
 				else
 					puts "#{Command.dev_root}/dep/#{k} exists." if env.debug?
 		        end
