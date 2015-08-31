@@ -7,7 +7,7 @@ class Analyze < Array
 	def update
 		if(`gem list countloc`.include?('countloc ('))
 			FileUtils.mkdir('doc') if(!File.exists?('doc'))
-			add 'countloc -r * --html doc/countloc.html'
+			add_quiet 'countloc -r * --html doc/countloc.html'
 		end
 	end
 end
