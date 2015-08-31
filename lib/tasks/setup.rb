@@ -13,6 +13,8 @@ class Setup < Array
 	end
 
 	def update
+		env=Environment.new if env.nil?
+
 		add_quiet 'bundle install' if File.exists? 'Gemfile'
 		#add Command.new( { :input => 'bundle install', :quiet => true}) if(File.exists?('Gemfile'))
 
@@ -31,15 +33,20 @@ class Setup < Array
 			}
 		end
 
+		puts 'Setup checking SVN_EXPORTS...' if env.debug?
 		if(defined?(SVN_EXPORTS))
 			SVN_EXPORTS.each{|k,v|
-				if(!File.exists?("#{Command.dev_root}/dep/#{k}"))
-			      FileUtils.mkdir_p(File.dirname("#{Command.dev_root}/dep/#{k}")) if !File.exists?("#{Command.dev_root}/dep/#{k}")
-				  dest="#{Command.dev_root}/dep/#{k}"
-			      add "svn export #{v} #{Command.dev_root}/dep/#{k}" if !dest.include?("@")
-				  add "svn export #{v} #{Command.dev_root}/dep/#{k}@" if dest.include?("@")
+				dest="#{Command.dev_root}/dep/#{k}"
+				if(!File.exists?(dest))
+			      FileUtils.mkdir_p(File.dirname(dest)) if !File.exists?(File.dirname(dest))
+			      add "svn export #{v} #{dest}" if !dest.include?("@")
+				  add "svn export #{v} #{dest}@" if dest.include?("@")
+				else
+					puts "#{Command.dev_root}/dep/#{k} exists." if env.debug?
 		        end
 			}
+		else
+			puts 'SVN_EXPORTS is not defined' if env.debug?
 		end
 
 		if(defined?(GIT_EXPORTS))
