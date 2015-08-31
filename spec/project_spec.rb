@@ -20,7 +20,23 @@ describe Project do
         dir="#{File.dirname(__FILE__)}/project_spec"
         Dir.remove dir
         Dir.make dir
-        helloRake=Project.new('https://github.com/dev-gem/HelloRake.git')
+
+         # INIT REPO HelloRake.git
+        Dir.chdir(dir) do
+            cmd=Command.execute('git init --bare HelloRake.git')
+            cmd=Command.execute("git clone #{dir}/HelloRake.git")
+            Dir.chdir("#{dir}/HelloRake") do
+                File.open('rakefile.rb','w'){|f|f.puts 'task :default do; puts "ok"; end'}
+                cmd=Command.execute('git add rakefile.rb')
+                cmd=Command.execute('git commit -m"added rakefile.rb"')
+                cmd=Command.execute('git tag 0.0.0 -m"0.0.0"')
+                cmd=Command.execute('git push')
+                cmd=Command.execute('git push --tags')
+            end
+        end
+
+        # ADD
+        helloRake=Project.new("#{dir}/HelloRake.git", 'local/HelloRake')
         helloRake.env=Environment.new({ 'DEV_ROOT' => dir, 'SUPPRESS_CONSOLE_OUTPUT' => 'true'})
 
         # MAKE
@@ -37,6 +53,38 @@ describe Project do
         expect(helloRake.clobber.exit_code).to eq(0)
         expect(File.exists?(helloRake.wrk_dir)).to eq(false)
         expect(File.exists?(File.dirname(helloRake.wrk_dir))).to eq(false)
+
+        Dir.remove dir
+    end
+
+    it "should fail work and make if there is not rakefile" do
+        dir="#{File.dirname(__FILE__)}/project_spec"
+        Dir.remove dir
+        Dir.make dir
+
+         # INIT REPO HelloRake.git
+        Dir.chdir(dir) do
+            cmd=Command.execute('git init --bare HelloRake.git')
+            cmd=Command.execute("git clone #{dir}/HelloRake.git")
+            Dir.chdir("#{dir}/HelloRake") do
+                File.open('README.md','w'){|f|f.puts 'test'}
+                cmd=Command.execute('git add README.md')
+                cmd=Command.execute('git commit -m"added README.md"')
+                cmd=Command.execute('git tag 0.0.0 -m"0.0.0"')
+                cmd=Command.execute('git push')
+                cmd=Command.execute('git push --tags')
+            end
+        end
+
+        # ADD
+        helloRake=Project.new("#{dir}/HelloRake.git", 'local/HelloRake')
+        helloRake.env=Environment.new({ 'DEV_ROOT' => dir, 'SUPPRESS_CONSOLE_OUTPUT' => 'true'})
+
+        # WORK
+        expect(helloRake.work.exit_code).to eq(1)
+
+        # MAKE
+        expect(helloRake.make('0.0.0').exit_code).to eq(1)
 
         Dir.remove dir
     end

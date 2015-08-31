@@ -71,6 +71,7 @@ class Projects < Hash
     	url=args[0]
     	project=Project.new(url)
     	project[:fullname]=args[1] if args.length > 1
+    	project.set_timeout args[2] if args.length > 2
     	if(!self.has_key?(project[:fullname]) && project[:fullname].length > 0)
     		@env.out "adding #{project.fullname}\n"
     		self[project.fullname]=project

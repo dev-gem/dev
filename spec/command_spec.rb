@@ -74,10 +74,10 @@ describe Command do
     expect(cmd[:exit_code]).not_to eq(0)
   end
 
+
   it "should be able to execute rake command in specific directory" do
     dir="#{File.dirname(__FILE__)}/command_spec"
     Dir.make dir
-    #FileUtils.mkdir_p(dir) if(!File.exists?(dir))
     File.open("#{dir}/rakefile.rb","w") { |f| 
         f.puts "task :default do"
         f.puts " puts 'rake_test'"
@@ -85,26 +85,13 @@ describe Command do
         f.close
     }
     expect(File.exists?("#{dir}/rakefile.rb")).to eq(true)
+    #cmd=Command.new({ :input => 'rake default', :quiet => true})
     cmd=Command.new({ :input => 'rake default', :quiet => true})#, :timeout => 2 })
     cmd[:directory]=dir
     expect(File.exists?(cmd[:directory])).to eq(true)
     cmd.execute
     Dir.remove dir
-    #FileUtils.rm_r("#{File.dirname(__FILE__)}/command_spec")
   end
-
-  #it "should be able to rake" do
-  #  dir="#{File.dirname(__FILE__)}/command_spec"
-  #  Dir.make dir
-    #FileUtils.mkdir(dir) if(!File.exists?(dir))
-  #  File.open("#{dir}/rakefile.rb","w") { |f| 
-  #      f.puts "task :default do"
-  #      f.puts " puts 'rake_test'"
-  #      f.puts "end" 
-  #  }
-  #  Dir.remove dir
-    #Environment.remove("#{File.dirname(__FILE__)}/command_spec")
-  #end
 
   it "should fail when calling rake produces an error" do
     dir="#{File.dirname(__FILE__)}/command_spec"
@@ -127,7 +114,7 @@ describe Command do
     cmd.execute
     expect(cmd[:exit_code]).not_to eq(0)
 
-    cmd=Command.new({ :input => 'rake bogus', :timeout => 3, :ignore_failure => true, :quiet => true})
+    cmd=Command.new({ :input => 'rake bogus', :timeout => 5.0, :ignore_failure => true, :quiet => true})
     cmd[:directory]=dir
     cmd.execute
     expect(cmd[:exit_code]).not_to eq(0)
@@ -140,7 +127,7 @@ describe Command do
   end
 
   it "should be able to execute an array of commands" do
-    help=['git --help','rake --help','ruby --help']
+    help=['git --help','rake --help']
     help.env=Environment.new({ 'SUPPRESS_CONSOLE_OUTPUT' => 'true' })
     help.execute({:quiet => true})
     File.open('help.html','w'){|f|f.write(help.to_html)}
@@ -148,12 +135,11 @@ describe Command do
 
   it "should be able to execute a hash with arrays or commands" do
     commands=Hash.new
-    commands[:help]=['git --help','rake --help','ruby --help']
-    commands[:version]=['git --version','rake --version','ruby --version']
+    commands[:help]=['git --help','rake --help']
+    commands[:version]=['git --version']
     commands[:help].env=Environment.new({ 'SUPPRESS_CONSOLE_OUTPUT' => 'true' })
     commands[:version].env=Environment.new({ 'SUPPRESS_CONSOLE_OUTPUT' => 'true' })
     commands.execute({:quiet => true})
-    File.open('commands.html','w'){|f|f.write(commands.to_html)}
   end
 
   it "should be able to get the output" do
