@@ -8,9 +8,9 @@ task :setup do Tasks.execute_task :setup;end
 #
 class Setup < Array
 
-	#def initialize value=nil
-	#	env=value if value.kind_of? Environment
-	#end
+	def initialize value=nil
+		env=value if value.kind_of? Environment
+	end
 
 	def update
 		add_quiet 'bundle install' if File.exists? 'Gemfile'

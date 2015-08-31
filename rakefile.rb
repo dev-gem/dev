@@ -4,7 +4,9 @@ require_relative('./lib/dev.rb')
 puts "DEBUG=#{ENV['DEBUG']}" if ENV.has_key?('DEBUG')
 CLEAN.include('*.gem','*.html')
 CLEAN.include('.yardopts') if File.exists?('.yardopts')
+CLEAN.exclude('bin/dev')
 CLOBBER.include('*.gem','lib/dev_*.rb')
+CLOBBER.exclude('bin/dev')
 build_product= "dev-#{Gem::Specification.load('dev.gemspec').version}.gem"
 
 task :build do
