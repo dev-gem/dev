@@ -55,6 +55,7 @@ class Dev
     
 
 	def usage
+		return 0
 		@env.out 'usage: dev <subcommand> [options]'
 		@env.out ''
 		@env.out 'available subcommands'
