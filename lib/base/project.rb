@@ -268,7 +268,7 @@ class Project < Hash
             if(last_work_mtime.nil? || last_work_mtime < Environment.get_latest_mtime(wrk_dir))
               Dir.chdir(wrk_dir) do
 
-                out_brackets fullname
+                @env.out fullname
                 
                 if(!File.exists?'rakefile.rb')
                     rake_default[:exit_code]=1
