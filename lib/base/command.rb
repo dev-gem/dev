@@ -1,5 +1,3 @@
-puts __FILE__ if defined?(DEBUG)
-
 require 'time'
 require 'open3'
 require_relative('timeout.rb')
@@ -7,6 +5,8 @@ require_relative('timer.rb')
 require_relative('array.rb')
 require_relative('hash.rb')
 require_relative('string.rb')
+require_relative('environment.rb')
+require_relative('dir.rb')
 BUFFER_SIZE=1024 if(!defined?(BUFFER_SIZE))
             
 # = Command
@@ -122,11 +122,14 @@ class Command < Hash
     			  self[:elapsed] = timer.elapsed_str
     			  self[:end_time] = Time.now
           else
+            #puts "command execute with timeout #{self[:timeout]}"
             require_relative 'timeout.rb'
             result=run_with_timeout(self[:directory],self[:input], self[:timeout],2)
+            #puts "result #{result}"
             self[:output]=result[0]
-            self[:error]=result[1]
-            self[:exit_code]=result[2]
+            self[:exit_code]=result[1]
+            #self[:error]=result[1]
+            #self[:exit_code]=result[2]
 
             self[:elapsed] = timer.elapsed_str
             self[:end_time] = Time.now
@@ -247,19 +250,60 @@ class Command < Hash
       duration=getFormattedTimeSpan(self[:end_time]-self[:start_time])
       if(Environment.default.colorize?)
         require 'ansi/code'
+        cduration = ANSI.reset + duration
         #code=ANSI.green + '+ ' + ANSI.reset
         #code=ANSI.red   + '- ' + ANSI.reset if exit_code != 0
-        cinput = ANSI.green + self[:input] + ANSI.reset
+        cinput = ANSI.reset + self[:input] + ANSI.reset
         cinput = ANSI.red   + self[:input] + ANSI.reset if exit_code != 0
         cdirectory = ''
         cdirectory = "(#{self[:directory]})" if include_directory
-        "  #{duration} #{cinput} #{cdirectory}"
+        "  #{cduration} #{cinput} #{cdirectory}"
       else
         code=' '
         code='X' if exit_code != 0
         sdirectory = ''
         sdirectory = "(#{self[:directory]})" if include_directory
         "#{code} #{duration} #{self[:input]} #{sdirectory}"
+      end
+    end
+
+    def format_property name,value
+        if(Environment.default.colorize?)
+            require 'ansi/code'
+            return "#{name}: " + ANSI.yellow + ANSI.bright + value.to_s.strip + ANSI.reset
+        else
+            return "#{name}: #{value}"
+        end
+    end 
+
+    def info 
+      result=format_property('input'.fix(15),self[:input]) + "\n"
+      result=result + format_property('directory'.fix(15),self[:directory])  + "\n"
+      result=result + format_property('exit_code'.fix(15),self[:exit_code]) + "\n"
+      result=result + format_property('duration'.fix(15),getFormattedTimeSpan(self[:end_time]-self[:start_time])) + "\n"
+      output=['']
+      output=self[:output].strip.split("\n") if !self[:output].nil?
+      if(output.length <= 1)
+        result=result + format_property('output'.fix(15),output[0]) + "\n" 
+        #result=result + format_property('output'.fix(15),'') + "\n" if(output.length==0)
+        #result=result + format_property('output'.fix(15),output) + "\n" if(output.length==1)
+      else
+        result=result + format_property('output'.fix(15),'') + "\n"
+        output.each{|line|
+          result=result + ' '.fix(16) + line + "\n"
+        }
+      end
+      error=['']
+      error=self[:error].strip.split("\n") if !self[:error].nil?
+      if(error.length <= 1) 
+        result=result + format_property('error'.fix(15),error[0]) + "\n"
+        #result=result + format_property('error'.fix(15),'') + "\n" if(error.length==0)
+        #result=result + format_property('error'.fix(15),error) + "\n" if(error.length==1)
+      else
+        result=result + format_property('error'.fix(15),'') + "\n"
+        error.each{|line|
+          result=result + ' '.fix(16) + line + "\n"
+        }
       end
     end
 

@@ -8,6 +8,8 @@ describe Project do
 
 	it "should be able to automatically initialize properties from url constructor" do
 		hellogem=Project.new('http://github.com/dev-gem/HelloRubyGem.git')
+		hellogem.env.set_env('SUPPRESS_CONSOLE_OUTPUT','true')
+
 		expect(hellogem.url).to eq('http://github.com/dev-gem/HelloRubyGem.git')
 		expect(hellogem.fullname).to eq('github/dev-gem/HelloRubyGem')
 		expect(hellogem.name).to eq('HelloRubyGem')
@@ -18,9 +20,24 @@ describe Project do
         dir="#{File.dirname(__FILE__)}/project_spec"
         Dir.remove dir
         Dir.make dir
-        helloRake=Project.new('https://github.com/dev-gem/HelloRake.git')
-        helloRake.env=Environment.new({ 'DEV_ROOT' => dir, 'DEBUG' => 'true'})
-        expect(helloRake.env.debug?).to eq(true)
+
+         # INIT REPO HelloRake.git
+        Dir.chdir(dir) do
+            cmd=Command.execute('git init --bare HelloRake.git')
+            cmd=Command.execute("git clone #{dir}/HelloRake.git")
+            Dir.chdir("#{dir}/HelloRake") do
+                File.open('rakefile.rb','w'){|f|f.puts 'task :default do; puts "ok"; end'}
+                cmd=Command.execute('git add rakefile.rb')
+                cmd=Command.execute('git commit -m"added rakefile.rb"')
+                cmd=Command.execute('git tag 0.0.0 -m"0.0.0"')
+                cmd=Command.execute('git push')
+                cmd=Command.execute('git push --tags')
+            end
+        end
+
+        # ADD
+        helloRake=Project.new("#{dir}/HelloRake.git", 'local/HelloRake')
+        helloRake.env=Environment.new({ 'DEV_ROOT' => dir, 'SUPPRESS_CONSOLE_OUTPUT' => 'true'})
 
         # MAKE
         expect(helloRake.command_history.length).to eq(0)
@@ -32,34 +49,43 @@ describe Project do
         expect(helloRake.work.exit_code).to eq(0)
         expect(helloRake.command_history.length).to eq(2)
 
+        # CLOBBER
+        expect(helloRake.clobber.exit_code).to eq(0)
+        expect(File.exists?(helloRake.wrk_dir)).to eq(false)
+        expect(File.exists?(File.dirname(helloRake.wrk_dir))).to eq(false)
+
         Dir.remove dir
     end
 
-	#it "should be able to make a specific tag" do
-	#	hellogem=Project.new('http://github.com/dev-gem/HelloRubyGem.git')
-	#	makedir="#{Environment.dev_root}/make/github/dev-gem/HelloRubyGem-0.0.0"
-	#	FileUtils.rm_r(makedir) if File.exists? makedir
+    it "should fail work and make if there is not rakefile" do
+        dir="#{File.dirname(__FILE__)}/project_spec"
+        Dir.remove dir
+        Dir.make dir
 
-	#	logfile="#{Environment.dev_root}/log/#{hellogem.fullname}/0.0.0/#{Environment.user}@#{Environment.machine}.json"
-	#	File.delete(logfile) if File.exists? logfile
+         # INIT REPO HelloRake.git
+        Dir.chdir(dir) do
+            cmd=Command.execute('git init --bare HelloRake.git')
+            cmd=Command.execute("git clone #{dir}/HelloRake.git")
+            Dir.chdir("#{dir}/HelloRake") do
+                File.open('README.md','w'){|f|f.puts 'test'}
+                cmd=Command.execute('git add README.md')
+                cmd=Command.execute('git commit -m"added README.md"')
+                cmd=Command.execute('git tag 0.0.0 -m"0.0.0"')
+                cmd=Command.execute('git push')
+                cmd=Command.execute('git push --tags')
+            end
+        end
 
-	#	publish_file="#{Environment.dev_root}/publish/HelloRubyGem-0.0.0.gem"
-    #    File.delete publish_file if File.exists? publish_file
+        # ADD
+        helloRake=Project.new("#{dir}/HelloRake.git", 'local/HelloRake')
+        helloRake.env=Environment.new({ 'DEV_ROOT' => dir, 'SUPPRESS_CONSOLE_OUTPUT' => 'true'})
 
-	#	make=hellogem.make('0.0.0')
-	#	expect(File.exists?(makedir)).to eq(false),"#{makedir} exists after hello.make('0.0.0')"
-	#	expect(File.exists?(publish_file)).to eq(true), "#{publish_file} does not exist after rake default"
-	#	if(make[:exit_code] != 0)
-	#		expect(false).to eq(true),"hellogem.make('0.0.0') exit code=#{make[:exit_code]}\n#{make[:output]}\n#{make[:error]}"
-	#	end
-	#	expect(make[:exit_code]).to eq(0),"hellogem.make('0.0.0') failed."
-	#	expect(File.exists?(logfile)).to eq(true), "#{logfile} does not exists after hellogem.make('0.0.0')"
-	#	hellogem.clobber
-	#	expect(File.exists?(makedir)).to eq(false)
-	#end
+        # WORK
+        expect(helloRake.work.exit_code).to eq(1)
 
-	it "should be able to list tags" do
-		hellogem=Project.new('http://github.com/dev-gem/HelloRubyGem.git')
-		#expect(hellogem.tags.include?('0.0.0')).to eq(true), 'hellogem.tags did not include '0.0.0'
-	end
+        # MAKE
+        expect(helloRake.make('0.0.0').exit_code).to eq(1)
+
+        Dir.remove dir
+    end
 end

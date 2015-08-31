@@ -1,11 +1,14 @@
+require_relative('environment.rb')
 class Array
     attr_accessor :env
     def intialize env=nil
       @env=env
-      @env=Environment.new() if @env.nil?
+      @env=Environment.new() if @env.nil? 
+      @env=Environmnet.new() if !@env.kind_of?(Environment)
     end
 
     def execute value=nil
+      @env=Environment.new() if @env.nil? 
       i=0
       while i < self.length
         self[i]=Command.new(self[i]) if(self[i].is_a?(String))
@@ -18,7 +21,7 @@ class Array
         #self[i].execute if(self[i].is_a?(Command))
         if(self[i].is_a?(Command))
           self[i].execute
-          puts self[i].summary
+          @env.out self[i].summary
         end
 
         i=i+1

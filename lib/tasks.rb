@@ -26,10 +26,10 @@ class Tasks
 	def execute_task task
 		if(defined?(COMMANDS))
 			if(COMMANDS.has_key?(task))
-				puts "[:#{task}]" if !@env.colorize?
+				puts ":#{task}" if !@env.colorize?
 				if @env.colorize?
 					require 'ansi/code'
-				   puts "[" + ANSI.blue + ANSI.bright + ":#{task}" + ANSI.reset + "]" if @env.colorize?
+				   puts  ANSI.white + ANSI.bold + ":#{task}" + ANSI.reset if @env.colorize?
 			    end
 		  		execute(COMMANDS[task])
 		    end

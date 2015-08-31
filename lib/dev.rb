@@ -5,7 +5,7 @@ require_relative('apps.rb')
 require_relative('tasks.rb')
 require_relative('commands.rb')
 
-PROJECT=Project.new()
+#PROJECT=Project.new()
 
 class Dev
 	attr_accessor :env,:projects,:commands
@@ -15,11 +15,13 @@ class Dev
 		@env=Environment.new() if @env.nil?
 		@projects=Projects.new(@env)
 		@commands=Commands.new(@env)
+		@output=''
 	end
     
 	def execute args
 		args=args.split(' ') if(args.kind_of?(String))
 
+        # parse arguments that are of the form KEY=VALUE
 		args.each{|arg|
 		 	if(arg.include?('='))
 		 		words=arg.split('=')
@@ -28,32 +30,42 @@ class Dev
 		 		end
 		 	end
 		}
+
 		if args.length == 0
-	       usage if args.length == 0
+	       return usage
 	    else
 		   subcommand=args[0] if args.length > 0
 		   subargs=Array.new
 		   subargs=args[1,args.length-1] if args.length > 1
 
-		   projects.add(subargs) if subcommand=='add'
-		   projects.import(subargs) if subcommand=='import'
-		   projects.list(subargs) if subcommand=='list'
-		   projects.make(subargs) if subcommand=='make'
-		   projects.work(subargs) if subcommand=='work'
-		   projects.update(subargs) if subcommand=='update'
+		   return projects.add(subargs) if subcommand=='add'
+		   return projects.clobber(subargs) if subcommand=='clobber'
+		   return projects.import(subargs) if subcommand=='import'
+		   return projects.list(subargs) if subcommand=='list'
+		   return projects.make(subargs) if subcommand=='make'
+		   return projects.info(subargs) if subcommand=='info'
+		   return projects.work(subargs) if subcommand=='work'
+		   return projects.update(subargs) if subcommand=='update'
+
+		   @env.out "unknown command: '#{subcommand}'"
+		   1
 		end
 	end
 
+    
+
 	def usage
-		puts 'usage: dev <subcommand> [options]'
-		puts ''
-		puts 'available subcommands'
-		puts ' help'
-		puts ' list'
-		puts ' make'
-		puts ' work'
-		puts ''
-		puts "Type 'dev help <subcommand>' for help on a specific subcommand.'"
+		@env.out 'usage: dev <subcommand> [options]'
+		@env.out ''
+		@env.out 'available subcommands'
+		@env.out ' help'
+		@env.out ' list'
+		@env.out ' make'
+		@env.out ' info'
+		@env.out ' work'
+		@env.out ''
+		@env.out "Type 'dev help <subcommand>' for help on a specific subcommand.'"
+		0
 	end
 end
 

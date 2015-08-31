@@ -3,7 +3,7 @@ puts __FILE__ if defined?(DEBUG)
 require_relative('string.rb')
 
 class Environment < Hash
-
+  attr_accessor :output
   @@default=nil
   def self.default
     @@default=Environment.new if @@default.nil?
@@ -11,6 +11,7 @@ class Environment < Hash
   end
 
   def initialize env=nil
+    @output=''
     @env=Hash.new
     @env_aliases={'HOME' => ['USERPROFILE'],
                   'DEV_ROOT' => ['DEV_HOME','HOME','USERPROFILE'],
@@ -105,6 +106,11 @@ class Environment < Hash
       end
     end
     colorize
+  end
+
+  def out message
+      puts message if !get_env('SUPPRESS_CONSOLE_OUTPUT')
+      @output=@output+message+'\n'
   end
 
   def show_success?
@@ -243,7 +249,7 @@ class Environment < Hash
   end
 
   def self.get_latest_mtime directory
-    mtime=nil
+    mtime=Time.new(1980)
     Dir.chdir(directory)  do
       Dir.glob('**/*.*').each{|f|
         mtime=File.mtime(f) if mtime.nil? || File.mtime(f) > mtime

@@ -1,5 +1,3 @@
-puts __FILE__ if defined?(DEBUG)
-
 ############################################################################
 # The following code is based on code originally copied from 
 # https://gist.github.com/lpar/1032297
@@ -16,13 +14,11 @@ puts __FILE__ if defined?(DEBUG)
 def run_with_timeout(directory,command, timeout, tick)
   output = ''
   exit_code=1
-  begin
-    # Start task in another thread, which spawns a process
-    stdin, stderrout, thread = Open3.popen2e(command, :chdir=>directory)
-    # Get the pid of the spawned process
-    pid = thread[:pid]
-    start = Time.now
 
+  Open3.popen2e(command, :chdir=>directory) { |stdin,stderrout,thread|
+    pid = thread.pid
+
+    start = Time.now
     while (Time.now - start) < timeout and thread.alive?
       # Wait up to `tick` seconds for output/error data
       Kernel.select([stderrout], nil, nil, tick)
@@ -33,9 +29,14 @@ def run_with_timeout(directory,command, timeout, tick)
         # A read would block, so loop around for another select
       rescue EOFError
         # Command has completed, not really an error...
+        exit_code=wait_thread.value
         break
       end
+
+      sleep(0.5)
     end
+
+    exit_code=wait_thread.value
 
     # Give Ruby time to clean up the other thread
     sleep 1
@@ -44,17 +45,54 @@ def run_with_timeout(directory,command, timeout, tick)
       # We need to kill the process, because killing the thread leaves
       # the process alive but detached, annoyingly enough.
       Process.kill("TERM", pid)
-    else
-      exit_code=thread.value
-      sleep 1
+      exit_code=5
     end
 
-  ensure
-    stdin.close if stdin
-    stderrout.close if stderrout
-  end
+    
+  }
+
   return [output,exit_code]
-end
+end  
+#  begin
+#    # Start task in another thread, which spawns a process
+#    stdin, stderrout, thread = Open3.popen2e(command, :chdir=>directory)
+#    # Get the pid of the spawned process
+#    pid = thread[:pid]
+#    start = Time.now
+#
+#    while (Time.now - start) < timeout and thread.alive?
+#      # Wait up to `tick` seconds for output/error data
+#      Kernel.select([stderrout], nil, nil, tick)
+#      # Try to read the data
+#      begin
+#        output << stderrout.read_nonblock(BUFFER_SIZE)
+#      rescue IO::WaitReadable
+#        # A read would block, so loop around for another select
+#      rescue EOFError
+#        # Command has completed, not really an error...
+#        exit_code=$?.exitstatus
+#        break
+#      end
+#    end
+#
+#    # Give Ruby time to clean up the other thread
+#    sleep 1
+
+#    if thread.alive?
+      # We need to kill the process, because killing the thread leaves
+      # the process alive but detached, annoyingly enough.
+#      Process.kill("TERM", pid)
+#      exit_code=5
+#    else
+#      sleep 1
+#    end
+
+#  ensure
+#    stdin.close if stdin
+#    stderrout.close if stderrout
+#  end
+#  return [output,exit_code]
+#end
 
 require 'timeout'
 def run_with_timeout2(directory,command,timeout)

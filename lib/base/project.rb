@@ -8,11 +8,12 @@ require_relative('string.rb')
 class Project < Hash
 	attr_accessor :filename,:env
 
-    def initialize value=''
+    def initialize value='',fullname=''
         @filename=''
         @env=Environment.new
         self[:url]=Project.get_url
         self[:fullname]=Project.get_fullname_from_url self[:url] if self[:url].length > 0
+        self[:timeout]=60*5
         if value.is_a?(String)
             self[:url] = value if value.is_a?(String) && value.length > 0
             self[:fullname] = Project.get_fullname_from_url self[:url]
@@ -21,6 +22,13 @@ class Project < Hash
         else
             self[:fullname]=Project.get_fullname_from_url self[:url] if self[:url].length > 0
         end
+        self[:fullname] = fullname if fullname.length > 0
+    end
+
+    def set_timeout value
+        self[:timeout] = value if value.is_a? Numeric
+        self[:timeout] = value.gsub('m','').strip.to_f * 60 if value.include?('m')
+        self[:timeout] = value.gsub('s','').strip.to_f * 60 if value.include?('s')
     end
 
 	def self.get_url directory=Rake.application.original_dir
@@ -40,8 +48,6 @@ class Project < Hash
 		return url.gsub('http://','').gsub('https://','').gsub('.com/','/').gsub('.git','')
 	end
 
-	
-
     def url; self[:url]; end
     def fullname; self[:fullname]; end
 
@@ -52,7 +58,7 @@ class Project < Hash
 
 	def wrk_dir; "#{@env.wrk_dir}/#{self.fullname}"; end
 	def make_dir tag=''
-		"#{@env.make_dir}/#{self.fullname}-#{tag}" if tag.length==0
+		"#{@env.make_dir}/#{self.fullname}" if tag.length==0
     	"#{@env.make_dir}/#{self.fullname}-#{tag}"
     end
 
@@ -66,18 +72,20 @@ class Project < Hash
 	end
 
 	def clone
-		puts "project.clone" if @env.debug?
-		puts "wrk_dir=#{wrk_dir}" if @env.debug?
 		if(!File.exists?(wrk_dir) && self[:url].include?('.git'))
-			puts "cloning #{self[:url]} to #{self.wrk_dir}"
-			puts `git clone #{self[:url]} #{self.wrk_dir}`
+            cmd=Command.new({ :input => "git clone #{self[:url]} #{self.wrk_dir}", :quiet => true,:ignore_failure => true})
+            cmd.execute
+            @env.out cmd.summary
 		end
 	end
 
 	def checkout
 		if(!File.exists?(wrk_dir) && self[:url].include?('svn'))
-			puts "checkout #{self.url} to #{self.wrk_dir}"
-			puts `svn checkout #{self.url} #{self.wrk_dir}`
+			#puts "checkout #{self.url} to #{self.wrk_dir}"
+			#puts `svn checkout #{self.url} #{self.wrk_dir}`
+            cmd=Command.new({ :input => "svn checkout #{self.url} #{self.wrk_dir}", :quiet => true,:ignore_failure => true})
+            cmd.execute
+            @env.out cmd.summary
 		end
 	end
 
@@ -90,24 +98,19 @@ class Project < Hash
 			Dir.chdir(self.wrk_dir) do
 				rake = Command.new({ :input => 'rake', :timeout => 300, :ignore_failure => true })
 				rake.execute
-				puts rake.summary
+				@env.out rake.summary
 			end
 		end
 	end
 
-	def info
-		puts "Project #{name}"
-		puts "#{'fullname'.fix(13)}: #{self.fullname}"
-		puts "#{'url'.fix(13)}: #{self[:url]}"
-		puts "#{'version'.fix(13)}: #{VERSION}" if defined? VERSION
-	end
+	
 
     def latest_tag update=false
 		makedir="#{@env.make_dir}/#{self.fullname}"
     	FileUtils.mkdir_p(File.dirname(makedir)) if !File.exists?(File.dirname(makedir))
         if(File.exists?(makedir))
         	Dir.chdir(makedir) do
-        	  Command.exit_code('git pull')
+        	  Command.exit_code('git pull') if update
             end
         else
         	if(update)
@@ -169,12 +172,91 @@ class Project < Hash
     def list
         history=command_history
         if(history.length==0)
-            puts "?      #{fullname}"
+            @env.out "?      #{fullname}"
         else
+            status=0
             history.each{|c|
-                puts c.summary true
+                status=c.exit_code if c.exit_code != 0
             }
+            if(status==0)
+                @env.out "       #{fullname}"
+            else
+                if(@env.colorize?)
+                    require 'ansi/code'
+                    @env.out ANSI.red + ANSI.bright + "X      #{fullname}" + ANSI.reset
+                else
+                    @env.out "X      #{fullname}"
+                end
+            end
         end
+    end
+
+    def out_brackets message
+        if(@env.colorize?)
+            require 'ansi/code'
+            @env.out "[" + ANSI.blue + ANSI.bright + message + ANSI.reset + ']'
+        else
+            @env.out "[#{message}]"
+        end
+    end
+
+    def out_cyan message
+        if(@env.colorize?)
+            require 'ansi/code'
+            @env.out ANSI.cyan + ANSI.bright + message + ANSI.reset
+        else
+            @env.out "#{message}"
+        end
+    end
+
+    def out_property name,value
+        if(@env.colorize?)
+            require 'ansi/code'
+            @env.out "#{name}: " + ANSI.white + ANSI.bold + value.to_s.strip + ANSI.reset
+        else
+            @env.out "#{name}: #{value}"
+        end
+    end
+
+    #def info
+    #    @env.out "Project #{name}"
+    #    @env.out "#{'fullname'.fix(13)}: #{self.fullname}"
+    #    @env.out "#{'url'.fix(13)}: #{self[:url]}"
+    #    @env.out "#{'version'.fix(13)}: #{VERSION}" if defined? VERSION
+    #end
+    def info
+        infoCmd=Command.new({ :input => 'info', :exit_code => 0 })
+        #out_cyan '========================================================='
+        #out_cyan fullname
+        out_property "fullname".fix(15), fullname
+        out_property "url".fix(15), url
+        wrk_history=command_history ['work']
+        out_property "work status".fix(15), "?" if wrk_history.length == 0
+        out_property "work status".fix(15), wrk_history[0].summary if wrk_history.length > 0
+        if(wrk_history.length > 0)
+            @env.out wrk_history[0].info
+        end
+        make_history=command_history ['make', latest_tag]
+        out_property "make status".fix(15),"?" if make_history.length == 0
+        out_property "make status".fix(15), make_history[0].summary if make_history.length > 0
+        if(make_history.length >0)
+            @env.out make_history[0].info
+        end
+        infoCmd
+    end
+
+    def clobber
+        clobberCmd=Command.new('clobber')
+        clobberCmd[:exit_code]=0
+        if(File.exists?(wrk_dir))
+            Dir.remove wrk_dir,true
+            @env.out "removed #{wrk_dir}"
+        end
+        if(File.exists?(make_dir))
+            Dir.remove make_dir,true
+            @env.out "removed #{make_dir}"
+        end
+        clobberCmd
     end
 
     def work
@@ -185,21 +267,27 @@ class Project < Hash
             rake_default=Command.new({:input =>'rake default',:quiet => true,:ignore_failure => true})
             if(last_work_mtime.nil? || last_work_mtime < Environment.get_latest_mtime(wrk_dir))
               Dir.chdir(wrk_dir) do
-                if(@env.colorize?)
-                    require 'ansi/code'
-                    puts "[" + ANSI.blue + ANSI.bright + fullname + ANSI.reset + ']'
+
+                out_brackets fullname
+                
+                if(!File.exists?'rakefile.rb')
+                    rake_default[:exit_code]=1
+                    rake_default[:error]="rakefile.rb not found."
+                    rake_default[:start_time]=Time.now
+                    rake_default[:end_time]=Time.now
                 else
-                    puts "[#{fullname}]"
+                    #rake_default[:timeout] = self[:timeout]
+                    rake_default.execute
                 end
-                rake_default.execute
                 rake_default.save logfile
                 update_status
-                puts rake_default.summary true
+                @env.out rake_default.summary true
+                return rake_default
               end
             else
                 if(File.exists?(logfile))
                     rake_default.open logfile
-                    puts rake_default.summary true if(rake_default[:exit_code] != 0 || @env.show_success?)
+                    @env.out rake_default.summary true if(rake_default[:exit_code] != 0 || @env.show_success?)
                 end
             end
             rake_default
@@ -207,17 +295,16 @@ class Project < Hash
     end
 
 	def make tag=''
-		tag=latest_tag if tag.length==0
-		puts "Project make tag #{tag}\n" if @env.debug?
-		return if tag.length==0
+		tag=latest_tag true if tag.length==0
+		#return if tag.length==0
 		raise 'no tag specified' if tag.length==0
 
 		rake_default=Command.new({:input => 'rake default',:quiet => true,:ignore_failure => true})
 		logfile=get_logfile ['make',tag]		
 		if(File.exists?(logfile))
-            puts "Project make logfile #{logfile} exists." if @env.debug?
             rake_default.open logfile
-            puts rake_default.summary true if(rake_default[:exit_code] != 0) || @env.show_success?
+            @env.out rake_default.summary true if(rake_default[:exit_code] != 0) || @env.show_success?
+            rake_default
 		else
 			makedir=make_dir tag
 			FileUtils.mkdir_p(File.dirname(makedir)) if !File.exists? File.dirname(makedir)
@@ -228,15 +315,22 @@ class Project < Hash
 			    end
             end
 			if(File.exists?(makedir))
-				  puts "changing dir to #{makedir}" if @env.debug?
 				  Dir.chdir(makedir) do
 					checkout=Command.new({:input=>"git checkout #{tag}",:quiet=>true})
 					checkout.execute
 					FileUtils.rm_r '.git'
-					rake_default.execute
+                    if(!File.exists?'rakefile.rb')
+                        rake_default[:exit_code]=1
+                        rake_default[:error]="rakefile.rb not found."
+                        rake_default[:start_time]=Time.now
+                        rake_default[:end_time]=Time.now
+                    else
+                        #rake_default[:timeout] = self[:timeout]
+                        rake_default.execute 
+                    end
                     rake_default.save logfile
 					update_status
-                    puts rake_default.summary true
+                    @env.out rake_default.summary true
 					rake_default
 				  end
             else
@@ -325,8 +419,6 @@ class Project < Hash
     	tags
     end
 
-	def clobber
-
-	end
+	
 end
 

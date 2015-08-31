@@ -68,14 +68,12 @@ class Projects < Hash
     end
 
     def add args
-    	puts "add #{args}\n" if @env.debug?
     	url=args[0]
-    	puts "url #{url}\n" if @env.debug?
     	project=Project.new(url)
     	project[:fullname]=args[1] if args.length > 1
-    	puts "fullname #{project[:fullname]}\n" if @env.debug?
+    	project.set_timeout args[2] if args.length > 2
     	if(!self.has_key?(project[:fullname]) && project[:fullname].length > 0)
-    		puts "adding #{project.fullname}\n"
+    		@env.out "adding #{project.fullname}\n"
     		self[project.fullname]=project
     		self.save
     	end
@@ -87,9 +85,11 @@ class Projects < Hash
     def work args
     	projects=get_projects args
 		puts "working #{projects.length} projects..." if @env.debug?
+		exit_code=0
     	projects.each{|project|
     		begin
-    		    project.work
+    		    result=project.work
+    		    exit_code=result.exit_code if(result.exit_code!=0)
     		rescue => error
 		    	puts "error raised during work #{project.fullname}"
 		    	puts "--------------------------------------------"
@@ -97,6 +97,25 @@ class Projects < Hash
 		    	puts "--------------------------------------------"
 		    end
     	}
+    	exit_code
+	end
+
+	def info args
+		projects=get_projects args
+		puts "collecting info for #{projects.length} projects..." if @env.debug?
+		exit_code=0
+    	projects.each{|project|
+    		begin
+    		    result=project.info
+    		    exit_code=result.exit_code if(result.exit_code!=0)
+    		rescue => error
+		    	puts "error raised during work #{project.fullname}"
+		    	puts "--------------------------------------------"
+		    	puts error
+		    	puts "--------------------------------------------"
+		    end
+    	}
+    	exit_code
 	end
 
     def list args
@@ -111,9 +130,11 @@ class Projects < Hash
 	def make args
 		projects=get_projects args
 		puts "making #{projects.length} projects..." if @env.debug?
+		exit_code=0
 		projects.each{|project|
 			begin
-			    project.make
+			    result=project.make
+			    exit_code=result.exit_code if(result.exit_code!=0)
 		    rescue => error
 		    	puts "error raised during make #{project.fullname}"
 		    	puts "--------------------------------------------"
@@ -121,7 +142,24 @@ class Projects < Hash
 		    	puts "--------------------------------------------"
 		    end
 		}
+		exit_code
 	end
+
+	def clobber args
+		projects=get_projects args
+		puts "clobbering #{projects.length} projects..." if @env.debug?
+		projects.each{|project|
+			begin
+			    project.clobber
+			    #Dir.remove_empty @env.wrk_dir
+		    rescue => error
+		    	puts "error raised during clobber #{project.fullname}"
+		    	puts "--------------------------------------------"
+		    	puts error
+		    	puts "--------------------------------------------"
+		    end
+		}
+    end
 
 	def update args
 		filter=''
