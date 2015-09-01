@@ -108,6 +108,13 @@ class Environment < Hash
     colorize
   end
 
+  def working?
+    return true if Rake.application.original_dir.include? wrk_dir
+    false
+  end
+
+  
+
   def out message
       puts message if !get_env('SUPPRESS_CONSOLE_OUTPUT')
       @output=@output+message+'\n'
