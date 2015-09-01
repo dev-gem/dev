@@ -1,7 +1,6 @@
-
 desc 'default task'
 task :default do
-  [:setup,:build,:test,:add,:commit,:publish,:clean,:push,:pull].each{|task| 
+  DEFAULT_TASKS.each{|task| 
     Rake::Task[task].invoke 
   }
   project.mark_work_up_to_date if !project.nil?
