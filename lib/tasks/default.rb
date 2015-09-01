@@ -36,24 +36,12 @@ if(!defined?(NO_DEFAULT_TASK))
         puts '   no changes'
       else
     	  if(File.exists?('.git'))
-    		  [:setup,:build,:test,:add,:commit,:publish,:clean,:push,:pull].each{|task| 
-            Rake::Task[task].invoke
-            puts "DEFAULT: writing #{logfile}" if Environment.default.debug?
-            File.open(logfile,'w'){|f|f.write(' ')} if(logfile.length > 0)
-          }
+    		  [:setup,:build,:test,:add,:commit,:publish,:clean,:push,:pull].each{|task| Rake::Task[task].invoke }
     	  else
   	  	  if(File.exists?('.svn'))
-  	  		  [:setup,:build,:test,:add,:commit,:publish,:clean,:update].each{|task| 
-              Rake::Task[task].invoke
-              puts "DEFAULT: writing #{logfile}" if Environment.default.debug?
-              File.open(logfile,'w'){|f|f.write(' ')} if(logfile.length > 0)
-            }
+  	  		  [:setup,:build,:test,:add,:commit,:publish,:clean,:update].each{|task| Rake::Task[task].invoke }
   	  	  else
-            [:setup,:build,:test,:publish].each{|task| 
-              Rake::Task[task].invoke
-              puts "DEFAULT: writing #{logfile}" if Environment.default.debug?
-              File.open(logfile,'w'){|f|f.write(' ')} if(logfile.length > 0)
-            }
+            [:setup,:build,:test,:publish].each{|task| Rake::Task[task].invoke}
   	  	  end
         end
   	  end
@@ -64,5 +52,8 @@ if(!defined?(NO_DEFAULT_TASK))
       require 'ansi/code'
       puts ANSI.white + ANSI.bold + ":default"  + " completed in " + ANSI.yellow + "#{TIMER.elapsed_str}" + ANSI.reset
     end
+
+    puts "DEFAULT: writing #{logfile}" if Environment.default.debug?
+    File.open(logfile,'w'){|f|f.write(' ')} if(logfile.length > 0)
   end # :default
 end
