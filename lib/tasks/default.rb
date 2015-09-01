@@ -7,23 +7,23 @@ require_relative('../base/projects.rb')
 require_relative('../base/project.rb')
 require_relative('../base/timer.rb')
 
-logfile=''
-projects=Projects.new
-project=projects.get_current
-if(!project.nil?)
-  logfile=project.get_logfile ['work','default','OK']
-  if(File.exists?(logfile))
-    puts "DEFAULT: logfile #{logfile} exists" if Environment.default.debug?
-    if(File.mtime(logfile) > Dir.get_latest_mtime(Rake.application.original_dir))
-      NO_CHANGES=true
-    else
-      puts "DEFAULT: deleting #{logfile}" if Environment.default.debug?
-      File.delete logfile
-    end
-  end
-else
-  puts 'DEFAULT: current project is nil' if Environment.default.debug?
-end
+#logfile=''
+#projects=Projects.new
+#project=projects.get_current
+#if(!project.nil?)
+#  logfile=project.get_logfile ['work','default','OK']
+#  if(File.exists?(logfile))
+#    puts "DEFAULT: logfile #{logfile} exists" if Environment.default.debug?
+#    if(File.mtime(logfile) > Dir.get_latest_mtime(Rake.application.original_dir))
+#      NO_CHANGES=true
+#    else
+#      puts "DEFAULT: deleting #{logfile}" if Environment.default.debug?
+#      File.delete logfile
+#    end
+#  end
+#else
+#  puts 'DEFAULT: current project is nil' if Environment.default.debug?
+#end
 
 if(!defined?(NO_DEFAULT_TASK)) 
   desc 'default task'
