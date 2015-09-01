@@ -8,11 +8,12 @@ require_relative('string.rb')
 class Project < Hash
 	attr_accessor :filename,:env
 
-    def initialize value=''
+    def initialize value='',fullname=''
         @filename=''
         @env=Environment.new
         self[:url]=Project.get_url
         self[:fullname]=Project.get_fullname_from_url self[:url] if self[:url].length > 0
+        self[:timeout]=60*5
         if value.is_a?(String)
             self[:url] = value if value.is_a?(String) && value.length > 0
             self[:fullname] = Project.get_fullname_from_url self[:url]
@@ -21,6 +22,13 @@ class Project < Hash
         else
             self[:fullname]=Project.get_fullname_from_url self[:url] if self[:url].length > 0
         end
+        self[:fullname] = fullname if fullname.length > 0
+    end
+
+    def set_timeout value
+        self[:timeout] = value if value.is_a? Numeric
+        self[:timeout] = value.gsub('m','').strip.to_f * 60 if value.include?('m')
+        self[:timeout] = value.gsub('s','').strip.to_f * 60 if value.include?('s')
     end
 
 	def self.get_url directory=Rake.application.original_dir
@@ -175,7 +183,7 @@ class Project < Hash
             else
                 if(@env.colorize?)
                     require 'ansi/code'
-                    @env.out ANSI.blue + "X      #{fullname}" + ANSI.reset
+                    @env.out ANSI.red + ANSI.bright + "X      #{fullname}" + ANSI.reset
                 else
                     @env.out "X      #{fullname}"
                 end
@@ -259,11 +267,22 @@ class Project < Hash
             rake_default=Command.new({:input =>'rake default',:quiet => true,:ignore_failure => true})
             if(last_work_mtime.nil? || last_work_mtime < Environment.get_latest_mtime(wrk_dir))
               Dir.chdir(wrk_dir) do
-                out_brackets fullname
-                rake_default.execute
+
+                @env.out fullname
+                
+                if(!File.exists?'rakefile.rb')
+                    rake_default[:exit_code]=1
+                    rake_default[:error]="rakefile.rb not found."
+                    rake_default[:start_time]=Time.now
+                    rake_default[:end_time]=Time.now
+                else
+                    #rake_default[:timeout] = self[:timeout]
+                    rake_default.execute
+                end
                 rake_default.save logfile
                 update_status
                 @env.out rake_default.summary true
+                return rake_default
               end
             else
                 if(File.exists?(logfile))
@@ -285,6 +304,7 @@ class Project < Hash
 		if(File.exists?(logfile))
             rake_default.open logfile
             @env.out rake_default.summary true if(rake_default[:exit_code] != 0) || @env.show_success?
+            rake_default
 		else
 			makedir=make_dir tag
 			FileUtils.mkdir_p(File.dirname(makedir)) if !File.exists? File.dirname(makedir)
@@ -299,7 +319,15 @@ class Project < Hash
 					checkout=Command.new({:input=>"git checkout #{tag}",:quiet=>true})
 					checkout.execute
 					FileUtils.rm_r '.git'
-					rake_default.execute
+                    if(!File.exists?'rakefile.rb')
+                        rake_default[:exit_code]=1
+                        rake_default[:error]="rakefile.rb not found."
+                        rake_default[:start_time]=Time.now
+                        rake_default[:end_time]=Time.now
+                    else
+                        #rake_default[:timeout] = self[:timeout]
+                        rake_default.execute 
+                    end
                     rake_default.save logfile
 					update_status
                     @env.out rake_default.summary true

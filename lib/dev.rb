@@ -5,7 +5,7 @@ require_relative('apps.rb')
 require_relative('tasks.rb')
 require_relative('commands.rb')
 
-PROJECT=Project.new()
+#PROJECT=Project.new()
 
 class Dev
 	attr_accessor :env,:projects,:commands
@@ -55,6 +55,7 @@ class Dev
     
 
 	def usage
+		return 0
 		@env.out 'usage: dev <subcommand> [options]'
 		@env.out ''
 		@env.out 'available subcommands'

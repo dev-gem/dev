@@ -34,7 +34,7 @@ class Commit < Array
 					Commit.reset_commit_message
 					raise "commit.message required to perform commit"
 				else
-					add 'svn commit -m"commit all"'
+					add_quiet 'svn commit -m"commit all"'
 				end
 			else
 				add_quiet 'svn commit --file commit.message'

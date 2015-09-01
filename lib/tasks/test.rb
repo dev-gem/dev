@@ -22,18 +22,18 @@ class Test < Array
 				dll_arg="\"#{nunit_dll}\"" if(nunit_dll.include?(' '))
 				xml_arg="/xml:#{nunit_dll}.TestResults.xml"
 				xml_arg="/xml:\"#{nunit_dll}.TestResults.xml\"" if(nunit_dll.include?(' '))
-				add "#{nunit_arg} #{dll_arg} #{xml_arg}"
+				add_quiet "#{nunit_arg} #{dll_arg} #{xml_arg}"
 			}
 		end
 
 		if(defined?(NUNIT_X86))
 			NUNIT_X86.each{|nunit_dll|
-				add "\"#{Test.nunit_console_x86}\" \"#{Rake.application.original_dir}\\#{nunit_dll}\" /xml:\"#{nunit_dll}.TestResults.xml\""
+				add_quiet "\"#{Test.nunit_console_x86}\" \"#{Rake.application.original_dir}\\#{nunit_dll}\" /xml:\"#{nunit_dll}.TestResults.xml\""
 			}
 		end
 
 		if(defined?(TESTS))
-			TEST.each{|t| add t}
+			TEST.each{|t| add_quiet t}
 		end
 	end
 

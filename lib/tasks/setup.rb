@@ -1,5 +1,3 @@
-puts __FILE__ if defined?(DEBUG)
-
 desc 'performs setup commands'
 task :setup do Tasks.execute_task :setup;end
 
@@ -9,7 +7,14 @@ task :setup do Tasks.execute_task :setup;end
 # SVN_EXPORT={ 'System.Data.SQLite/1.0.93.0' => 'https://third-party.googlecode.com/svn/trunk/System.Data.SQLite/1.0.93.0' }
 #
 class Setup < Array
+
+	def initialize value=nil
+		env=value if value.kind_of? Environment
+	end
+
 	def update
+		env=Environment.new if env.nil?
+
 		add_quiet 'bundle install' if File.exists? 'Gemfile'
 		#add Command.new( { :input => 'bundle install', :quiet => true}) if(File.exists?('Gemfile'))
 
@@ -24,19 +29,33 @@ class Setup < Array
 
 		if(Dir.glob('**/packages.config').length > 0)
 			Dir.glob('*.sln').each{|sln_file|
-				add "nuget restore #{sln_file}"
+				add_quiet "nuget restore #{sln_file}"
 			}
 		end
 
+		puts 'Setup checking SVN_EXPORTS...' if env.debug?
 		if(defined?(SVN_EXPORTS))
 			SVN_EXPORTS.each{|k,v|
-				if(!File.exists?("#{Command.dev_root}/dep/#{k}"))
-			      FileUtils.mkdir_p(File.dirname("#{Command.dev_root}/dep/#{k}")) if !File.exists?("#{Command.dev_root}/dep/#{k}")
-				  dest="#{Command.dev_root}/dep/#{k}"
-			      add "svn export #{v} #{Command.dev_root}/dep/#{k}" if !dest.include?("@")
-				  add "svn export #{v} #{Command.dev_root}/dep/#{k}@" if dest.include?("@")
+				dest="#{Command.dev_root}/dep/#{k}"
+				if(!File.exists?(dest))
+				  puts "#{Command.dev_root}/dep/#{k} does not exists" if env.debug?
+			      FileUtils.mkdir_p(File.dirname(dest)) if !File.exists?(File.dirname(dest))
+			      if(!dest.include?("@"))
+			      	puts "adding svn export #{v} #{dest}" if env.debug?
+			      	add_quiet "svn export #{v} #{dest}"
+			      end
+			      if(dest.include?("@"))
+			      	puts "adding svn export #{v} #{dest}@" if env.debug?
+			      	add_quiet "svn export #{v} #{dest}@"
+			      end
+			      #add "svn export #{v} #{dest}" if !dest.include?("@")
+				  #add "svn export #{v} #{dest}@" if dest.include?("@")
+				else
+					puts "#{Command.dev_root}/dep/#{k} exists." if env.debug?
 		        end
 			}
+		else
+			puts 'SVN_EXPORTS is not defined' if env.debug?
 		end
 
 		if(defined?(GIT_EXPORTS))
