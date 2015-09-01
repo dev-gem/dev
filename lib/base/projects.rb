@@ -79,6 +79,19 @@ class Projects < Hash
     	end
     end
 
+    def remove args
+    	projects=get_projects args
+		puts "removing #{projects.length} projects..." if @env.debug?
+		remove_keys=[]
+    	projects.each{|project|
+    		project.clobber
+    		remove_keys << project.fullname
+    	}
+    	remove_keys.each{|key|self.delete(key)}
+    	self.save
+    	return 0
+	end
+
     def help args
     end
     
@@ -125,6 +138,7 @@ class Projects < Hash
     		project.list
     		
     	}
+    	return 0
 	end
 
 	def make args

@@ -44,6 +44,7 @@ class Dev
 		   return projects.list(subargs) if subcommand=='list'
 		   return projects.make(subargs) if subcommand=='make'
 		   return projects.info(subargs) if subcommand=='info'
+		   return projects.remove(subargs) if subcommand=='remove'
 		   return projects.work(subargs) if subcommand=='work'
 		   return projects.update(subargs) if subcommand=='update'
 

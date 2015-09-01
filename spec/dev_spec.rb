@@ -14,7 +14,7 @@ describe Dev do
         #expect(dev.env.output.include?('usage:')).to eq(true)
     end
 
-    it "should be able to perform add, work and make for a specific project" do
+    it "should be able to perform add, work, make, remove for a specific project" do
         dir="#{File.dirname(__FILE__)}/dev_spec"
         Dir.remove dir
         Dir.make dir
@@ -37,12 +37,20 @@ describe Dev do
         # ADD
         dev.execute("add #{dir}/HelloRake.git local/HelloRake")
 
+        dev.env.output=''
+        expect(dev.execute("list HelloRake")).to eq 0
+        expect(dev.env.output.include?('HelloRake')).to eq true
+
         # WORK
         expect(dev.execute('work HelloRake')).to eq 0 
         dev.env.output=''
 
         # MAKE
         expect(dev.execute('make HelloRake')).to eq 0 
+
+        # REMOVE
+        expect(dev.execute('remove HelloRake')).to eq 0
+
         Dir.remove dir
     end
 
