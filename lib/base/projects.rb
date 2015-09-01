@@ -178,7 +178,7 @@ class Projects < Hash
 	def update args
 		projects=get_projects args
 		puts "updating #{projects.length} projects..." if @env.debug?
-		self.each{|k,v|
+		projects.each{|project|
 		    begin
     		    result=project.update
     		    exit_code=result.exit_code if(result.exit_code!=0)
