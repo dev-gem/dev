@@ -25,8 +25,8 @@ class Environment < Hash
   def self.dev_root
     default.root_dir
   end
-
   #####End LEGACY support
+
   def root_dir
     get_env('DEV_ROOT').gsub('\\','/')
   end
@@ -121,40 +121,6 @@ class Environment < Hash
     Gem.win_platform?
   end
 
-  #@@debug=true if defined?(DEBUG)
-  #@@debug=false if !defined?(DEBUG)
-  #@@development_root=nil
-
-  #def initialize
-    #self[:home]=Environment.home
-    #self[:machine]=Environment.machine
-    #self[:user]=Environment.user
-  #end
-
-  #def self.set_development_root value
-  #  @@development_root=value
-  #  if(!value.nil?)
-  #    FileUtils.mkdir_p value if(!File.exists?(value))
-  #    ['bin','data','log','make','publish','test'].each{|dir|
-  #      #FileUtils.mkdir_p("#{value}/#{dir}") if !File.exists? "#{value}/#{dir}"
-  #    }
-  #  end
-  #end
-
-  #def self.debug
-  #  @@debug
-  #end
-
-  #def self.home 
-  #  ["USERPROFILE","HOME"].each {|v|
-  #    return ENV[v].gsub('\\','/') unless ENV[v].nil?
-  #  }
-  #  dir="~"
-  #  dir=ENV["HOME"] unless ENV["HOME"].nil?
-  #  dir=ENV["USERPROFILE"].gsub('\\','/') unless ENV["USERPROFILE"].nil?
-  #  return dir
-  #end
-
   #def self.configuration
   #  config="#{Environment.home}/dev.config.rb"
   #  if(!File.exists?(config))
@@ -164,40 +130,14 @@ class Environment < Hash
   #  config
   #end
 
-  #def self.machine
-  #   if !ENV['COMPUTERNAME'].nil? 
-	#   return ENV['COMPUTERNAME']
-	# end
-
-  #   machine = `hostname`
-  #   machine = machine.split('.')[0] if machine.include?('.')
-	# return machine.strip
-  #end
-
-  def self.remove directory
-    if(File.exists?(directory))
-      begin
-        FileUtils.rm_rf directory
-        FileUtils.rm_r directory
-      rescue
-      end
-    end
-  end
-
-  #def self.user
- # 	return ENV['USER'] if !ENV['USER'].nil?  #on Unix
- #   ENV['USERNAME']
-  #end
-
-  #def self.dev_root
-  #  if(!@@development_root.nil?)
-  #    return @@development_root
+  #def self.remove directory
+  #  if(File.exists?(directory))
+  #    begin
+  #      FileUtils.rm_rf directory
+  #      FileUtils.rm_r directory
+  #    rescue
+  #    end
   #  end
-  #  ["DEV_HOME","DEV_ROOT"].each {|v|
-  #    return ENV[v].gsub('\\','/') unless ENV[v].nil?
-  #  }
-  #  dir=home
-  # return dir
   #end
 
   def self.check
@@ -248,13 +188,13 @@ class Environment < Hash
     }
   end
 
-  def self.get_latest_mtime directory
-    mtime=Time.new(1980)
-    Dir.chdir(directory)  do
-      Dir.glob('**/*.*').each{|f|
-        mtime=File.mtime(f) if mtime.nil? || File.mtime(f) > mtime
-      }
-    end
-    mtime
-  end
+  #def self.get_latest_mtime directory
+  #  mtime=Time.new(1980)
+  #  Dir.chdir(directory)  do
+  #    Dir.glob('**/*.*').each{|f|
+  #      mtime=File.mtime(f) if mtime.nil? || File.mtime(f) > mtime
+  #    }
+  #  end
+  #  mtime
+  #end
 end

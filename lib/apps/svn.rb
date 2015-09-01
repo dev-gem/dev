@@ -1,7 +1,6 @@
-puts __FILE__ if defined?(DEBUG)
-
 require 'fileutils'
 require 'tmpdir'
+require_relative('../base/dir.rb')
 class Svn
 
 	def self.latest_revision
@@ -131,7 +130,7 @@ class Svn
 				end
 				
 				#begin
-				Environment.remove "#{dir}/to_publish_checkout"
+				Dir.remove "#{dir}/to_publish_checkout"
 				output
 			}
 		end

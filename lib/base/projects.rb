@@ -20,13 +20,15 @@ class Projects < Hash
 		"#{@env.root_dir}/data/Projects.json"
 	end
 
-    #def update_state
-    #	self.each{|k,v|
-    #		self[k]=Project.new(v) if(v.is_a?(String))
-    #		self[k][:fullname]=k
-    #	}
-    #end
-
+    def get_current
+      fullname=Rake.application.original_dir.gsub("#{Environment.default.wrk_dir}/",'')
+      if(self.has_key? fullname)
+        self[fullname]
+      else
+        nil
+      end
+    end
+    
 	def save
 		Dir.make File.dirname(filename) if !File.exists? File.dirname(filename)
 		File.open(filename,'w'){|f|f.write(JSON.pretty_generate(self))}

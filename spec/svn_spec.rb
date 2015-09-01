@@ -58,9 +58,9 @@ describe Svn do
 			expect(`svn info #{svn_dest}/file3.text 2>&1`.include?('Revision:')).to eq(false)
 			expect(`svn info #{svn_dest}/file4.dat 2>&1`.include?('Revision:')).to eq(true)
 
-			Environment.remove('to_publish')
+			Dir.remove('to_publish')
 			expect(File.exists?('to_publish')).to eq(false)
-			Environment.remove('svn_test_repo')
+			Dir.remove('svn_test_repo')
 			expect(File.exists?('svn_test_repo')).to eq(false)
 		end
 		Dir.remove dir
