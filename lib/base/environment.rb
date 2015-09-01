@@ -28,33 +28,33 @@ class Environment < Hash
 
   #####End LEGACY support
   def root_dir
-    get_env('DEV_ROOT')
+    get_env('DEV_ROOT').gsub('\\','/')
   end
  
   def home_dir
-    get_env('HOME')
+    get_env('HOME').gsub('\\','/')
   end
 
   def log_dir
-    dir="#{get_env('DEV_ROOT')}/log/#{user}@#{machine}"
+    dir="#{root_dir}/log/#{user}@#{machine}"
     FileUtils.mkdir_p dir if !File.exists? dir
     dir
   end
 
   def make_dir
-    dir="#{get_env('DEV_ROOT')}/make"
+    dir="#{root_dir}/make"
     FileUtils.mkdir_p dir if !File.exists? dir
     dir
   end
 
   def publish_dir
-    dir="#{get_env('DEV_ROOT')}/publish"
+    dir="#{root_dir}/publish"
     FileUtils.mkdir_p dir if !File.exists? dir
     dir
   end
 
   def wrk_dir
-    dir="#{get_env('DEV_ROOT')}/wrk"
+    dir="#{root_dir}/wrk"
     FileUtils.mkdir_p dir if !File.exists? dir
     dir
   end
