@@ -1,4 +1,4 @@
-puts __FILE__ if defined?(DEBUG)
+require_relative('apps.rb')
 
 require 'json'
 require 'rake/clean'
