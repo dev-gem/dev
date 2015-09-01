@@ -185,8 +185,10 @@ class Project < Hash
     end
 
     def mark_work_up_to_date
-        logfile=get_logfile ['work','up2date']
-        File.open(logfile,'w'){|f|f.write(' ')}
+        if wrk_dir == Rake.application.original_dir
+          logfile=get_logfile ['work','up2date']
+          File.open(logfile,'w'){|f|f.write(' ')}
+        end
     end
 
     def get_logfile tags
