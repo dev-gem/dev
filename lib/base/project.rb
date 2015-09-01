@@ -392,16 +392,24 @@ class Project < Hash
     	checkout
     	if(File.exists?(wrk_dir))
     		Dir.chdir(wrk_dir) do
-    			rake_default=Command.new('git pull')
-				rake_default[:quiet]=true
-				rake_default[:ignore_failure]=true
-				rake_default.execute
-				rake_default=Command.new('svn update')
-				rake_default[:quiet]=true
-				rake_default[:ignore_failure]=true
-				rake_default.execute
+                if(File.exists?('.git'))
+                  return Command.execute(Command.new({:input => 'git pull', :quiet => true, :ignore_failure => true}))
+    			  #pull=Command.new('git pull')
+				  #rake_default[:quiet]=true
+				  #rake_default[:ignore_failure]=true
+				  #rake_default.execute
+                  #return rake_defa
+                end
+                if(File.exists?('svn'))
+                    return Command.execute(Command.new({:input => 'svn update', :quiet => true, :ignore_failure => true}))
+                end
+				#rake_default=Command.new('svn update')
+				#rake_default[:quiet]=true
+				#rake_default[:ignore_failure]=true
+				#rake_default.execute
     		end
     	end
+        return Command.new({:exit_code => 1})
     end
 
     def tags
