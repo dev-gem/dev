@@ -1,6 +1,11 @@
+puts __FILE__ if ENV.has_key?('DEBUG')
+
 require_relative('base/environment.rb')
+
+
 require_relative('base/projects.rb')
 require_relative('commands.rb')
+
 
 class Dev
 	attr_accessor :env,:projects,:commands
@@ -64,10 +69,12 @@ class Dev
 	end
 end
 
-puts "defining DEV" if Environment.default.debug?
-DEV=Dev.new
-
 require_relative('base.rb')
 #require_relative('apps.rb')
 require_relative('tasks.rb')
 require_relative('commands.rb')
+
+puts "defining DEV" if Environment.default.debug?
+DEV=Dev.new
+require_relative('tasks/default.rb')
+

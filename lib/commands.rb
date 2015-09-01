@@ -1,10 +1,12 @@
+puts __FILE__ if ENV.has_key?('DEBUG')
+
 require_relative('apps.rb')
 
 require 'json'
 require 'rake/clean'
 
 Dir.glob("#{File.dirname(__FILE__)}/tasks/*.rb").each{|rb| 
-  require(rb)
+  require(rb) if !rb.include?('default.rb')
 }
 class Commands < Hash
 	attr_accessor :env

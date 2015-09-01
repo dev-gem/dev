@@ -8,11 +8,18 @@ require_relative('../base/project.rb')
 require_relative('../base/timer.rb')
 
 puts "defining DEFAULT TASK" if Environment.default.debug?
-puts "working? = #{Environment.default.working?}" if Environment.default.debug?
-puts "has_work? = #{Environment.default.has_work?}" if Environment.default.debug?
 
 if(defined?(DEV))
-  puts "DEFAULT: DEV is defined" if Environment.default.debug?
+  puts "DEFAULT: DEV is defined" if DEV.env.debug?
+  puts "working? = #{DEV.env.working?}" if DEV.env.debug?
+  puts "current project is nil" if DEV.env.debug? && DEV.projects.current.nil?
+  puts "current project #{DEV.projects.current.fullname}" if DEV.env.debug? && !DEV.projects.current.nil?
+  project=DEV.projects.current
+  if(!project.nil? && project.wrk_up_to_date?)
+    puts "project work is up to date " if DEV.env.debug?
+    WRK_UP_TO_DATE=project.wrk_up_to_date?
+  end
+  #puts "no_changes? = #{DEV.env.no_changes?}" if DEV.env.debug?
 end
 #logfile=''
 #projects=Projects.new
@@ -38,7 +45,7 @@ if(!defined?(NO_DEFAULT_TASK))
     if(defined?(DEFAULT_TASKS))
       DEFAULT_TASKS.each{|task| Rake::Task[task].invoke}
     else
-      if defined? NO_CHANGES
+      if defined? WRK_UP_TO_DATE
         puts '   no changes'
       else
     	  if(File.exists?('.git'))

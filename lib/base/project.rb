@@ -1,7 +1,9 @@
 puts __FILE__ if defined?(DEBUG)
 
 require 'json'
+require 'rake'
 require_relative('../apps/svn.rb')
+require_relative('dir.rb')
 require_relative('environment.rb')
 require_relative('string.rb')
 
@@ -159,6 +161,26 @@ class Project < Hash
     		commands << Command.new(JSON.parse(IO.read(logfile)))
     	}
         commands
+    end
+   
+    def wrk_up_to_date?
+        logfile=get_logfile ['work','up2date']
+        if File.exists? logfile
+            last_work_time=File.mtime(logfile)
+            last_file_changed=Dir.get_latest_mtime Rake.application.original_dir
+            if last_work_time > last_file_changed
+                CLEAN.include logfile
+                return true
+            end
+            #if File.mtime(logfile) > Dir.get_latest_mtime Rake.application.original_dir
+                #CLEAN.include(logfile)
+            #    return true
+           # end
+        end
+        false
+    end
+
+    def mark_wkr_up_to_date
     end
 
     def get_logfile tags

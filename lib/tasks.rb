@@ -44,5 +44,5 @@ end
 
 ['add','analyze','build','clobber','commit',
  'doc','info','publish','pull','push','setup','test',
- 'update','default'].each{|name| require_relative("tasks/#{name}.rb")}
+ 'update'].each{|name| require_relative("tasks/#{name}.rb")}
 
