@@ -6,7 +6,7 @@ require 'json'
 require 'rake/clean'
 
 Dir.glob("#{File.dirname(__FILE__)}/tasks/*.rb").each{|rb| 
-  require(rb) if !rb.include?('default.rb')
+  require(rb) if !rb.include?('default')
 }
 class Commands < Hash
 	attr_accessor :env
