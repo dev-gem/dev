@@ -164,20 +164,22 @@ class Project < Hash
     end
    
     def work_up_to_date?
-        logfile=get_logfile ['work','up2date']
-        if File.exists? logfile
+        if wrk_dir == Rake.application.original_dir
+          logfile=get_logfile ['work','up2date']
+          if File.exists? logfile
             last_work_time=File.mtime(logfile)
             last_file_changed=Dir.get_latest_mtime Rake.application.original_dir
             if last_work_time > last_file_changed
                 CLEAN.include logfile
                 return true
             else
-                File.remove(logfile)
+                File.delete(logfile)
             end
             #if File.mtime(logfile) > Dir.get_latest_mtime Rake.application.original_dir
                 #CLEAN.include(logfile)
             #    return true
            # end
+          end
         end
         false
     end
