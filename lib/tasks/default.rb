@@ -31,8 +31,13 @@ if(defined?(NO_DEFAULT_TASK))
   puts "NO_DEFAULT_TASK is defined" if Environment.default.debug?
 elsif(work_up_to_date)
   puts "work_up_to_date is true" if Environment.default.debug?
+  desc 'default task'
+  task :default do
+    puts '   no changes'
+  end
 else
 #if(!defined?(NO_DEFAULT_TASK)) 
+  puts "defining default task" if Environment.default.debug?
   desc 'default task'
   task :default do
     if(defined?(DEFAULT_TASKS))
