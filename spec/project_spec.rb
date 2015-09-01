@@ -61,6 +61,7 @@ describe Project do
         dir="#{File.dirname(__FILE__)}/project_spec"
         Dir.remove dir
         Dir.make dir
+        sleep(0.5)
 
          # INIT REPO HelloRake.git
         Dir.chdir(dir) do
