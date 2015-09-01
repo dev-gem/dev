@@ -13,6 +13,7 @@ class Setup < Array
 	end
 
 	def update
+		puts "Setup.update" if Environment.default.debug?
 		env=Environment.new if env.nil?
 
 		add_quiet 'bundle install' if File.exists? 'Gemfile'
