@@ -44,7 +44,7 @@ else
   end
   desc 'default task'
   task :default do
-    DEFAULT_TASKS.each{|task| 
+    default_tasks.each{|task| 
       Rake::Task[task].invoke 
     }
     project.mark_work_up_to_date if !project.nil?
