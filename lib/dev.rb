@@ -1,11 +1,4 @@
-puts __FILE__ if defined?(DEBUG)
 
-require_relative('base.rb')
-require_relative('apps.rb')
-require_relative('tasks.rb')
-require_relative('commands.rb')
-
-#PROJECT=Project.new()
 
 class Dev
 	attr_accessor :env,:projects,:commands
@@ -53,8 +46,6 @@ class Dev
 		end
 	end
 
-    
-
 	def usage
 		return 0
 		@env.out 'usage: dev <subcommand> [options]'
@@ -72,3 +63,8 @@ class Dev
 end
 
 DEV=Dev.new
+
+require_relative('base.rb')
+require_relative('apps.rb')
+require_relative('tasks.rb')
+require_relative('commands.rb')

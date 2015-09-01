@@ -113,7 +113,9 @@ class Environment < Hash
     false
   end
 
-  
+  def has_work?
+    true
+  end
 
   def out message
       puts message if !get_env('SUPPRESS_CONSOLE_OUTPUT')

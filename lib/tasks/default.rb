@@ -9,7 +9,12 @@ require_relative('../base/timer.rb')
 
 puts "defining DEFAULT TASK" if Environment.default.debug?
 puts "working? = #{Environment.default.working?}" if Environment.default.debug?
-logfile=''
+puts "has_work? = #{Environment.default.has_work?}" if Environment.default.debug?
+
+if(defined?(DEV))
+  puts "DEFAULT: DEV is defined" if Environment.default.debug?
+end
+#logfile=''
 #projects=Projects.new
 #project=projects.get_current
 #if(!project.nil?)
