@@ -163,7 +163,7 @@ class Project < Hash
         commands
     end
    
-    def wrk_up_to_date?
+    def work_up_to_date?
         logfile=get_logfile ['work','up2date']
         if File.exists? logfile
             last_work_time=File.mtime(logfile)
@@ -171,6 +171,8 @@ class Project < Hash
             if last_work_time > last_file_changed
                 CLEAN.include logfile
                 return true
+            else
+                File.remove(logfile)
             end
             #if File.mtime(logfile) > Dir.get_latest_mtime Rake.application.original_dir
                 #CLEAN.include(logfile)
@@ -180,7 +182,9 @@ class Project < Hash
         false
     end
 
-    def mark_wkr_up_to_date
+    def mark_work_up_to_date
+        logfile=get_logfile ['work','up2date']
+        File.open(logfile,'w'){|f|f.write(' ')}
     end
 
     def get_logfile tags

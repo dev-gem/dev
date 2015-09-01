@@ -15,9 +15,9 @@ if(defined?(DEV))
   puts "current project is nil" if DEV.env.debug? && DEV.projects.current.nil?
   puts "current project #{DEV.projects.current.fullname}" if DEV.env.debug? && !DEV.projects.current.nil?
   project=DEV.projects.current
-  if(!project.nil? && project.wrk_up_to_date?)
+  if(!project.nil? && project.work_up_to_date?)
     puts "project work is up to date " if DEV.env.debug?
-    WRK_UP_TO_DATE=project.wrk_up_to_date?
+    WRK_UP_TO_DATE=true
   end
   #puts "no_changes? = #{DEV.env.no_changes?}" if DEV.env.debug?
 end
@@ -66,7 +66,6 @@ if(!defined?(NO_DEFAULT_TASK))
       puts ANSI.white + ANSI.bold + ":default"  + " completed in " + ANSI.yellow + "#{TIMER.elapsed_str}" + ANSI.reset
     end
 
-    puts "DEFAULT: writing #{logfile}" if Environment.default.debug?
-    File.open(logfile,'w'){|f|f.write(' ')} if(logfile.length > 0)
+    project.mark_work_up_to_date if !project.nil?
   end # :default
 end
