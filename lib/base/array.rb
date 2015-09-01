@@ -11,7 +11,7 @@ class Array
       @env=Environment.new() if @env.nil? 
       i=0
       while i < self.length
-        self[i]=Command.new(self[i]) if(self[i].is_a?(String))
+        self[i]=Command.new({ :input => "#{self[i]}", :quiet => true } ) if(self[i].is_a?(String))
         self[i]=Command.new(self[i]) if(self[i].is_a?(Hash) && !self[i].is_a?(Command))
 
         if(!value.nil? && value.is_a?(Hash))
