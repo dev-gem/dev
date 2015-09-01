@@ -127,7 +127,8 @@ describe Command do
   end
 
   it "should be able to execute an array of commands" do
-    help=['git --help','rake --help']
+    help=['git --help']
+    help << 'rake --help'
     help.env=Environment.new({ 'SUPPRESS_CONSOLE_OUTPUT' => 'true' })
     help.execute({:quiet => true})
     File.open('help.html','w'){|f|f.write(help.to_html)}
