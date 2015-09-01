@@ -59,4 +59,4 @@ task :show_colors do
 	puts ANSI.reset
 end
 
-task :default => [:setup,:build,:test,:add,:commit,:publish,:push]
+#task :default => [:setup,:build,:test,:add,:commit,:publish,:push]

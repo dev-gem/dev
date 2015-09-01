@@ -46,7 +46,7 @@ else
   end
 
   puts "default_tasks=#{default_tasks}" if Environment.default.debug?
-  desc 'default task'
+  desc "default task #{default_tasks.to_s}"
   task :default do
     default_tasks.each{|task| 
       Rake::Task[task].invoke 
