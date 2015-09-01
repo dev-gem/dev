@@ -34,7 +34,9 @@ else
   default_tasks=nil
   default_tasks=DEFAULT_TASKS if defined? DEFAULT_TASKS
   if(default_tasks.nil?)
-    if(File.exists?('.git'))
+    if(work_up_to_date)
+      default_tasks=[]
+    elsif(File.exists?('.git'))
       default_tasks=[:setup,:build,:test,:add,:commit,:publish,:clean,:push,:pull]
     elsif File.exists?('.svn')
       default_tasks=[:setup,:build,:test,:add,:commit,:publish,:clean,:update]
@@ -42,6 +44,8 @@ else
       default_tasks=[:setup,:build,:test,:publish]
     end
   end
+
+  puts "default_tasks=#{default_tasks}" if Environment.default.debug?
   desc 'default task'
   task :default do
     default_tasks.each{|task| 
