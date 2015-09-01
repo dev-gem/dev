@@ -30,18 +30,44 @@ end
 
 if(defined?(NO_DEFAULT_TASK))
   puts "NO_DEFAULT_TASK is defined" if Environment.default.debug?
-elsif(work_up_to_date)
-  require_relative('default.no.changes.rb')
 else
-  if(defined?(DEFAULT_TASKS))
-    require_relative('default.tasks.rb')
-  elsif File.exists?('.git')
-    require_relative('default.git.rb')
-  elsif File.exists?('.svn')
-    require_relative('default.svn.rb')
-  else
-    require_relative('default.no.scm.rb')
+  default_tasks=nil
+  default_tasks=DEFAULT_TASKS if defined? DEFAULT_TASKS
+  if(default_tasks.nil?)
+    if(File.exists?('.git'))
+      default_tasks=[:setup,:build,:test,:add,:commit,:publish,:clean,:push,:pull]
+    elsif File.exists?('.svn')
+      default_tasks=[:setup,:build,:test,:add,:commit,:publish,:clean,:update]
+    else
+      default_tasks=[:setup,:build,:test,:publish]
+    end
   end
+  desc 'default task'
+  task :default do
+    DEFAULT_TASKS.each{|task| 
+      Rake::Task[task].invoke 
+    }
+    project.mark_work_up_to_date if !project.nil?
+    puts "[:default] completed in #{TIMER.elapsed_str}" if !Environment.default.colorize?
+    if Environment.default.colorize?
+      require 'ansi/code'
+      puts ANSI.white + ANSI.bold + ":default"  + " completed in " + ANSI.yellow + "#{TIMER.elapsed_str}" + ANSI.reset
+    end
+  end
+end
+
+#elsif(work_up_to_date)
+#  require_relative('default.no.changes.rb')
+#else
+#  if(defined?(DEFAULT_TASKS))
+#    require_relative('default.tasks.rb')
+#  elsif File.exists?('.git')
+#    require_relative('default.git.rb')
+#  elsif File.exists?('.svn')
+#    require_relative('default.svn.rb')
+#  else
+#    require_relative('default.no.scm.rb')
+#  end
 #if(!defined?(NO_DEFAULT_TASK)) 
 #  puts "defining default task" if Environment.default.debug?
 #  desc 'default task'
@@ -70,4 +96,4 @@ else
 #      puts ANSI.white + ANSI.bold + ":default"  + " completed in " + ANSI.yellow + "#{TIMER.elapsed_str}" + ANSI.reset
 #    end
 #  end # :default
-end
+#end
