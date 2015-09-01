@@ -7,7 +7,7 @@ require_relative('../base/projects.rb')
 require_relative('../base/project.rb')
 require_relative('../base/timer.rb')
 
-puts "definining DEFAULT TASK" if Environment.default.debug?
+puts "defining DEFAULT TASK" if Environment.default.debug?
 #logfile=''
 #projects=Projects.new
 #project=projects.get_current
