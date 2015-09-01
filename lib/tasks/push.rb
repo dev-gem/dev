@@ -1,5 +1,3 @@
-puts __FILE__ if defined?(DEBUG)
-
 desc 'performs a git push'
 task :push do Tasks.execute_task :push;end
 

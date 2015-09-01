@@ -1,8 +1,6 @@
 puts __FILE__ if ENV.has_key?('DEBUG')
 
 require_relative('base/environment.rb')
-
-
 require_relative('base/projects.rb')
 require_relative('commands.rb')
 

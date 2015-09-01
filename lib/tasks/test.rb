@@ -1,5 +1,3 @@
-puts __FILE__ if defined?(DEBUG)
-
 #
 # nunit dlls may be specified with
 # NUNIT=FileList.new('**/*.Test.dll')

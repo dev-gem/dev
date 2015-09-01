@@ -1,4 +1,3 @@
-puts __FILE__ if defined?(DEBUG)
 require_relative '../base/array.rb'
 desc 'performs publish commands'
 task :publish do Tasks.execute_task :publish; end

@@ -1,5 +1,3 @@
-puts __FILE__ if defined?(DEBUG)
-
 desc 'performs documentation commands'
 task :doc do Tasks.execute_task :doc;end
 
