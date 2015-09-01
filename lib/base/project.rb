@@ -176,6 +176,8 @@ class Project < Hash
                 File.delete(logfile)
             end
           end
+        else
+            puts "wrk_dir does not match Rake.application.original_dir" if @env.debug?
         end
         false
     end
@@ -184,6 +186,8 @@ class Project < Hash
         if wrk_dir == Rake.application.original_dir
           logfile=get_logfile ['work','up2date']
           File.open(logfile,'w'){|f|f.write(' ')}
+        else
+            puts "wrk_dir does not match Rake.application.original_dir" if @env.debug?
         end
     end
 
