@@ -176,12 +176,24 @@ class Projects < Hash
     end
 
 	def update args
-		filter=''
-		filter=args[1] if !args.nil? && args.length > 0
+		#filter=''
+		#filter=args[1] if !args.nil? && args.length > 0
+		projects=get_projects args
+		puts "updating #{projects.length} projects..." if @env.debug?
 		self.each{|k,v|
 			if filter.nil? || filter.length==0 || k.include?(filter)
-				puts "updating #{v.fullname}"
-			 	v.update
+				begin
+    		      result=project.update
+    		      exit_code=result.exit_code if(result.exit_code!=0)
+    		    rescue => error
+		    	  puts "error raised during update #{project.fullname}"
+		    	  puts "--------------------------------------------"
+		    	  puts error
+		    	  puts "--------------------------------------------"
+		        end
+
+				#puts "updating #{v.fullname}"
+			 	#v.update
 		    end
 		}
 	end
