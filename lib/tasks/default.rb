@@ -16,9 +16,13 @@ if(defined?(DEV))
   #puts "current project #{DEV.projects.current.fullname}" if DEV.env.debug? && !DEV.projects.current.nil?
   project=DEV.projects.current
   puts "project is nil" if DEV.env.debug? && project.nil?
-  if(!project.nil? && project.work_up_to_date?)
-    puts "project work is up to date " if DEV.env.debug?
-    WRK_UP_TO_DATE=true
+  if(!project.nil?)
+    if(project.work_up_to_date?)
+      puts "project work is up to date" if DEV.env.debug?
+      WRK_UP_TO_DATE=true
+    else
+      puts "project work is NOT up to date" if DEV.env.debug?
+    end
   end
   #puts "no_changes? = #{DEV.env.no_changes?}" if DEV.env.debug?
 end
@@ -28,6 +32,7 @@ if(!defined?(NO_DEFAULT_TASK))
   task :default do
     if(defined?(DEFAULT_TASKS))
       DEFAULT_TASKS.each{|task| Rake::Task[task].invoke}
+      project.mark_work_up_to_date if !project.nil?
     else
       if defined? WRK_UP_TO_DATE
         puts '   no changes'
@@ -41,6 +46,7 @@ if(!defined?(NO_DEFAULT_TASK))
             [:setup,:build,:test,:publish].each{|task| Rake::Task[task].invoke}
   	  	  end
         end
+        project.mark_work_up_to_date if !project.nil?
   	  end
     end
     
@@ -50,6 +56,6 @@ if(!defined?(NO_DEFAULT_TASK))
       puts ANSI.white + ANSI.bold + ":default"  + " completed in " + ANSI.yellow + "#{TIMER.elapsed_str}" + ANSI.reset
     end
 
-    project.mark_work_up_to_date if !project.nil?
+    
   end # :default
 end
