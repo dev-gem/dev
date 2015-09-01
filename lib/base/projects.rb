@@ -180,6 +180,7 @@ class Projects < Hash
 		puts "updating #{projects.length} projects..." if @env.debug?
 		projects.each{|project|
 		    begin
+		    	puts "updating #{project.fullname}"
     		    result=project.update
     		    exit_code=result.exit_code if(result.exit_code!=0)
     		rescue => error
