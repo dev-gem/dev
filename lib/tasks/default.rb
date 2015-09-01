@@ -9,6 +9,7 @@ require_relative('../base/timer.rb')
 
 puts "defining DEFAULT TASK" if Environment.default.debug?
 
+work_up_to_date=false
 if(defined?(DEV))
   puts "DEFAULT: DEV is defined" if DEV.env.debug?
   #puts "working? = #{DEV.env.working?}" if DEV.env.debug?
@@ -19,15 +20,19 @@ if(defined?(DEV))
   if(!project.nil?)
     if(project.work_up_to_date?)
       puts "project work is up to date" if DEV.env.debug?
-      WRK_UP_TO_DATE=true
+      work_up_to_date=true
     else
       puts "project work is NOT up to date" if DEV.env.debug?
     end
   end
   #puts "no_changes? = #{DEV.env.no_changes?}" if DEV.env.debug?
 end
-
-if(!defined?(NO_DEFAULT_TASK)) 
+if(defined?(NO_DEFAULT_TASK))
+  puts "NO_DEFAULT_TASK is defined" if Environment.default.debug?
+elsif(work_up_to_date)
+  puts "work_up_to_date is true" if Environment.default.debug?
+else
+#if(!defined?(NO_DEFAULT_TASK)) 
   desc 'default task'
   task :default do
     if(defined?(DEFAULT_TASKS))
@@ -55,7 +60,5 @@ if(!defined?(NO_DEFAULT_TASK))
       require 'ansi/code'
       puts ANSI.white + ANSI.bold + ":default"  + " completed in " + ANSI.yellow + "#{TIMER.elapsed_str}" + ANSI.reset
     end
-
-    
   end # :default
 end
