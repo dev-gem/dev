@@ -61,6 +61,7 @@ describe Dev do
         dev=Dev.new( { 'DEV_ROOT' => dir, 'SUPPRESS_CONSOLE_OUTPUT' => 'true' } )
 
         # INIT REPO HelloRake.git
+        sleep(1)
         Dir.chdir(dir) do
             cmd=Command.execute('git init --bare HelloRake.git')
             cmd=Command.execute("git clone #{dir}/HelloRake.git")
