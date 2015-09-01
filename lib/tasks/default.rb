@@ -11,33 +11,17 @@ puts "defining DEFAULT TASK" if Environment.default.debug?
 
 if(defined?(DEV))
   puts "DEFAULT: DEV is defined" if DEV.env.debug?
-  puts "working? = #{DEV.env.working?}" if DEV.env.debug?
-  puts "current project is nil" if DEV.env.debug? && DEV.projects.current.nil?
-  puts "current project #{DEV.projects.current.fullname}" if DEV.env.debug? && !DEV.projects.current.nil?
+  #puts "working? = #{DEV.env.working?}" if DEV.env.debug?
+  #puts "current project is nil" if DEV.env.debug? && DEV.projects.current.nil?
+  #puts "current project #{DEV.projects.current.fullname}" if DEV.env.debug? && !DEV.projects.current.nil?
   project=DEV.projects.current
+  puts "project is nil" if DEV.env.debug? && project.nil?
   if(!project.nil? && project.work_up_to_date?)
     puts "project work is up to date " if DEV.env.debug?
     WRK_UP_TO_DATE=true
   end
   #puts "no_changes? = #{DEV.env.no_changes?}" if DEV.env.debug?
 end
-#logfile=''
-#projects=Projects.new
-#project=projects.get_current
-#if(!project.nil?)
-#  logfile=project.get_logfile ['work','default','OK']
-#  if(File.exists?(logfile))
-#    puts "DEFAULT: logfile #{logfile} exists" if Environment.default.debug?
-#    if(File.mtime(logfile) > Dir.get_latest_mtime(Rake.application.original_dir))
-#      NO_CHANGES=true
-#    else
-#      puts "DEFAULT: deleting #{logfile}" if Environment.default.debug?
-#      File.delete logfile
-#    end
-#  end
-#else
-#  puts 'DEFAULT: current project is nil' if Environment.default.debug?
-#end
 
 if(!defined?(NO_DEFAULT_TASK)) 
   desc 'default task'

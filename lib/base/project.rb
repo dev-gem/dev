@@ -175,10 +175,6 @@ class Project < Hash
             else
                 File.delete(logfile)
             end
-            #if File.mtime(logfile) > Dir.get_latest_mtime Rake.application.original_dir
-                #CLEAN.include(logfile)
-            #    return true
-           # end
           end
         end
         false
