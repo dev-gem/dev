@@ -36,7 +36,11 @@ class Array
       return true if(command.kind_of?(String) && !include?(command))
       if(command.kind_of?(Command))
         self.each{|c|
-           return true if(c[:input] == command[:input])
+          if c.kind_of?(String)
+            return true if command[:input] == c
+          else
+            return true if(c[:input] == command[:input])
+          end
         }
       end
       false
