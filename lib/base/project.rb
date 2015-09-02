@@ -158,7 +158,12 @@ class Project < Hash
     def command_history tags=nil
     	commands=Array.new
     	log_filenames(tags).each{|logfile|
-    		commands << Command.new(JSON.parse(IO.read(logfile)))
+            begin
+                cmd=Command.new(JSON.parse(IO.read(logfile)))
+                commands << cmd
+            rescue
+            end
+    		
     	}
         commands
     end
