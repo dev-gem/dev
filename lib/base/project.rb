@@ -295,7 +295,7 @@ class Project < Hash
         logfile=get_logfile ['work']
         if(File.exists?(wrk_dir))
             rake_default=Command.new({:input =>'rake default',:quiet => true,:ignore_failure => true})
-            if(last_work_mtime.nil? || last_work_mtime < Environment.get_latest_mtime(wrk_dir))
+            if(last_work_mtime.nil? || last_work_mtime < Dir.get_latest_mtime(wrk_dir))
               Dir.chdir(wrk_dir) do
 
                 @env.out fullname
