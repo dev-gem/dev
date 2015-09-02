@@ -165,7 +165,7 @@ class Project < Hash
    
     def work_up_to_date?
         if wrk_dir == Rake.application.original_dir
-          logfile=get_logfile ['work','up2date']
+          logfile=get_logfile ['up2date']
           if File.exists? logfile
             last_work_time=File.mtime(logfile)
             last_file_changed=Dir.get_latest_mtime Rake.application.original_dir
@@ -184,7 +184,7 @@ class Project < Hash
 
     def mark_work_up_to_date
         if wrk_dir == Rake.application.original_dir
-          logfile=get_logfile ['work','up2date']
+          logfile=get_logfile ['up2date']
           File.open(logfile,'w'){|f|f.write(' ')}
         else
             puts "wrk_dir does not match Rake.application.original_dir" if @env.debug?
