@@ -25,9 +25,14 @@ class Dir
   def self.get_latest_mtime directory
     mtime=Time.new(1980)
     Dir.chdir(directory)  do
+      latest_filename=''
       Dir.glob('**/*.*').each{|f|
-        mtime=File.mtime(f) if mtime.nil? || File.mtime(f) > mtime
+        if mtime.nil? || File.mtime(f) > mtime
+          mtime=File.mtime(f) 
+          latest_filename=f
+        end
       }
+      puts "   latest_mtime #{mtime.to_s} #{latest_filename}" if Environment.default.debug?
     end
     mtime
   end
