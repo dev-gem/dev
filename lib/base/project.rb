@@ -178,6 +178,7 @@ class Project < Hash
                 CLEAN.include logfile
                 return true
             else
+                puts "   deleting #{logfile}" if Environment.default.debug?
                 File.delete(logfile)
             end
           end
@@ -190,6 +191,7 @@ class Project < Hash
     def mark_work_up_to_date
         if wrk_dir == Rake.application.original_dir
           logfile=get_logfile ['up2date']
+          puts "   writing #{logfile}" if Environment.default.debug?
           File.open(logfile,'w'){|f|f.write(' ')}
         else
             puts "wrk_dir does not match Rake.application.original_dir" if @env.debug?
