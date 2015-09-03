@@ -35,7 +35,7 @@ class Project < Hash
 
 	def self.get_url directory=Rake.application.original_dir
 	  url=''
-	  Dir.chdir(directory) do#Rake.application.original_dir) do
+	  Dir.chdir(directory) do
 	    url=`git config --get remote.origin.url`.strip if(File.exists?('.git'))
 	    url= Svn.url.strip if(File.exists?('.svn'))
 	  end
@@ -83,8 +83,6 @@ class Project < Hash
 
 	def checkout
 		if(!File.exists?(wrk_dir) && self[:url].include?('svn'))
-			#puts "checkout #{self.url} to #{self.wrk_dir}"
-			#puts `svn checkout #{self.url} #{self.wrk_dir}`
             cmd=Command.new({ :input => "svn checkout #{self.url} #{self.wrk_dir}", :quiet => true,:ignore_failure => true})
             cmd.execute
             @env.out cmd.summary
@@ -257,12 +255,6 @@ class Project < Hash
         end
     end
 
-    #def info
-    #    @env.out "Project #{name}"
-    #    @env.out "#{'fullname'.fix(13)}: #{self.fullname}"
-    #    @env.out "#{'url'.fix(13)}: #{self[:url]}"
-    #    @env.out "#{'version'.fix(13)}: #{VERSION}" if defined? VERSION
-    #end
     def info
         infoCmd=Command.new({ :input => 'info', :exit_code => 0 })
         #out_cyan '========================================================='
@@ -433,23 +425,14 @@ class Project < Hash
     		Dir.chdir(wrk_dir) do
                 if(File.exists?('.git'))
                   pull=Command.execute(Command.new({:input => 'git pull', :quiet => true, :ignore_failure => true}))
-                  @env.out pull.summary
+                  @env.out pull.summary true
                   return pull
-    			  #pull=Command.new('git pull')
-				  #rake_default[:quiet]=true
-				  #rake_default[:ignore_failure]=true
-				  #rake_default.execute
-                  #return rake_defa
                 end
                 if(File.exists?('svn'))
                     updateCmd=Command.execute(Command.new({:input => 'svn update', :quiet => true, :ignore_failure => true}))
-                    @env.out updateCmd.summary
+                    @env.out updateCmd.summary true
                     return updateCmd
                 end
-				#rake_default=Command.new('svn update')
-				#rake_default[:quiet]=true
-				#rake_default[:ignore_failure]=true
-				#rake_default.execute
     		end
     	end
         return Command.new({:exit_code => 1})
