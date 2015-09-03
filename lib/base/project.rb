@@ -178,9 +178,11 @@ class Project < Hash
                 CLEAN.include logfile
                 return true
             else
-                puts "   deleting #{logfile}" if Environment.default.debug?
+                puts "   deleting #{logfile}" if @env.debug?
                 File.delete(logfile)
             end
+          else
+            puts "logfile #{logfile} does NOT exist." if @env.debug?
           end
         else
             puts "wrk_dir does not match Rake.application.original_dir" if @env.debug?
