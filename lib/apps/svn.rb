@@ -113,7 +113,8 @@ class Svn
 
 						files.each{|f|
 							fdir=File.dirname(f)
-							FileUtils.mkdir_p(fdir) if(fdir.length > 0 && !File.exists?(fdir))
+
+							#FileUtils.mkdir_p(fdir) if(fdir.length > 0 && !File.exists?(fdir))
 							FileUtils.cp("#{source_dir}/#{f}","#{f}")
 							add_file.puts f
 						}
