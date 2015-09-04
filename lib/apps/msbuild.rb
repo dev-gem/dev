@@ -70,7 +70,7 @@ class MSBuild < Hash
 	  	sln_text=File.read(sln_filename,:encoding=>"UTF-8")
     	#sln_text.scan( /= [\w]+\|([\w ]+)/ ).each{|m|
       sln_text.scan(/\|([\w\d\s]+)\s*=/).each{|m|
-	    	p=m.first.to_s
+	    	p=m.first.to_s.strip
 	    	platforms << p if !platforms.include?(p)
 	  	}
 		  return platforms
