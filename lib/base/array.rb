@@ -11,6 +11,9 @@ class Array
       @env=Environment.new() if @env.nil? 
       i=0
       while i < self.length
+        puts "Array[#{i.to_s}]'=nil" if @env.debug? && self[i].nil?
+        puts "Array[#{i.to_s}].class=#{self[i].class.to_s}" if @env.debug? && !self[i].nil?
+        puts "Array[#{i.to_s}].to_s=#{self[i].to_s}" if @env.debug? && !self[i].nil?
         self[i]=Command.new({ :input => self[i], :quiet => true }) if(self[i].is_a?(String))
         self[i]=Command.new(self[i]) if(self[i].is_a?(Hash) && !self[i].is_a?(Command))
 
@@ -18,7 +21,6 @@ class Array
           value.each{|k,v|self[i][k]=v}
         end
 
-        #self[i].execute if(self[i].is_a?(Command))
         if(self[i].is_a?(Command))
           self[i].execute
           @env.out self[i].summary
