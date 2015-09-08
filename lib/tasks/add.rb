@@ -21,10 +21,8 @@ class Add < Array
 	                   	    end
 	                        if(status.include?('?') || status.include?('was not found') || error.include?('was not found'))
 	                        	if(f.include?(' '))
-								  #puts "svn add \"#{f}\" --parents"
-								  add_quiet add "svn add \"#{f}\" --parents"
+								  add_quiet "svn add \"#{f}\" --parents"
 							    else
-							      #puts "svn add #{f} --parents"
 								  add_quiet "svn add #{f} --parents"
 							    end
 							end
@@ -36,7 +34,6 @@ class Add < Array
 						if(File.exists?(f) && File.file?(f))
 						  status=Command.output("git status #{f} --short")
 						  if status.include?('??') || status.include?(' M ')
-							#puts "git add #{f} -v"
 							add_quiet "git add #{f} -v" 
 						  end
 					    end
