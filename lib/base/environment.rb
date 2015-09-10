@@ -179,7 +179,7 @@ class Environment < Hash
     puts "      dev_root: #{self.root_dir}"
     puts "       machine: #{self.machine}"
     puts "          user: #{self.user}"
-    puts " configuration: #{self.configuration}"
+    #puts " configuration: #{self.configuration}"
     puts "         debug: #{self.debug}"
     puts " "
     puts "Path Commands"
