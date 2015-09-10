@@ -1,6 +1,6 @@
 desc 'displays project info'
 task :info do
-	Environment.info
+	Environment.default.info
 	puts ' '
 	PROJECT.info
 	puts ' '
