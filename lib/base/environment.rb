@@ -172,15 +172,15 @@ class Environment < Hash
     text.match(/(\d+\.\d+\.[\d\w]+)/)
   end
 
-  def self.info 
+  def info 
     puts "Environment"
     puts "  ruby version: #{`ruby --version`}"
     puts " ruby platform: #{RUBY_PLATFORM}"
-    puts "      dev_root: #{Environment.dev_root}"
-    puts "       machine: #{Environment.machine}"
-    puts "          user: #{Environment.user}"
-    puts " configuration: #{Environment.configuration}"
-    puts "         debug: #{Environment.debug}"
+    puts "      dev_root: #{self.dev_root}"
+    puts "       machine: #{self.machine}"
+    puts "          user: #{self.user}"
+    puts " configuration: #{self.configuration}"
+    puts "         debug: #{self.debug}"
     puts " "
     puts "Path Commands"
     ['svn --version --quiet','git --version','msbuild /version','nuget','candle','light','gem --version'].each{|cmd|
