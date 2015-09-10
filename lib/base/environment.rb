@@ -176,7 +176,7 @@ class Environment < Hash
     puts "Environment"
     puts "  ruby version: #{`ruby --version`}"
     puts " ruby platform: #{RUBY_PLATFORM}"
-    puts "      dev_root: #{self.dev_root}"
+    puts "      dev_root: #{self.root_dir}"
     puts "       machine: #{self.machine}"
     puts "          user: #{self.user}"
     puts " configuration: #{self.configuration}"
