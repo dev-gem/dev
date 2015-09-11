@@ -78,7 +78,7 @@ class Setup < Array
 		if(defined?(VERSION))
 			Dir.glob('*.nuspec').each{|nuspec|
 				current_version=IO.read(nuspec).scan(/<version>[\d.]+<\/version>/)[0]
-				puts "#{nuspec} current version=#{current_version}" if defined?(DEBUG)
+				puts "#{nuspec} current version=#{current_version}" if env.debug?
 				if(current_version.include?('<version>'))
 					target_version="<version>#{VERSION}</version>"
 					if(current_version != target_version)
@@ -88,17 +88,19 @@ class Setup < Array
 			}
 			Dir.glob('**/AssemblyInfo.cs').each{|assemblyInfo|
 				current_version=IO.read(assemblyInfo).scan(/Version\(\"[\d.]+\"\)/)[0]
-				puts "#{assemblyInfo} current version=#{current_version}" if defined?(DEBUG)
-				if(current_version.include?('Version('))
+				if(!current_version.nil?)
+				  puts "#{assemblyInfo} current version=#{current_version}" if env.debug?
+				  if(current_version.include?('Version('))
 					target_version="Version(\"#{VERSION}\")"
 					if(current_version != target_version)
 						add "<%Text.replace_in_file('#{assemblyInfo}','#{current_version}','#{target_version}')%>"
 					end
-				end
+				  end
+			    end
 			}
 			Dir.glob('**/*.wxs').each{|wxs|
 				current_version=IO.read(wxs).scan(/Version=\"([\d.]+)\"/)[0][0]
-				puts "#{wxs} current version=#{current_version}" if defined?(DEBUG)
+				puts "#{wxs} current version=#{current_version}" if env.debug?
 				if(current_version.include?('Version='))
 					target_version="Version=\"#{VERSION}\")="
 					if(current_version != target_version)
