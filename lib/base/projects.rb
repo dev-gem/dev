@@ -25,7 +25,13 @@ class Projects < Hash
       if(self.has_key? fullname)
         self[fullname]
       else
-        nil
+      	project=nil
+      	begin
+    		project=Project.new(Project.get_url,fullname)
+    	rescue
+        	project=nil
+        end
+        project
       end
     end
 
