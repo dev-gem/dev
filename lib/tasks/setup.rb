@@ -76,13 +76,14 @@ class Setup < Array
 		end
 
 		if(defined?(VERSION))
+			puts "updating nuspec files for VERSION #{VERSION}" if env.debug?
 			Dir.glob('*.nuspec').each{|nuspec|
 				current_version=IO.read(nuspec).scan(/<version>[\d.]+<\/version>/)[0]
 				puts "#{nuspec} current version=#{current_version}" if env.debug?
 				if(current_version.include?('<version>'))
 					target_version="<version>#{VERSION}</version>"
 					if(current_version != target_version)
-						add "<%Text.replace_in_file('#{nuspec}','#{current_version}','#{target_version}')%>"
+						add_quiet "<%Text.replace_in_file('#{nuspec}','#{current_version}','#{target_version}')%>"
 					end
 				end
 			}
@@ -93,7 +94,7 @@ class Setup < Array
 				  if(current_version.include?('Version('))
 					target_version="Version(\"#{VERSION}\")"
 					if(current_version != target_version)
-						add "<%Text.replace_in_file('#{assemblyInfo}','#{current_version}','#{target_version}')%>"
+						add_quiet "<%Text.replace_in_file('#{assemblyInfo}','#{current_version}','#{target_version}')%>"
 					end
 				  end
 			    end
@@ -104,8 +105,8 @@ class Setup < Array
 				if(current_version.include?('Version='))
 					target_version="Version=\"#{VERSION}\")="
 					if(current_version != target_version)
-						add "<%Text.replace_in_file('#{wxs}','#{current_version}','#{target_version}')%>"
-						add "<%Text.replace_in_file('Value=\"#{current_version}\"','Value=\"#{target_version}\"')%>"
+						add_quiet "<%Text.replace_in_file('#{wxs}','#{current_version}','#{target_version}')%>"
+						add_quiet "<%Text.replace_in_file('Value=\"#{current_version}\"','Value=\"#{target_version}\"')%>"
 					end
 				end
 			}
