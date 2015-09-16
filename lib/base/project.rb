@@ -428,7 +428,7 @@ class Project < Hash
                   @env.out pull.summary true
                   return pull
                 end
-                if(File.exists?('svn'))
+                if(File.exists?('.svn'))
                     updateCmd=Command.execute(Command.new({:input => 'svn update', :quiet => true, :ignore_failure => true}))
                     @env.out updateCmd.summary true
                     return updateCmd
