@@ -73,6 +73,7 @@ class Svn
 
 		# Support for legacy argument order
 		if(source_dir.include?('svn:') || source_dir.include?('http:') || source_dir.include?('https:'))
+			puts 'warning arguments are in legacy order' if Environment.default.debug?
 			# swap arguments
 			tmp=source_dir
 			source_dir=destination
@@ -98,7 +99,12 @@ class Svn
 				output = output + f + " "
 			}
 			pwd=Dir.pwd
-			Dir.mktmpdir{|dir|
+
+			dir="#{Environment.default.tmp_dir}/svn_publish"
+			Dir.remove dir if File.exists? dir
+			FileUtils.mkdir dir
+			Dir.chdir(dir) do
+			#Dir.mktmpdir{|dir|
 
 				# checkout new subversion directory
 				output = output + "\nsvn checkout #{destination} #{dir}/to_publish_checkout"
@@ -113,7 +119,6 @@ class Svn
 
 						files.each{|f|
 							fdir=File.dirname(f)
-
 							FileUtils.mkdir_p(fdir) if(fdir.length > 0 && !File.exists?(fdir))
 							FileUtils.cp("#{source_dir}/#{f}","#{f}")
 							add_file.puts f
@@ -131,9 +136,10 @@ class Svn
 				end
 				
 				#begin
-				Dir.remove "#{dir}/to_publish_checkout"
+				#Dir.remove "#{dir}/to_publish_checkout"
 				output
-			}
+			end
+			Dir.remove(dir)
 		end
 	end
 end

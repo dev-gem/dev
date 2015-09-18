@@ -41,6 +41,12 @@ class Environment < Hash
     dir
   end
 
+  def tmp_dir
+    dir="#{root_dir}/tmp"
+    FileUtils.mkdir_p dir if !File.exists? dir
+    dir
+  end
+
   def make_dir
     dir="#{root_dir}/make"
     FileUtils.mkdir_p dir if !File.exists? dir
