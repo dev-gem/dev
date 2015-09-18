@@ -80,6 +80,13 @@ class Svn
 			destination=tmp
 		end
 
+		if(!source_filelist.kind_of?(FileList))
+			puts 'converting files array into FileList' if Environment.default.debug?
+			list=FileList.new
+			source_filelist.each{|item|list.include(item)}
+			source_fileList=list
+		end
+
 		output = "\n"
 		if(`svn info #{destination} 2>&1`.include?('Revision:'))
 			puts "Svn.publish: destination #{destination} already exists" 
