@@ -2,7 +2,6 @@ version: "{build}"
 install:
   - gem install rake --quiet --no-ri --no-rdoc
   - gem install rspec --quiet --no-ri --no-rdoc
-  - gem install dev --quiet --no-ri --no-rdoc
 build: off
 test_script:
   - rake
