@@ -186,7 +186,8 @@ class Environment < Hash
     puts "       machine: #{self.machine}"
     puts "          user: #{self.user}"
     #puts " configuration: #{self.configuration}"
-    puts "         debug: #{self.debug}"
+    puts "         debug: #{self.debug?}"
+    puts "git user.email: #{Git.user_email}" if
     puts " "
     puts "Path Commands"
     ['svn --version --quiet','git --version','msbuild /version','nuget','candle','light','gem --version'].each{|cmd|
@@ -195,7 +196,7 @@ class Environment < Hash
       command[:ignore_failure]=true
       command.execute
       if(command[:exit_code] == 0)
-        puts "#{cmd.split(' ')[0].fix(14)} #{get_version(command[:output])}"
+        puts "#{cmd.split(' ')[0].fix(14)} #{Environment.get_version(command[:output])}"
       else
         puts "#{cmd.split(' ')[0].fix(14)} not found."
           missing_command=true

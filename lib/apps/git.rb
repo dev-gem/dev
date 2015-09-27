@@ -20,6 +20,16 @@ class Git
         url=`git config --get remote.origin.url` if(File.exists?('.git'))
     end
 
+    def self.user_email
+        email=''
+        begin
+            url=`git config --list`.scan(/user.email=([\d\w.@\-\+]+)/)[0][0] if(File.exists?('.git'))
+        rescue
+            url=''
+        end
+        email
+    end
+
     def self.remote_origin directory=''
     	url=''
     	directory=Dir.pwd if directory.length == 0
