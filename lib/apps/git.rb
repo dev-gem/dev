@@ -23,11 +23,8 @@ class Git
     def self.user_email
         email=''
         begin
-            puts `git config --list` 
             email=`git config --list`.scan(/user.email=([\d\w.@\-\+]+)/)[0][0]
-        rescue=>e
-            puts "exception raised."
-            puts e.to_s
+        rescue
             email=''
         end
         email
