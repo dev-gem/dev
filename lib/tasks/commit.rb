@@ -12,7 +12,7 @@ class Commit < Array
 		message=""
 		message=IO.read('commit.message').strip if File.exists?('commit.message')
 
-		if(File.exists?('.git') && `git config --list`.include?('user.name='))
+		if(File.exists?('.git') && `git config --list`.include?('user.name=') && Git.user_email.length > 0)
 			if(!`git status`.include?('nothing to commit') &&
 			   !`git status`.include?('untracked files present'))
 			  if(message.length==0)

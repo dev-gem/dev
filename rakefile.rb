@@ -21,10 +21,12 @@ task :build do
 end
 
 task :publish do
-    Git.tag "#{File.dirname(__FILE__)}","#{Gem::Specification.load('dev.gemspec').version.to_s}" if `git branch`.include?('* master') 
-	begin
+	if(Git.user_email.length > 0)
+       Git.tag "#{File.dirname(__FILE__)}","#{Gem::Specification.load('dev.gemspec').version.to_s}" if `git branch`.include?('* master') 
+	   begin
 		puts Command.execute("gem push dev-#{Gem::Specification.load('dev.gemspec').version.to_s}.gem").summary
 		FileUtils.rm(" dev-#{Gem::Specification.load('dev.gemspec').version.to_s}.gem")
-	rescue
-	end
+	   rescue
+	   end
+    end
 end
