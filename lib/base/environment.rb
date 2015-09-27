@@ -187,7 +187,7 @@ class Environment < Hash
     puts "          user: #{self.user}"
     #puts " configuration: #{self.configuration}"
     puts "         debug: #{self.debug?}"
-    puts "git user.email: #{Git.user_email}" if
+    puts "git user.email: #{Git.user_email}" 
     puts " "
     puts "Path Commands"
     ['svn --version --quiet','git --version','msbuild /version','nuget','candle','light','gem --version'].each{|cmd|

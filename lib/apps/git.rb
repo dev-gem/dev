@@ -23,9 +23,12 @@ class Git
     def self.user_email
         email=''
         begin
-            url=`git config --list`.scan(/user.email=([\d\w.@\-\+]+)/)[0][0] if(File.exists?('.git'))
-        rescue
-            url=''
+            puts `git config --list` 
+            email=`git config --list`.scan(/user.email=([\d\w.@\-\+]+)/)[0][0]
+        rescue=>e
+            puts "exception raised."
+            puts e.to_s
+            email=''
         end
         email
     end

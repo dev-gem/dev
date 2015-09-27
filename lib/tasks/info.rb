@@ -2,8 +2,8 @@ desc 'displays project info'
 task :info do
 	Environment.default.info
 	puts ' '
-	PROJECT.info
+	#PROJECT.info
 	puts ' '
-	COMMANDS.info
+	#COMMANDS.info
 end
 
