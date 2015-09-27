@@ -72,6 +72,9 @@ describe Project do
             cmd=Command.execute("git clone #{dir}/HelloRake.git")
             Dir.chdir("#{dir}/HelloRake") do
                 File.open('README.md','w'){|f|f.puts 'test'}
+                cmd=Command.execute('git config user.email "lou-parslow+dev.gem@gamail.com"') if Git.user_email.length < 1
+                cmd=Command.execute('git config user.name "lou-parslow"') if Git.user_name.length < 1
+                cmd=Command.execute('git config --global push.default simple') 
                 cmd=Command.execute('git add README.md')
                 cmd=Command.execute('git commit -m"added README.md"')
                 cmd=Command.execute('git tag 0.0.0 -m"0.0.0"')
