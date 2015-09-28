@@ -82,7 +82,7 @@ describe Dev do
         end
 
         # ADD
-        dev.execute("add #{dir}/HelloRake.git local/HelloRake 1s")
+        dev.execute("add \"#{dir}/HelloRake.git\" local/HelloRake 1s")
 
         # WORK
         expect(dev.execute('work HelloRake')).not_to eq 0 
