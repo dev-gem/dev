@@ -38,7 +38,7 @@ describe Dev do
         end
 
         # ADD
-        dev.execute("add #{dir}/HelloRake.git local/HelloRake")
+        dev.execute("add \"#{dir}/HelloRake.git\" local/HelloRake")
 
         dev.env.output=''
         expect(dev.execute("list HelloRake")).to eq 0
@@ -67,7 +67,7 @@ describe Dev do
         sleep(1)
         Dir.chdir(dir) do
             cmd=Command.execute('git init --bare HelloRake.git')
-            cmd=Command.execute("git clone #{dir}/HelloRake.git")
+            cmd=Command.execute("git clone \"#{dir}/HelloRake.git\"")
             Dir.chdir("#{dir}/HelloRake") do
                 File.open('rakefile.rb','w'){|f|f.puts "task :default do; while(true do; sleep(60);puts 'x';end; end"}
                 cmd=Command.execute('git config user.email "lou-parslow+dev.gem@gamail.com"') if Git.user_email.length < 1
