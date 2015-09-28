@@ -38,24 +38,26 @@ describe Project do
             end
         end
 
-        # ADD
-        helloRake=Project.new("#{dir}/HelloRake.git", 'local/HelloRake')
-        helloRake.env=Environment.new({ 'DEV_ROOT' => dir, 'SUPPRESS_CONSOLE_OUTPUT' => 'true'})
+        if(!dir.include?(' '))
+          # ADD
+          helloRake=Project.new("#{dir}/HelloRake.git", 'local/HelloRake')
+          helloRake.env=Environment.new({ 'DEV_ROOT' => dir, 'SUPPRESS_CONSOLE_OUTPUT' => 'true'})
 
-        # MAKE
-        expect(helloRake.command_history.length).to eq(0)
-        expect(helloRake.make('0.0.0').exit_code).to eq(0)
-        expect(File.exists?(helloRake.get_logfile(['make','0.0.0']))).to eq(true)
-        expect(helloRake.command_history.length).to eq(1)
+          # MAKE
+          expect(helloRake.command_history.length).to eq(0)
+          expect(helloRake.make('0.0.0').exit_code).to eq(0)
+          expect(File.exists?(helloRake.get_logfile(['make','0.0.0']))).to eq(true)
+          expect(helloRake.command_history.length).to eq(1)
 
-        # WORK
-        expect(helloRake.work.exit_code).to eq(0)
-        expect(helloRake.command_history.length).to eq(2)
+          # WORK
+          expect(helloRake.work.exit_code).to eq(0)
+          expect(helloRake.command_history.length).to eq(2)
 
-        # CLOBBER
-        expect(helloRake.clobber.exit_code).to eq(0)
-        expect(File.exists?(helloRake.wrk_dir)).to eq(false)
-        expect(File.exists?(File.dirname(helloRake.wrk_dir))).to eq(false)
+          # CLOBBER
+          expect(helloRake.clobber.exit_code).to eq(0)
+          expect(File.exists?(helloRake.wrk_dir)).to eq(false)
+          expect(File.exists?(File.dirname(helloRake.wrk_dir))).to eq(false)
+        end
 
         Dir.remove dir
     end
@@ -83,15 +85,17 @@ describe Project do
             end
         end
 
-        # ADD
-        helloRake=Project.new("#{dir}/HelloRake.git", 'local/HelloRake')
-        helloRake.env=Environment.new({ 'DEV_ROOT' => dir, 'SUPPRESS_CONSOLE_OUTPUT' => 'true'})
+        if(!dir.include?(' '))
+          # ADD
+          helloRake=Project.new("#{dir}/HelloRake.git", 'local/HelloRake')
+          helloRake.env=Environment.new({ 'DEV_ROOT' => dir, 'SUPPRESS_CONSOLE_OUTPUT' => 'true'})
 
-        # WORK
-        expect(helloRake.work.exit_code).to eq(1)
+          # WORK
+          expect(helloRake.work.exit_code).to eq(1)
 
-        # MAKE
-        expect(helloRake.make('0.0.0').exit_code).to eq(1)
+          # MAKE
+          expect(helloRake.make('0.0.0').exit_code).to eq(1)
+        end
 
         Dir.remove dir
     end
