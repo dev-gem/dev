@@ -23,7 +23,7 @@ describe Dev do
         # INIT REPO HelloRake.git
         Dir.chdir(dir) do
             cmd=Command.execute('git init --bare HelloRake.git')
-            cmd=Command.execute("git clone #{dir}/HelloRake.git")
+            cmd=Command.execute("git clone \"#{dir}/HelloRake.git\"")
             Dir.chdir("#{dir}/HelloRake") do
                 File.open('rakefile.rb','w'){|f|f.puts 'task :default do; puts "ok"; end'}
                 cmd=Command.execute('git config user.email "lou-parslow+dev.gem@gamail.com"') if Git.user_email.length < 1

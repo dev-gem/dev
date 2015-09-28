@@ -76,4 +76,6 @@ class Version
 	end
 end
 
-VERSION=Version.get_version if !defined? VERSION
+if(!defined?(VERSION))
+  VERSION=Version.get_version
+end
