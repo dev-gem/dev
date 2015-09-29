@@ -114,7 +114,7 @@ class Setup < Array
 				current_version=IO.read(wxs).scan(/Version=[\"']([\d.]+)[\"']/)[0][0]
 				puts "#{wxs} current version=#{current_version}" if env.debug?
 				if(current_version.include?('Version='))
-					target_version="Version=\"#{VERSION}\")="
+					target_version=VERSION#{}"Version=\"#{VERSION}\")="
 					if(current_version != target_version)
 						add_quiet "<%Text.replace_in_file('#{wxs}','#{current_version}','#{target_version}')%>"
 						#add_quiet "<%Text.replace_in_file('Value=\"#{current_version}\"','Value=\"#{target_version}\"')%>"
