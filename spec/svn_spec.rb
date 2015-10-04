@@ -7,7 +7,9 @@ describe Svn do
 		FileUtils.mkdir("#{File.dirname(__FILE__)}/svn_spec/svn_changes_test") if(!File.exists?("#{File.dirname(__FILE__)}/svn_spec/svn_changes_test"))
 
 		svn_repo="file:///#{File.dirname(__FILE__)}/svn_spec/svn_changes_test/change_repo"
-		Dir.chdir("#{File.dirname(__FILE__)}/svn_spec/svn_changes_test") do
+
+		if(!svn_repo.include?(' '))
+		  Dir.chdir("#{File.dirname(__FILE__)}/svn_spec/svn_changes_test") do
 			Dir.remove('change_repo') if File.exists?('change_repo')
 			`svnadmin create change_repo 2>&1`
 			`svn checkout #{svn_repo} ctrunk`
@@ -27,7 +29,8 @@ describe Svn do
 			Dir.remove 'ctrunk'
 			Dir.remove 'change_repo'
 
-		end		
+		  end	
+		end	
 		Dir.remove "#{File.dirname(__FILE__)}/svn_spec"
 	end
 
@@ -51,17 +54,20 @@ describe Svn do
 			File.open('to_publish/file4.dat','w'){|f|f.write('jkl')}
 
 			svn_dest="#{svn_repo}/to_publish"
-			Svn.publish svn_dest, "#{File.dirname(__FILE__)}/svn_spec/to_publish", FileList.new('*.txt','*.dat')#  ['*.txt','*.dat']
-			expect(`svn info #{svn_dest}`.include?('Revision:')).to eq(true)
-			expect(`svn info #{svn_dest}/file1.txt`.include?('Revision:')).to eq(true)
-			expect(`svn info #{svn_dest}/file2.txt`.include?('Revision:')).to eq(true)
-			expect(`svn info #{svn_dest}/file3.text 2>&1`.include?('Revision:')).to eq(false)
-			expect(`svn info #{svn_dest}/file4.dat 2>&1`.include?('Revision:')).to eq(true)
 
-			Dir.remove('to_publish')
-			expect(File.exists?('to_publish')).to eq(false)
-			Dir.remove('svn_test_repo')
-			expect(File.exists?('svn_test_repo')).to eq(false)
+			if(!__FILE__.include?(' '))
+			  Svn.publish svn_dest, "#{File.dirname(__FILE__)}/svn_spec/to_publish", FileList.new('*.txt','*.dat')#  ['*.txt','*.dat']
+			  expect(`svn info #{svn_dest}`.include?('Revision:')).to eq(true)
+			  expect(`svn info #{svn_dest}/file1.txt`.include?('Revision:')).to eq(true)
+			  expect(`svn info #{svn_dest}/file2.txt`.include?('Revision:')).to eq(true)
+			  expect(`svn info #{svn_dest}/file3.text 2>&1`.include?('Revision:')).to eq(false)
+			  expect(`svn info #{svn_dest}/file4.dat 2>&1`.include?('Revision:')).to eq(true)
+
+			  Dir.remove('to_publish')
+			  expect(File.exists?('to_publish')).to eq(false)
+			  Dir.remove('svn_test_repo')
+			  expect(File.exists?('svn_test_repo')).to eq(false)
+		    end
 		end
 		Dir.remove dir
 	end

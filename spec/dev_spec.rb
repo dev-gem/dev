@@ -23,9 +23,12 @@ describe Dev do
         # INIT REPO HelloRake.git
         Dir.chdir(dir) do
             cmd=Command.execute('git init --bare HelloRake.git')
-            cmd=Command.execute("git clone #{dir}/HelloRake.git")
+            cmd=Command.execute("git clone \"#{dir}/HelloRake.git\"")
             Dir.chdir("#{dir}/HelloRake") do
                 File.open('rakefile.rb','w'){|f|f.puts 'task :default do; puts "ok"; end'}
+                cmd=Command.execute('git config user.email "lou-parslow+dev.gem@gamail.com"') if Git.user_email.length < 1
+                cmd=Command.execute('git config user.name "lou-parslow"') if Git.user_name.length < 1
+                cmd=Command.execute('git config --global push.default simple') 
                 cmd=Command.execute('git add rakefile.rb')
                 cmd=Command.execute('git commit -m"added rakefile.rb"')
                 cmd=Command.execute('git tag 0.0.0 -m"0.0.0"')
@@ -34,22 +37,24 @@ describe Dev do
             end
         end
 
-        # ADD
-        dev.execute("add #{dir}/HelloRake.git local/HelloRake")
+        if(!dir.include?(' '))
+          # ADD
+          dev.execute("add \"#{dir}/HelloRake.git\" local/HelloRake")
 
-        dev.env.output=''
-        expect(dev.execute("list HelloRake")).to eq 0
-        expect(dev.env.output.include?('HelloRake')).to eq true
+          dev.env.output=''
+          expect(dev.execute("list HelloRake")).to eq 0
+          expect(dev.env.output.include?('HelloRake')).to eq true
 
-        # WORK
-        expect(dev.execute('work HelloRake')).to eq 0 
-        dev.env.output=''
+          # WORK
+          expect(dev.execute('work HelloRake')).to eq 0 
+          dev.env.output=''
 
-        # MAKE
-        expect(dev.execute('make HelloRake')).to eq 0 
+          # MAKE
+          expect(dev.execute('make HelloRake')).to eq 0 
 
-        # REMOVE
-        expect(dev.execute('remove HelloRake')).to eq 0
+          # REMOVE
+          expect(dev.execute('remove HelloRake')).to eq 0
+        end
 
         Dir.remove dir
     end
@@ -64,9 +69,12 @@ describe Dev do
         sleep(1)
         Dir.chdir(dir) do
             cmd=Command.execute('git init --bare HelloRake.git')
-            cmd=Command.execute("git clone #{dir}/HelloRake.git")
+            cmd=Command.execute("git clone \"#{dir}/HelloRake.git\"")
             Dir.chdir("#{dir}/HelloRake") do
                 File.open('rakefile.rb','w'){|f|f.puts "task :default do; while(true do; sleep(60);puts 'x';end; end"}
+                cmd=Command.execute('git config user.email "lou-parslow+dev.gem@gamail.com"') if Git.user_email.length < 1
+                cmd=Command.execute('git config user.name "lou-parslow"') if Git.user_name.length < 1
+                cmd=Command.execute('git config --global push.default simple') 
                 cmd=Command.execute('git add rakefile.rb')
                 cmd=Command.execute('git commit -m"added rakefile.rb"')
                 cmd=Command.execute('git tag 0.0.0 -m"0.0.0"')
@@ -75,15 +83,18 @@ describe Dev do
             end
         end
 
-        # ADD
-        dev.execute("add #{dir}/HelloRake.git local/HelloRake 1s")
+        if(!dir.include?(' '))
+          # ADD
+          dev.execute("add \"#{dir}/HelloRake.git\" local/HelloRake 1s")
 
-        # WORK
-        expect(dev.execute('work HelloRake')).not_to eq 0 
-        dev.env.output=''
+          # WORK
+          expect(dev.execute('work HelloRake')).not_to eq 0 
+          dev.env.output=''
 
-        # MAKE
-        expect(dev.execute('make HelloRake')).not_to eq 0 
+          # MAKE
+          expect(dev.execute('make HelloRake')).not_to eq 0 
+        end
+
         Dir.remove dir
     end
 end

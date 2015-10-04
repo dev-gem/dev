@@ -30,6 +30,16 @@ class Git
         email
     end
 
+    def self.user_name
+        name=''
+        begin
+            name=`git config --list`.scan(/user.name=([\d\w.@\-\+]+)/)[0][0]
+        rescue
+            name=''
+        end
+        name
+    end
+
     def self.remote_origin directory=''
     	url=''
     	directory=Dir.pwd if directory.length == 0

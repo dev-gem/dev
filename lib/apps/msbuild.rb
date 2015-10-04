@@ -10,8 +10,10 @@ class MSBuild < Hash
     if(File.exists?("C:\\Program Files (x86)\\MSBuild\\14.0\\bin\\msbuild.exe"))
       self[:vs14]="C:\\Program Files (x86)\\MSBuild\\14.0\\bin\\msbuild.exe" 
     else
-      puts "C:\\Program Files (x86)\\MSBuild\\14.0\\bin\\msbuild.exe was not found." 
-      puts "MSBUILD[:vs14]='PATH_TO_MSBUILD' may be used to specify msbuild path."
+      if(Environment.windows?)
+        puts "C:\\Program Files (x86)\\MSBuild\\14.0\\bin\\msbuild.exe was not found." 
+        puts "MSBUILD[:vs14]='PATH_TO_MSBUILD' may be used to specify msbuild path."
+      end
     end
     self[:vs9]="C:\\Windows\\Microsoft.NET\\Framework\\v3.5\\msbuild.exe"  if(File.exists?("C:\\Windows\\Microsoft.NET\\Framework\\v3.5\\msbuild.exe"))
     self[:vs10]="C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319\\msbuild.exe" if(File.exists?("C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319\\msbuild.exe"))
