@@ -136,6 +136,18 @@ class Environment < Hash
     Gem.win_platform?
   end
 
+  def mac?
+   (/darwin/ =~ RUBY_PLATFORM) != nil
+  end
+
+  def unix?
+    !windows?
+  end
+
+  def linux?
+    unix? and not mac?
+  end
+
   #def self.configuration
   #  config="#{Environment.home}/dev.config.rb"
   #  if(!File.exists?(config))
