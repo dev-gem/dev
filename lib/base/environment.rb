@@ -104,7 +104,7 @@ class Environment < Hash
 
   def colorize?
     colorize=true
-    if windows?
+    if Environment.windows?
       if(`gem list win32console`.include?('win32console'))
         require 'ansi/code'
       else
@@ -132,19 +132,35 @@ class Environment < Hash
     true
   end
 
-  def windows?
+  def self.OS
+    if windows?
+      return "windows"
+    else
+      if mac?
+        return "mac"
+      else
+        if linux?
+          return "linux"
+        else
+          return "unix"
+        end
+      end
+    end
+  end
+
+  def self.windows?
     Gem.win_platform?
   end
 
-  def mac?
+  def self.mac?
    (/darwin/ =~ RUBY_PLATFORM) != nil
   end
 
-  def unix?
+  def self.unix?
     !windows?
   end
 
-  def linux?
+  def self.linux?
     unix? and not mac?
   end
 
