@@ -75,7 +75,7 @@ class Build < Array
 	        	puts "Build scanning for xcodeproj folders" if Environment.default.debug?
 	        	Dir.glob('**/*.xcodeproj').each{|dir|
 	        		build_commands = XCodeBuild.get_build_commands dir
-	        		if(!build_commands.nil)
+	        		if(!build_commands.nil?)
 	        		  build_commands.each{|c|
 	    				add_quiet(c)
 	    			  }
