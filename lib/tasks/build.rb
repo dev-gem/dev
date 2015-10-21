@@ -78,7 +78,7 @@ class Build < Array
 	        		build_commands = XCodeBuild.get_build_commands dir
 	        		if(!build_commands.nil?)
 	        		  build_commands.each{|c|
-	    				add_quiet(c)
+	    				build_commands << c
 	    			  }
 	    		    end
 	        	}
