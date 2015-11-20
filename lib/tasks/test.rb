@@ -50,6 +50,7 @@ class Test < Array
 			if(defined?(NUNIT_CONSOLE))
 				@@nunit_console = NUNIT_CONSOLE 
 			end
+			@@nunit_console = "C:\\Program Files (x86)\\NUnit.org\\nunit-console\\nunit3-console.exe" if(!File.exists?(@@nunit_console))
 			@@nunit_console = "C:\\Program Files (x86)\\NUnit 2.6.4\\bin\\nunit-console.exe" if(!File.exists?(@@nunit_console))
 			@@nunit_console = "C:\\Program Files (x86)\\NUnit 2.6.3\\bin\\nunit-console.exe" if(!File.exists?(@@nunit_console))
 		end
@@ -65,6 +66,7 @@ class Test < Array
 			if(defined?(NUNIT_CONSOLE_X86))
 				@@nunit_console_x86 = NUNIT_CONSOLE_X86 
 			end
+			@@nunit_console_x86 = "C:\\Program Files (x86)\\NUnit.org\\nunit-console\\nunit3-console.exe" if(!File.exists?(@@nunit_console_x86))
 			@@nunit_console_x86 = "C:\\Program Files (x86)\\NUnit 2.6.4\\bin\\nunit-console-x86.exe" if(!File.exists?(@@nunit_console_x86))
 			@@nunit_console_x86 = "C:\\Program Files (x86)\\NUnit 2.6.3\\bin\\nunit-console-x86.exe" if(!File.exists?(@@nunit_console_x86))
 		end
