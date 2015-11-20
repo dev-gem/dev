@@ -59,7 +59,7 @@ class Version
 		        return scan[0][0] if(scan.length > 0 && !scan[0].nil? && scan[0].length > 0)
 		   end
 	    end
-		'0.0.0'
+		'0.0'
 	end
 
 	def self.get_version
@@ -72,7 +72,7 @@ class Version
 		Dir.glob('**/*.wxs').each{|wxs|
 			return Version.read wxs
 		}
-		'0.0.0'
+		'0.0'
 	end
 end
 
