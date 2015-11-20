@@ -18,15 +18,24 @@ class Test < Array
 				nunit_arg="\"#{Test.nunit_console}\"" if Test.nunit_console.include?(' ')
 				dll_arg=nunit_dll
 				dll_arg="\"#{nunit_dll}\"" if(nunit_dll.include?(' '))
-				xml_arg="/xml:#{nunit_dll}.TestResults.xml"
-				xml_arg="/xml:\"#{nunit_dll}.TestResults.xml\"" if(nunit_dll.include?(' '))
+				if(Test.nunit_console.include?('nunit3'))
+				  xml_arg="--out=#{nunit_dll}.TestResults.xml --result=nunit3"
+				  xml_arg="--out=\"#{nunit_dll}.TestResults.xml\" --result=nunit3" if(nunit_dll.include?(' '))
+				else
+				  xml_arg="/xml:#{nunit_dll}.TestResults.xml"
+				  xml_arg="/xml:\"#{nunit_dll}.TestResults.xml\"" if(nunit_dll.include?(' '))
+			    end
 				add_quiet "#{nunit_arg} #{dll_arg} #{xml_arg}"
 			}
 		end
 
 		if(defined?(NUNIT_X86))
 			NUNIT_X86.each{|nunit_dll|
-				add_quiet "\"#{Test.nunit_console_x86}\" \"#{Rake.application.original_dir}\\#{nunit_dll}\" /xml:\"#{nunit_dll}.TestResults.xml\""
+				if(Test.nunit_console_x86.include?('nunit3'))
+				  add_quiet "\"#{Test.nunit_console_x86}\" \"#{Rake.application.original_dir}\\#{nunit_dll}\" --out=\"#{nunit_dll}.TestResults.xml\" --result=nunit3"
+				else
+				  add_quiet "\"#{Test.nunit_console_x86}\" \"#{Rake.application.original_dir}\\#{nunit_dll}\" /xml:\"#{nunit_dll}.TestResults.xml\""
+				end
 			}
 		end
 
