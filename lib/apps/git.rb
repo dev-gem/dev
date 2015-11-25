@@ -155,7 +155,12 @@ class Git
             puts "chdir #{src_directory}"
             Dir.chdir(src_directory) do
                 puts "git pull"
-                puts `git pull`
+                git_pull=Command.new('git pull')
+                git_pull[:directory]=src_directory
+                git_pull[:timeout] = 30
+                git_pull[:ignore_failure] =true
+                git_pull.execute
+                
             end
         end
 
