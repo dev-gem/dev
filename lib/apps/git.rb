@@ -152,6 +152,7 @@ class Git
             puts "git clone #{src_url} #{src_directory}"
             puts `git clone #{src_url} #{src_directory}`
         else
+            puts "chdir #{src_directory}"
             Dir.chdir(src_directory) do
                 puts "git pull"
                 puts `git pull`
