@@ -146,4 +146,24 @@ class Git
             result
         end
     end
+
+    def self.copy(src_url,src_directory,branch,target_directory,filelist)
+        if(!File.exists?(src_directory))
+            puts `git clone #{src_url} #{src_directory}`
+        else
+            Dir.chdir(src_directory) do
+                puts `git pull`
+            end
+        end
+
+        Dir.chdir(src_directory) do
+            puts `git branch #{branch}`
+            filelist.each{|f|
+                dest="#{target_directory}/#{f}"
+                FileUtils.mkdir_p File.dirname(dest) if !File.exists? File.dirname(dest)
+                puts "copying #{f} to #{dest}"
+                FileUtils.cp(f,dest)
+            }
+        end
+    end
 end
