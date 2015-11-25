@@ -158,6 +158,7 @@ class Git
             end
         end
 
+        puts "chdir #{src_directory}"
         Dir.chdir(src_directory) do
             puts "git checkout #{branch}"
             puts `git checkout #{branch}`
