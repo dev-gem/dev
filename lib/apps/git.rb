@@ -157,7 +157,7 @@ class Git
         end
 
         Dir.chdir(src_directory) do
-            puts `git branch #{branch}`
+            puts `git checkout #{branch}`
             filelist.each{|f|
                 dest="#{target_directory}/#{f}"
                 FileUtils.mkdir_p File.dirname(dest) if !File.exists? File.dirname(dest)
