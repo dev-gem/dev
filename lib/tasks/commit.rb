@@ -21,7 +21,7 @@ class Commit < Array
 					Commit.reset_commit_message
 					raise "commit.message required to perform commit"
 				else
-			  		add_quiet "git commit -m'all'"
+			  		add_passive "git commit -m'all'"
 			  	end
 			  else
 			    add_quiet "git commit -a -v --file commit.message"
