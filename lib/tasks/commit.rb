@@ -14,7 +14,8 @@ class Commit < Array
 
 		if(File.exists?('.git') && `git config --list`.include?('user.name=') && Git.user_email.length > 0)
 			if(!`git status`.include?('nothing to commit') &&
-			   !`git status`.include?('untracked files present'))
+			   !`git status`.include?('untracked files present') &&
+			   !`git status`.include?('no changes add to commit'))
 			  if(message.length==0)
 				if(defined?(REQUIRE_COMMIT_MESSAGE))
 					Commit.reset_commit_message
