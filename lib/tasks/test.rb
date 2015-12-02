@@ -44,6 +44,15 @@ class Test < Array
 		end
 	end
 
+    def self.nunit3_console_in_path?
+      command=Command.new('nunit3-console')
+      command[:quiet]=true
+      command[:ignore_failure]=true
+      command.execute
+      return true if(command[:exit_code] == 0) 
+      false
+    end
+
     def self.nunit_console_in_path?
       command=Command.new('nunit-console')
       command[:quiet]=true
@@ -54,6 +63,7 @@ class Test < Array
     end
     @@nunit_console=''
 	def self.nunit_console
+		return "nunit3-console" if Test.nunit3_console_in_path?
 		return "nunit-console" if Test.nunit_console_in_path?
 		if(!File.exists?(@@nunit_console))
 			if(defined?(NUNIT_CONSOLE))
