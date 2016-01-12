@@ -3,7 +3,7 @@ puts __FILE__ if defined?(DEBUG)
 require_relative('string.rb')
 
 class Environment < Hash
-  attr_accessor :output
+  attr_accessor :output,:publish_dir
   @@default=nil
   def self.default
     @@default=Environment.new if @@default.nil?
@@ -12,6 +12,7 @@ class Environment < Hash
 
   def initialize env=nil
     @output=''
+
     @env=Hash.new
     @env_aliases={'HOME' => ['USERPROFILE'],
                   'DEV_ROOT' => ['DEV_HOME','HOME','USERPROFILE'],
@@ -19,6 +20,9 @@ class Environment < Hash
     }
     env.each{|k,v| @env[k.to_s]=v} if !env.nil?
     @@default=self if @@default.nil?
+
+    @publish_dir="#{root_dir}/publish"
+    FileUtils.mkdir_p @publish_dir if !File.exists? @publish_dir
   end
 
   #####Begin LEGACY support
@@ -53,11 +57,11 @@ class Environment < Hash
     dir
   end
 
-  def publish_dir
-    dir="#{root_dir}/publish"
-    FileUtils.mkdir_p dir if !File.exists? dir
-    dir
-  end
+  #def publish_dir
+  #  dir="#{root_dir}/publish"
+  #  FileUtils.mkdir_p dir if !File.exists? dir
+  #  dir
+  #end
 
   def wrk_dir
     dir="#{root_dir}/wrk"
