@@ -1,4 +1,4 @@
-# Copyright 2012-2015 Lou Parslow
+# Copyright 2012-2016 Lou Parslow
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 #
 Gem::Specification.new do |s|
 	s.name          = 'dev'
-	s.version		= '2.0.297'
+	s.version		= '2.0.298'
 	s.date			= '2016-03-03'
 	s.summary		= 'dev'
 	s.description	= 'development tasks'
