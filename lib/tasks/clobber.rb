@@ -12,6 +12,7 @@ CLOBBER.include('doc') if File.exists?('doc')
 CLOBBER.include('obj') if File.exists?('obj')
 CLOBBER.include('**/obj')
 CLOBBER.include('packages') if File.exists?('packages')
+CLOBBER.include('**/.vs')
 
 CLOBBER.include('*.gem')
 
