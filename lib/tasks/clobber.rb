@@ -7,8 +7,10 @@ CLOBBER.include('**/*.gem')
 
 # CLOBBER Folders
 CLOBBER.include('bin') if File.exists?('bin')
+CLOBBER.include('**/bin')
 CLOBBER.include('doc') if File.exists?('doc')
 CLOBBER.include('obj') if File.exists?('obj')
+CLOBBER.include('**/obj')
 CLOBBER.include('packages') if File.exists?('packages')
 
 CLOBBER.include('*.gem')
