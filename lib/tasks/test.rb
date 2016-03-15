@@ -96,4 +96,4 @@ class Test < Array
 	end
 end
 
-NUNIT=FileList.new('bin/**/*.Test.dll','bin/**/*.Tests.dll')
+NUNIT=FileList.new('**/*.Test.dll','**/*.Tests.dll')
