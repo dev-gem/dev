@@ -45,6 +45,19 @@ class Environment < Hash
     dir
   end
 
+  def dropbox_dir
+    dropbox_info = "#{ENV['LOCALAPPDATA']}/Dropbox/info.json"
+    if(File.exists?(dropbox_info))
+      info = JSON.parse(IO.read(dropbox_info))
+      if(info.has_key?('personal'))
+        if(info['personal'].has_key?('path'))
+          return info['personal']['path']
+        end
+      end
+    end
+    ""
+  end
+
   def tmp_dir
     dir="#{root_dir}/tmp"
     FileUtils.mkdir_p dir if !File.exists? dir
