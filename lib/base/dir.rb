@@ -37,14 +37,14 @@ class Dir
     mtime
   end
 
-  def self.zip(directory,glob_pattern,zipfilename)
+  def self.zip(directory,files,zipfilename)
     if Gem::Specification::find_all_by_name('rubyzip').any?
       require 'zip'
       File.delete(zipfilename) if(File.exists?(zipfilename))
       Zip::File.open(zipfilename,Zip::File::CREATE) do |zipfile|
         Dir.chdir(directory) do
           count = 0
-          Dir.glob(glob_pattern).each{|source_file|
+          files.each{|source_file|
             zipfile.add(source_file,"#{directory}/#{source_file}")
             count = count + 1
           }
