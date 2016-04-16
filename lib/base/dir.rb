@@ -55,12 +55,12 @@ class Dir
         end
       end
     else
-      puts 'zip gem is not installed'
+      puts "rubyzip gem is not installed 'gem install rubyzip'"
     end
 end
 
 def self.unzip(zipfilename,directory)
-  if Gem::Specification::find_all_by_name('zip').any?
+  if Gem::Specification::find_all_by_name('rubyzip').any?
     Zip::File.open(zipfilename) do |zip_file|
       zip_file.each do |entry|
         puts entry
@@ -71,7 +71,7 @@ def self.unzip(zipfilename,directory)
       end
     end
   else
-    puts 'zip gem is not installed'
+    puts "rubyzip gem is not installed 'gem install rubyzip'"
   end
 end
 end
