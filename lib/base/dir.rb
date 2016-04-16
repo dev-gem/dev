@@ -1,9 +1,5 @@
 require 'fileutils'
 
-if Gem::Specification::find_all_by_name('zip').any?
-  require 'zip'
-end
-
 class Dir
   def self.make directory
   	FileUtils.mkdir_p directory if !File.exists? directory
@@ -41,8 +37,9 @@ class Dir
     mtime
   end
 
-  def self.zip_source(directory,glob_pattern,zipfilename)
-    if Gem::Specification::find_all_by_name('zip').any?
+  def self.zip(directory,glob_pattern,zipfilename)
+    if Gem::Specification::find_all_by_name('rubyzip').any?
+      require 'zip'
       File.delete(zipfilename) if(File.exists?(zipfilename))
       Zip::File.open(zipfilename,Zip::File::CREATE) do |zipfile|
         Dir.chdir(directory) do
@@ -61,15 +58,19 @@ end
 
 def self.unzip(zipfilename,directory)
   if Gem::Specification::find_all_by_name('rubyzip').any?
+    require 'zip'
     Zip::File.open(zipfilename) do |zip_file|
+      count = 0
       zip_file.each do |entry|
         puts entry
         dest = "#{directory}/#{entry.to_s}"
         parent_dir=File.dirname(dest)
         FileUtils.mkdir_p parent_dir if(!Dir.exists?(parent_dir))
         entry.extract("#{directory}/#{entry.to_s}")
+        count = count + 1
       end
     end
+    puts "extracted #{count} files to #{directory}"
   else
     puts "rubyzip gem is not installed 'gem install rubyzip'"
   end
