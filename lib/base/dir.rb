@@ -45,7 +45,7 @@ class Dir
         Dir.chdir(directory) do
           count = 0
           Dir.glob(glob_pattern).each{|source_file|
-            zipfile.add(source_file,"#{File.dirname(__FILE__)}/#{directory}/#{source_file}")
+            zipfile.add(source_file,"#{directory}/#{source_file}")
             count = count + 1
           }
           puts "added #{count} files to #{zipfilename}"
