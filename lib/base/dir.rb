@@ -59,10 +59,9 @@ end
 def self.unzip(zipfilename,directory)
   if Gem::Specification::find_all_by_name('rubyzip').any?
     require 'zip'
+    count = 0
     Zip::File.open(zipfilename) do |zip_file|
-      count = 0
       zip_file.each do |entry|
-        puts entry
         dest = "#{directory}/#{entry.to_s}"
         parent_dir=File.dirname(dest)
         FileUtils.mkdir_p parent_dir if(!Dir.exists?(parent_dir))
