@@ -16,7 +16,7 @@ CLOBBER.include('**/.vs')
 
 CLOBBER.include('*.gem')
 CLOBBER.include('DTAR_*')
-CLOOBER.include('.vs') if File.exists?('.vs')
+CLOBBER.include('.vs') if File.exists?('.vs')
 
 desc 'performs clobber commands'
 task :clobber => [:clean] do Tasks.execute_task :clobber;end
