@@ -6,6 +6,7 @@ CLOBBER.include('**/*.nupkg')
 CLOBBER.include('**/*.gem')
 
 # CLOBBER Folders
+CLOBBER.include('bin/**/*')
 CLOBBER.include('bin') if File.exists?('bin')
 CLOBBER.include('**/bin')
 CLOBBER.include('doc') if File.exists?('doc')
