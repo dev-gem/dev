@@ -11,51 +11,19 @@ WXS_FILES=FileList.new('**/*.wxs')
 
 class Build < Array
 	def update
-
-		#changed = true
-        #if(changed)
-        	puts "Build scanning for gemspec files" if Environment.default.debug?
-			Dir.glob('*.gemspec'){|gemspec|
-	    		add_quiet("gem build #{gemspec}") if !File.exist?(Gemspec.gemfile gemspec)
-	    	}
-	    	
-	    	# Windows
-	    	if(Environment.windows?)
-	    		update_sln
-	    		update_nuget
-
-
-              puts "Build scanning for wxs <Product> files" if Environment.default.debug?
-	    	  WXS_FILES.each{|wxs_file|
-	    		if(IO.read(wxs_file).include?('<Product'))
-	    		  build_commands = Wix.get_build_commands wxs_file
-	    		  if(!build_commands.nil?)
-	    			build_commands.each{|c|
-	    				add_quiet(c)
-	    			}
-	    		  end
-	    	    end
-	    	  }
-
-	    	  puts "Build scanning for wxs <Bundle> files" if Environment.default.debug?
-	    	  WXS_FILES.each{|wxs_file|
-	    		if(IO.read(wxs_file).include?('<Bundle'))
-	    		  build_commands = Wix.get_build_commands wxs_file
-	    		  if(!build_commands.nil?)
-	    			build_commands.each{|c|
-	    				add_quiet(c)
-	    			}
-	    		  end
-	    	    end
-	    	  }
-	        end
-
-	        # Mac
-	        if(Environment.mac?)
-	        	update_xcode
-	        end
-	    #end
+    	update_gemspec
+		update_sln if Environment.windows?
+    	update_nuget if Environment.windows?
+    	update_wix if Environment.windows?
+        update_xcode if Environment.mac?
 	end
+
+    def update_gemspec
+    	puts "Build scanning for gemspec files" if Environment.default.debug?
+		Dir.glob('*.gemspec'){|gemspec|
+	    	add_quiet("gem build #{gemspec}") if !File.exist?(Gemspec.gemfile gemspec)
+	    }
+    end
 
 	def update_sln
 		puts "Build scanning for sln files" if Environment.default.debug?
@@ -85,6 +53,31 @@ class Build < Array
 	    }
 	end
 
+	def update_wix
+		puts "Build scanning for wxs <Product> files" if Environment.default.debug?
+		WXS_FILES.each{|wxs_file|
+			if(IO.read(wxs_file).include?('<Product'))
+			  build_commands = Wix.get_build_commands wxs_file
+			  if(!build_commands.nil?)
+				build_commands.each{|c|
+					add_quiet(c)
+				}
+			  end
+			end
+		}
+
+		puts "Build scanning for wxs <Bundle> files" if Environment.default.debug?
+		WXS_FILES.each{|wxs_file|
+			if(IO.read(wxs_file).include?('<Bundle'))
+			  build_commands = Wix.get_build_commands wxs_file
+			  if(!build_commands.nil?)
+				build_commands.each{|c|
+					add_quiet(c)
+				}
+			  end
+			end
+		}
+	end
 	def update_xcode
 		puts "Build scanning for xcodeproj folders" if Environment.default.debug?
 	    Dir.glob('**/*.xcodeproj').each{|dir|
