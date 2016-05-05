@@ -99,7 +99,7 @@ class Setup < Array
 				  end
 			    end
 			}
-			Dir.glob('**/*.wxs').each{|wxs|
+			Dir.glob('**/*.{wxs,_wxs}').each{|wxs|
 				begin
 					current_version=IO.read(wxs).scan(/\sVersion=[\"']([\d.]+)[\"']/)[0][0]
 					puts "#{wxs} current version=#{current_version}" if env.debug?
