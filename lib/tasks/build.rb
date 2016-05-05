@@ -8,11 +8,13 @@ task :build do Tasks.execute_task :build;end
 SLN_FILES=FileList.new('*.sln','*/*.sln','*/*/*.sln')
 NUGET_FILES=FileList.new('**/*.nuspec')
 WXS_FILES=FileList.new('**/*.wxs')
+SMARTASSEMBLY_FILES=FileList.new('**/*.saproj')
 
 class Build < Array
 	def update
     	update_gemspec
 		update_sln if Environment.windows?
+		update_smartassembly if Environment.windows?
     	update_nuget if Environment.windows?
     	update_wix if Environment.windows?
         update_xcode if Environment.mac?
@@ -38,6 +40,15 @@ class Build < Array
 			else
 				puts "  no build command discovered." if Environment.default.debug?
 			end
+		}
+	end
+
+	def update_smartassembly
+		puts "Build scanning for sa (smart assembly) files" if Environment.default.debug?
+		sa = 'C:/Program Files/Red Gate/SmartAssembly 6/SmartAssembly.com'
+		SMARTASSEMBLY_FILES.each{|saproj_file|
+			puts "  #{saproj_file}" if Environment.default.debug?
+			add_quiet("#{sa} /build #{saproj_file}")
 		}
 	end
 
