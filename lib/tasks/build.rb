@@ -48,7 +48,11 @@ class Build < Array
 		sa = 'C:/Program Files/Red Gate/SmartAssembly 6/SmartAssembly.com'
 		SMARTASSEMBLY_FILES.each{|saproj_file|
 			puts "  #{saproj_file}" if Environment.default.debug?
-			add_quiet("#{sa} /build #{saproj_file}")
+			if(!File.exists?(sa))
+				puts "warning: #{sa} does not exist, skipping build command for #{saproj_file}"
+			else
+				add_quiet("#{sa} /build #{saproj_file}")
+			end
 		}
 	end
 
