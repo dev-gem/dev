@@ -51,7 +51,7 @@ class Build < Array
 			if(!File.exists?(sa))
 				puts "warning: #{sa} does not exist, skipping build command for #{saproj_file}"
 			else
-				add_quiet("#{sa} /build #{saproj_file}")
+				add_quiet("\"#{sa}\" /build #{saproj_file}")
 			end
 		}
 	end
