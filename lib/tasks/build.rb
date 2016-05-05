@@ -22,29 +22,8 @@ class Build < Array
 	    	# Windows
 	    	if(Environment.windows?)
 	    		update_sln
-	    	#  puts "Build scanning for sln files" if Environment.default.debug?
-	    	#  SLN_FILES.each{|sln_file|
-	    	#	puts "  #{sln_file}" if Environment.default.debug?
-	    	#	build_commands = MSBuild.get_build_commands sln_file
-	    	#	if(!build_commands.nil?)
-	    	#		build_commands.each{|c|
-	    	#			puts "  build command #{c} discovered." if Environment.default.debug?
-	    	#			add_quiet(c)
-	    	#		}
-	    	#	else
-	    	#		puts "  no build command discovered." if Environment.default.debug?
-	    	#	end
-	    	#  }
+	    		update_nuget
 
-              puts "Build scanning for nuget files" if Environment.default.debug?
-	    	  NUGET_FILES.each{|nuget_file|
-	    		build_commands = Nuget.get_build_commands nuget_file
-	    		if(!build_commands.nil?)
-	    			build_commands.each{|c|
-	    				add_quiet(c)
-	    			}
-	    		end
-	    	  }
 
               puts "Build scanning for wxs <Product> files" if Environment.default.debug?
 	    	  WXS_FILES.each{|wxs_file|
@@ -73,16 +52,7 @@ class Build < Array
 
 	        # Mac
 	        if(Environment.mac?)
-	        	puts "Build scanning for xcodeproj folders" if Environment.default.debug?
-	        	Dir.glob('**/*.xcodeproj').each{|dir|
-	        		puts dir if Environment.default.debug?
-	        		build_commands = XCodeBuild.get_build_commands dir
-	        		if(!build_commands.nil?)
-	        		  build_commands.each{|c|
-	    				build_commands << c
-	    			  }
-	    		    end
-	        	}
+	        	update_xcode
 	        end
 	    #end
 	end
@@ -101,5 +71,30 @@ class Build < Array
 				puts "  no build command discovered." if Environment.default.debug?
 			end
 		}
+	end
+
+	def update_nuget
+		puts "Build scanning for nuget files" if Environment.default.debug?
+	   	NUGET_FILES.each{|nuget_file|
+	    	build_commands = Nuget.get_build_commands nuget_file
+	    	if(!build_commands.nil?)
+	    		build_commands.each{|c|
+	    			add_quiet(c)
+	    		}
+	    	end
+	    }
+	end
+
+	def update_xcode
+		puts "Build scanning for xcodeproj folders" if Environment.default.debug?
+	    Dir.glob('**/*.xcodeproj').each{|dir|
+	        puts dir if Environment.default.debug?
+	        build_commands = XCodeBuild.get_build_commands dir
+	        if(!build_commands.nil?)
+	        	build_commands.each{|c|
+	    			build_commands << c
+	    		}
+	    	end
+	     }
 	end
 end
