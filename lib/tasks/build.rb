@@ -21,19 +21,20 @@ class Build < Array
 	    	
 	    	# Windows
 	    	if(Environment.windows?)
-	    	  puts "Build scanning for sln files" if Environment.default.debug?
-	    	  SLN_FILES.each{|sln_file|
-	    		puts "  #{sln_file}" if Environment.default.debug?
-	    		build_commands = MSBuild.get_build_commands sln_file
-	    		if(!build_commands.nil?)
-	    			build_commands.each{|c|
-	    				puts "  build command #{c} discovered." if Environment.default.debug?
-	    				add_quiet(c)
-	    			}
-	    		else
-	    			puts "  no build command discovered." if Environment.default.debug?
-	    		end
-	    	  }
+	    		update_sln
+	    	#  puts "Build scanning for sln files" if Environment.default.debug?
+	    	#  SLN_FILES.each{|sln_file|
+	    	#	puts "  #{sln_file}" if Environment.default.debug?
+	    	#	build_commands = MSBuild.get_build_commands sln_file
+	    	#	if(!build_commands.nil?)
+	    	#		build_commands.each{|c|
+	    	#			puts "  build command #{c} discovered." if Environment.default.debug?
+	    	#			add_quiet(c)
+	    	#		}
+	    	#	else
+	    	#		puts "  no build command discovered." if Environment.default.debug?
+	    	#	end
+	    	#  }
 
               puts "Build scanning for nuget files" if Environment.default.debug?
 	    	  NUGET_FILES.each{|nuget_file|
@@ -84,5 +85,21 @@ class Build < Array
 	        	}
 	        end
 	    #end
+	end
+
+	def update_sln
+		puts "Build scanning for sln files" if Environment.default.debug?
+		SLN_FILES.each{|sln_file|
+			puts "  #{sln_file}" if Environment.default.debug?
+			build_commands = MSBuild.get_build_commands sln_file
+			if(!build_commands.nil?)
+				build_commands.each{|c|
+					puts "  build command #{c} discovered." if Environment.default.debug?
+					add_quiet(c)
+				}
+			else
+				puts "  no build command discovered." if Environment.default.debug?
+			end
+		}
 	end
 end
