@@ -13,6 +13,7 @@ SMARTASSEMBLY_FILES=FileList.new('**/*.saproj')
 class Build < Array
 	def update
     	update_gemspec
+    	update_dotnet
 		update_sln if Environment.windows?
 		update_smartassembly if Environment.windows?
     	update_nuget if Environment.windows?
@@ -25,6 +26,13 @@ class Build < Array
 		Dir.glob('*.gemspec'){|gemspec|
 	    	add_quiet("gem build #{gemspec}") if !File.exist?(Gemspec.gemfile gemspec)
 	    }
+    end
+
+    def update_dotnet
+    	puts "Build scanning for project.json" if Environment.default.debug?
+    	if(File.exists?('project.json'))
+			add_quiet "dotnet build"
+		end
     end
 
 	def update_sln

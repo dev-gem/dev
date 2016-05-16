@@ -34,6 +34,10 @@ class Setup < Array
 			}
 		end
 
+		if(File.exists?('project.json'))
+			add_quiet "dotnet restore"
+		end
+
 		puts 'Setup checking SVN_EXPORTS...' if env.debug?
 		if(defined?(SVN_EXPORTS))
 			SVN_EXPORTS.each{|k,v|
