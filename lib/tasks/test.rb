@@ -32,7 +32,7 @@ class Test < Array
 		if(defined?(NUNIT_X86))
 			NUNIT_X86.each{|nunit_dll|
 				if(Test.nunit_console_x86.include?('nunit3'))
-				  add_quiet "\"#{Test.nunit_console_x86}\" \"#{Rake.application.original_dir}\\#{nunit_dll}\" --result=\"#{nunit_dll}.TestResults.xml\""
+				  add_quiet "\"#{Test.nunit_console_x86}\" \"#{Rake.application.original_dir}\\#{nunit_dll}\" --result=\"#{nunit_dll}.TestResults.xml\" --labels=All"
 				else
 				  add_quiet "\"#{Test.nunit_console_x86}\" \"#{Rake.application.original_dir}\\#{nunit_dll}\" /xml:\"#{nunit_dll}.TestResults.xml\""
 				end
