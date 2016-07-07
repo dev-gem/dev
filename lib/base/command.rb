@@ -82,8 +82,8 @@ class Command < Hash
 
 	def execute value=nil
 
-    puts "#{self[:input]}" if Environment.default.debug?
-    
+    puts "#{self[:input]}" if ENV.has_key?('DEBUG')
+
     if(!value.nil? && value.is_a?(Hash))
       value.each{|k,v|self[k]=v}
     end
