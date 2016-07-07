@@ -1,4 +1,3 @@
-DEBUG=true
 require_relative('./lib/dev.rb')
 
 puts RUBY_PLATFORM
