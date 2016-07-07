@@ -128,6 +128,9 @@ class Environment < Hash
         colorize=false
       end
     end
+    if Environment.mac?
+      colorize=false
+    end
     colorize
   end
 

@@ -1,7 +1,7 @@
 require_relative('environment.rb')
 class Array
     attr_accessor :env
-    def intialize env=nil
+    def initialize env=nil
       @env=env
       @env=Environment.new() if @env.nil? 
       @env=Environmnet.new() if !@env.kind_of?(Environment)

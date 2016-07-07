@@ -4,6 +4,6 @@ task :info do
 	puts ' '
 	#PROJECT.info
 	puts ' '
-	#COMMANDS.info
+	COMMANDS.info
 end
 
