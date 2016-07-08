@@ -54,7 +54,7 @@ class Version
 				return scan[0][0] if(scan.length > 0 && !scan[0].nil? && scan[0].length > 0)
 			end
 		   #return IO.read(filename).scan(/Version\(\"([\d.]+)\"\)/)[0][0] 
-		   scan=IO.read(wxs).scan(/Version=\"([\d.]+)\"/)
+		   scan=IO.read(filename).scan(/Version=\"([\d.]+)\"/)
 		   if(!scan.nil?)
 		        return scan[0][0] if(scan.length > 0 && !scan[0].nil? && scan[0].length > 0)
 		   end
