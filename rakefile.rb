@@ -10,6 +10,14 @@ CLOBBER.include('*.gem','lib/dev_*.rb')
 CLOBBER.exclude('bin')
 build_product= "dev-#{Gem::Specification.load('dev.gemspec').version}.gem"
 
+task :setup do
+	File.open('bin/dev','w'){|f| 
+		f.write("#!/usr/bin/env ruby\n") 
+		f.write("require 'dev'\n")
+		f.write("DEV.execute ARGV\n")
+	}
+end
+
 task :build do
 	Dir.glob('*.gem'){|f|File.delete f}
 	puts Command.execute('gem build dev.gemspec').summary
