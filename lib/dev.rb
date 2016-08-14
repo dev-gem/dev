@@ -4,7 +4,6 @@ require_relative('base/environment.rb')
 require_relative('base/projects.rb')
 require_relative('commands.rb')
 
-
 class Dev
 	attr_accessor :env,:projects,:commands
 
