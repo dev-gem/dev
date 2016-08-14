@@ -71,7 +71,7 @@ class Environment < Hash
   end
 
   def wrk_dir
-    dir="#{root_dir}/wrk"
+    dir="#{root_dir}/work"
     FileUtils.mkdir_p dir if !File.exists? dir
     dir
   end
