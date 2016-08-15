@@ -25,6 +25,7 @@ class Version
 
     def self.update_text text, version
     	text=text.gsub(/version\s*=\s*'[\d.]+'/,"version='#{version}'")
+		text=text.gsub(/VERSION\s*=\s*'[\d.]+'/,"VERSION='#{version}'")
     	text=text.gsub(/version\s*=\s*"[\d.]+"/,"version=\"#{version}\"")
     	text=text.gsub(/Version\s*=\s*'[\d.]+'/,"Version='#{version}'")
     	text=text.gsub(/Version\s*=\s*"[\d.]+"/,"Version=\"#{version}\"")
