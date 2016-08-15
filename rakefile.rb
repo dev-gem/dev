@@ -8,6 +8,7 @@ puts "os: #{Environment.OS}"
 CLEAN.include('*.gem','*.html')
 CLEAN.include('.yardopts') if File.exists?('.yardopts')
 CLEAN.exclude('bin')
+CLOBBER.exclude('lib')
 CLOBBER.include('*.gem','lib/dev_*.rb')
 CLOBBER.exclude('bin')
 build_product= "dev-#{Gem::Specification.load('dev.gemspec').version}.gem"
