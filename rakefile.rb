@@ -1,4 +1,6 @@
+ENV["DEBUG"] = 'true'
 require_relative('./lib/dev.rb')
+
 
 puts RUBY_PLATFORM
 puts "DEBUG=#{ENV['DEBUG']}" if ENV.has_key?('DEBUG')

@@ -70,14 +70,8 @@ class Environment < Hash
     dir
   end
 
-  #def publish_dir
-  #  dir="#{root_dir}/publish"
-  #  FileUtils.mkdir_p dir if !File.exists? dir
-  #  dir
-  #end
-
   def wrk_dir
-    dir="#{root_dir}/wrk"
+    dir="#{root_dir}/work"
     FileUtils.mkdir_p dir if !File.exists? dir
     dir
   end
@@ -91,8 +85,6 @@ class Environment < Hash
 
   def user
     get_env('USERNAME')
-    #return ENV['USER'] if !ENV['USER'].nil?  #on Unix
-    #ENV['USERNAME']
   end
 
   def get_env key
@@ -184,25 +176,6 @@ class Environment < Hash
     unix? and not mac?
   end
 
-  #def self.configuration
-  #  config="#{Environment.home}/dev.config.rb"
-  #  if(!File.exists?(config))
-  #    text=IO.read("#{File.dirname(__FILE__)}/../dev.config.rb")
-  #    File.open(config,'w'){|f|f.write(text)}
-  #  end
-  #  config
-  #end
-
-  #def self.remove directory
-  #  if(File.exists?(directory))
-  #    begin
-  #      FileUtils.rm_rf directory
-  #      FileUtils.rm_r directory
-  #    rescue
-  #    end
-  #  end
-  #end
-
   def self.check
     puts 'checking commands...'
     missing_command=false
@@ -251,14 +224,4 @@ class Environment < Hash
       end
     }
   end
-
-  #def self.get_latest_mtime directory
-  #  mtime=Time.new(1980)
-  #  Dir.chdir(directory)  do
-  #    Dir.glob('**/*.*').each{|f|
-  #      mtime=File.mtime(f) if mtime.nil? || File.mtime(f) > mtime
-  #    }
-  #  end
-  #  mtime
-  #end
 end
