@@ -5,7 +5,7 @@
 class XCodeBuild < Hash
 	def self.get_build_commands xcodeproj_filename
         build_commands=Array.new 
-        build_command=Command.new('xcodebuild')
+        build_command=Command.new('xcodebuild build')
         build_command[:directory] = File.dirname(xcodeproj_filename)
 
         #name=xcodeproj_filename.gsub('.xcodeproj','')
