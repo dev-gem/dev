@@ -17,21 +17,27 @@ class Add < Array
 					#---
 					SOURCE.each{|f|
 						if(File.exists?(f) && File.file?(f) && !list_output.include?(f))
-							if(f.include?(' '))
-	              status=Command.output("svn status \"#{f}\"") 
-	              error=Command.error("svn status \"#{f}\"")
-	            else
-	              status=Command.output("svn status #{f}") 
-	              error=Command.error("svn status #{f}")
-	            end
-	            if(status.include?('?') || status.include?('was not found') || error.include?('was not found'))
-	              if(f.include?(' '))
-								  add_quiet "svn add \"#{f}\" --parents"
-							  else
-								  add_quiet "svn add #{f} --parents"
-							  end
-							end
-						end
+							if(m = status_output.match(/^(?<action>.)\s+(?<file>#{f})$/i))
+			          if(m[:file] == f && m[:action] == '?')
+									add_quiet "svn add \"#{f}\" --parents"
+			          end
+		          end
+            end
+						#	if(f.include?(' '))
+	          #    status=Command.output("svn status \"#{f}\"") 
+	          #    error=Command.error("svn status \"#{f}\"")
+	          #  else
+	          #    status=Command.output("svn status #{f}") 
+	          #    error=Command.error("svn status #{f}")
+	          #  end
+	          #  if(status.include?('?') || status.include?('was not found') || error.include?('was not found'))
+	          #    if(f.include?(' '))
+						#		  add_quiet "svn add \"#{f}\" --parents"
+						#	  else
+						#		  add_quiet "svn add #{f} --parents"
+						#	  end
+						#	end
+						#end
 					}
 				end
 				if(File.exists?('.git'))
