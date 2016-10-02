@@ -84,9 +84,9 @@ class Git
                 puts `git tag #{version} -m'#{version}'`
                 puts 'committing'
                 puts `git commit -m'#{version}'`
-                puts 'pushing'
-                puts `git push --tags`
-                puts `git push`
+                #puts 'pushing'
+                #puts `git push --tags`
+                #puts `git push`
             end
         end
     end
