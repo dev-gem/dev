@@ -77,7 +77,7 @@ class Git
     def self.tag directory,version
         directory=Dir.pwd if directory.length == 0
         Dir.chdir(directory) do
-            `git pull`
+            #`git pull`
             tags=`git tag`
             if(!tags.include?(version))
                 puts 'tagging branch'
