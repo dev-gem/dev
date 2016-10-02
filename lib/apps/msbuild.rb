@@ -6,6 +6,7 @@ puts __FILE__ if defined?(DEBUG)
 # Visual Studio 2015 version 14.0, solution format version 12.00
 class MSBuild < Hash
 
+  @@ignore_configurations=Array.new
   def initialize
     if(File.exists?("C:\\Program Files (x86)\\MSBuild\\14.0\\bin\\msbuild.exe"))
       self[:vs14]="C:\\Program Files (x86)\\MSBuild\\14.0\\bin\\msbuild.exe" 
@@ -15,11 +16,16 @@ class MSBuild < Hash
         puts "MSBUILD[:vs14]='PATH_TO_MSBUILD' may be used to specify msbuild path."
       end
     end
+
     self[:vs9]="C:\\Windows\\Microsoft.NET\\Framework\\v3.5\\msbuild.exe"  if(File.exists?("C:\\Windows\\Microsoft.NET\\Framework\\v3.5\\msbuild.exe"))
     self[:vs10]="C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319\\msbuild.exe" if(File.exists?("C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319\\msbuild.exe"))
     self[:vs12]="C:\\Program Files (x86)\\MSBuild\\12.0\\bin\\msbuild.exe" if(File.exists?("C:\\Program Files (x86)\\MSBuild\\12.0\\bin\\msbuild.exe"))
   end
-  
+
+  def self.ignore_configuration(configuration)
+    @@ignore_configurations.add(configuration) if(!@@ignore_configurations.include?(configuration))
+  end
+
   def self.has_version? version
     if(defined?(MSBUILD))
       MSBUILD.has_key?(version)
@@ -62,7 +68,9 @@ class MSBuild < Hash
 	  	sln_text=File.read(sln_filename,:encoding=>'UTF-8')
     	sln_text.scan( /= ([\w]+)\|/ ).each{|m|
 	  	c=m.first.to_s
-	  	configs << c if !configs.include?(c)
+      if(!@@ignore_configurations.include?(c))
+	  	  configs << c if !configs.include?(c)
+      end
 		}
 		return configs
   	end
