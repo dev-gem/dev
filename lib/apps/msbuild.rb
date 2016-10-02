@@ -6,7 +6,7 @@ puts __FILE__ if defined?(DEBUG)
 # Visual Studio 2015 version 14.0, solution format version 12.00
 class MSBuild < Hash
 
-  @@ignore_configurations=Array.new
+  #@@ignore_configurations=Array.new
   def initialize
     if(File.exists?("C:\\Program Files (x86)\\MSBuild\\14.0\\bin\\msbuild.exe"))
       self[:vs14]="C:\\Program Files (x86)\\MSBuild\\14.0\\bin\\msbuild.exe" 
@@ -22,9 +22,9 @@ class MSBuild < Hash
     self[:vs12]="C:\\Program Files (x86)\\MSBuild\\12.0\\bin\\msbuild.exe" if(File.exists?("C:\\Program Files (x86)\\MSBuild\\12.0\\bin\\msbuild.exe"))
   end
 
-  def self.ignore_configuration(configuration)
-    @@ignore_configurations.add(configuration) if(!@@ignore_configurations.include?(configuration))
-  end
+  #def self.ignore_configuration(configuration)
+  #  @@ignore_configurations.add(configuration) if(!@@ignore_configurations.include?(configuration))
+  #end
 
   def self.has_version? version
     if(defined?(MSBUILD))
@@ -55,25 +55,29 @@ class MSBuild < Hash
   end
 
 	def self.get_vs_version(sln_filename)
-   		sln_text=File.read(sln_filename,:encoding=>'UTF-8')
-    	return :vs9 if sln_text.include?('Format Version 10.00')
-    	return :vs12 if sln_text.include?('12.0.30723.0')
-      return :vs12 if sln_text.include?('Visual Studio 2013')
-      return :vs12 if sln_text.include?('12.0.31101.0')
-      return :vs14
-  	end
+   	sln_text=File.read(sln_filename,:encoding=>'UTF-8')
+    return :vs9 if sln_text.include?('Format Version 10.00')
+    return :vs12 if sln_text.include?('12.0.30723.0')
+    return :vs12 if sln_text.include?('Visual Studio 2013')
+    return :vs12 if sln_text.include?('12.0.31101.0')
+    return :vs14
+  end
 
-  	def self.get_configurations(sln_filename)
-    	configs=Array.new
-	  	sln_text=File.read(sln_filename,:encoding=>'UTF-8')
-    	sln_text.scan( /= ([\w]+)\|/ ).each{|m|
-	  	c=m.first.to_s
-      if(!@@ignore_configurations.include?(c))
+  def self.get_configurations(sln_filename)
+    configs=Array.new
+	  sln_text=File.read(sln_filename,:encoding=>'UTF-8')
+    sln_text.scan( /= ([\w]+)\|/ ).each{|m|
+	    c=m.first.to_s
+      ignore = false
+      if(defined?(IGNORE_CONFIGURATIONS))
+        ignore = true if IGNORE_CONFIGURATIONS.include?(c)
+      end
+      if(!ignore)
 	  	  configs << c if !configs.include?(c)
       end
 		}
 		return configs
-  	end
+  end
 
   	def self.get_platforms(sln_filename)
     	platforms=Array.new
