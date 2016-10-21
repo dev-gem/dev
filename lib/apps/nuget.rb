@@ -8,7 +8,7 @@ class Nuget
       	if(defined?(INCLUDE_REFERENCED_PROJECTS))
       		build_commands << "nuget pack #{nuspec_file} -IncludeReferencedProjects"
       	else
-      	    build_commands << "nuget pack #{nuspec_file}"
+      	    build_commands << "nuget pack #{nuspec_file} -Symbols"
         end
       end
       build_commands
