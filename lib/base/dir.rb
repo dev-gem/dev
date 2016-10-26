@@ -82,7 +82,7 @@ def self.copy_files(src_dir,glob_pattern,exclude_patterns,target_dir)
 			  exclude = false
 			  if(!exclude_patterns.nil?)
 			    exclude_patterns.each{|p|
-				   exclude = true if(f.include(p))
+				   exclude = true if(f.include?(p))
 				}
 			  end
 			  if(!exclude)
