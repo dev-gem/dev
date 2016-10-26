@@ -22,4 +22,8 @@ describe Environment do
     expect(env2.debug?).to eq(true)
     expect(env1.get_env('DEV_ROOT')).not_to eq(env2.get_env('DEV_ROOT'))
   end
+
+  it "should NOT be an admin" do
+    expect(Environment.default.admin?).to eq(false)
+  end
 end
