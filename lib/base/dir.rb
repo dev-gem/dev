@@ -74,4 +74,24 @@ def self.unzip(zipfilename,directory)
     puts "rubyzip gem is not installed 'gem install rubyzip'"
   end
 end
+
+def self.copy_files(src_dir,glob_pattern,exclude_patterns,target_dir)
+	if(Dir.exists?(src_dir))
+		Dir.chdir(src_dir) do
+			Dir.glob(glob_pattern).each{|f|
+			  exclude = false
+			  if(!exclude_patterns.nil?)
+			    exclude_patterns.each{|p|
+				   exclude = true if(f.include(p))
+				}
+			  end
+			  if(!exclude)
+			    dest = "#{target_dir}/#{f}"
+				FileUtils.mkdir_p(File.dirname(dest)) if(!Dir.exists?(File.dirname(dest)))
+				FileUtils.cp(f,dest)
+			  end
+			}
+		end
+	end
+end
 end
