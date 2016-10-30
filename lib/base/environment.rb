@@ -31,6 +31,10 @@ class Environment < Hash
   end
   #####End LEGACY support
 
+  def admin?
+    rights=%x[whoami /priv]
+    return rights.include?('SeCreateGlobalPrivilege')
+  end
   def root_dir
     get_env('DEV_ROOT').gsub('\\','/')
   end

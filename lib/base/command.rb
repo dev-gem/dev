@@ -124,15 +124,10 @@ class Command < Hash
     			  self[:elapsed] = timer.elapsed_str
     			  self[:end_time] = Time.now
           else
-            #puts "command execute with timeout #{self[:timeout]}"
             require_relative 'timeout.rb'
             result=run_with_timeout(self[:directory],self[:input], self[:timeout],2)
-            #puts "result #{result}"
             self[:output]=result[0]
             self[:exit_code]=result[1]
-            #self[:error]=result[1]
-            #self[:exit_code]=result[2]
-
             self[:elapsed] = timer.elapsed_str
             self[:end_time] = Time.now
             
@@ -161,7 +156,7 @@ class Command < Hash
     		raise "#{self[:input]} failed\n#{self[:output]}\n#{self[:error]}" 
     	end
     end
-      
+    self 
 	end
 
     def self.machine
