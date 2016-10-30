@@ -90,6 +90,9 @@ describe Command do
     cmd[:directory]=dir
     expect(File.exists?(cmd[:directory])).to eq(true)
     cmd.execute
+    #puts Command.execute('rake default', dir).summary
+    # one line execution
+    #puts Command.execute('rake default',dir).summary
     Dir.remove dir
   end
 
