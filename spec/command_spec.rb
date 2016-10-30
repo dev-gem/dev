@@ -92,7 +92,7 @@ describe Command do
     cmd.execute
     #puts Command.execute('rake default', dir).summary
     # one line execution
-    #puts Command.execute('rake default',dir).summary
+    puts Command.new({ :input => 'rake default', :directory => dir }).execute.summary
     Dir.remove dir
   end
 
