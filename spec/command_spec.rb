@@ -158,6 +158,6 @@ describe Command do
 
   it "should be able to execute with a specific working directory" do
     summary=Command.execute('dir',File.dirname(__FILE__)).summary
-    expect(summary.include?('rb'))
+    expect(summary.include?('dev.gemspec'))
   end
 end
