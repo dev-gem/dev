@@ -159,5 +159,7 @@ describe Command do
   it "should be able to execute with a specific working directory" do
     summary=Command.execute('dir',File.dirname(__FILE__)).summary
     expect(summary.include?('dev.gemspec'))
+    summary=Command.execute('dir',"#{File.dirname(__FILE__)}/lib").summary
+    expect(summary.include?('dev.config.rb'))
   end
 end
