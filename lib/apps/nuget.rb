@@ -51,14 +51,14 @@ class Nuget
     end
 
     def self.update_versions(source_filename,destination_filename)
-      old_versions=NuGet.get_versions(destination_filename)
-      source_versions=NuGet.get_versions(source_filename)
+      old_versions=Nuget.get_versions(destination_filename)
+      source_versions=Nuget.get_versions(source_filename)
       new_versions=Hash.new
       old_versions.each{|k,v|
         if(source_versions.has_key?(k))
           new_versions[k]=source_versions[k]
         end
       }
-      NuGet.set_versions(destination_filename,new_versions)
+      Nuget.set_versions(destination_filename,new_versions)
     end
 end
