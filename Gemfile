@@ -1,7 +1,7 @@
 source "http://rubygems.org"
 gem 'rspec'
 gem 'rake'
-gem 'bundle'
+gem 'bundler'
 gem 'yard'
 gem 'ansi'
 #gem 'rubyzip'

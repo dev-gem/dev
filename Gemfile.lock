@@ -2,8 +2,6 @@ GEM
   remote: http://rubygems.org/
   specs:
     ansi (1.5.0)
-    bundle (0.0.1)
-      bundler
     diff-lcs (1.2.5)
     github-markup (1.4.0)
     rake (10.4.2)
@@ -29,7 +27,7 @@ PLATFORMS
 
 DEPENDENCIES
   ansi
-  bundle
+  bundler
   github-markup
   rake
   redcarpet

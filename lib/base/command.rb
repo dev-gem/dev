@@ -191,8 +191,9 @@ class Command < Hash
      return dir
     end
 
-    def self.execute command
+    def self.execute command, working_directory=''
       cmd = Command.new({ :input => command, :quiet => true}) if command.kind_of?(String)
+      cmd[:directory] = working_directory if command.kind_of?(String)
       cmd = command if command.kind_of?(Command)
       cmd = Command.new(command) if command.kind_of?(Hash)
       cmd.execute

@@ -1,7 +1,7 @@
 class Version
 	def self.extract text
-		[/[Vv]ersion\s*=\s*['"]([\d.]+)['"]/,
-		 /VERSION\s*=\s*['"]([\d.]+)['"]/,
+		[/VERSION\s*=\s*['"]([\d.]+)['"]/,
+		 /[Vv]ersion\s*=\s*['"]([\d.]+)['"]/,
 		 /Version\(\s*"([\d.]+)"\s*\)/].each{|regex|
 			scan=text.scan(regex)
 			if(!scan.nil?)

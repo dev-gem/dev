@@ -114,8 +114,9 @@ then a call to TASKS.refresh can be made to redefine the default task
 
   TASKS.refresh    
 
+
 ##License
-Copyright 2012-2013 Lou Parslow
+Copyright 2012-2016 Lou Parslow
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

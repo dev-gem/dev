@@ -155,4 +155,9 @@ describe Command do
     expect(Command.exit_code('rake --version')).to eq(0)
     expect(Command.exit_code('bogus --version')).not_to eq(0)
   end
+
+  it "should be able to execute with a specific working directory" do
+    output=Command.execute('dir',File.dirname(__FILE__)).output
+    expect(output.include?('command_spec.rb')).to eq(true)
+  end
 end
