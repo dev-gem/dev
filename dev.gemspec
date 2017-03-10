@@ -15,8 +15,8 @@
 #
 Gem::Specification.new do |s|
 	s.name          = 'dev'
-	s.version		= '2.1.49'
-	s.date			= '2017-03-09'
+	s.version		= '2.1.50'
+	s.date			= '2017-03-10'
 	s.summary		= 'dev'
 	s.description	= 'development tasks'
 	s.authors		= ["Lou Parslow"]

@@ -62,7 +62,7 @@ class MSBuild < Hash
     return :vs12 if sln_text.include?('12.0.30723.0')
     return :vs12 if sln_text.include?('Visual Studio 2013')
     return :vs12 if sln_text.include?('12.0.31101.0')
-    return :vs15 if has_version :vs15
+    return :vs15 if has_version? :vs15
     return :vs14
   end
 
