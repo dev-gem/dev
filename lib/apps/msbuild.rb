@@ -22,6 +22,7 @@ class MSBuild < Hash
     self[:vs10]="C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319\\msbuild.exe" if(File.exists?("C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319\\msbuild.exe"))
     self[:vs12]="C:\\Program Files (x86)\\MSBuild\\12.0\\bin\\msbuild.exe" if(File.exists?("C:\\Program Files (x86)\\MSBuild\\12.0\\bin\\msbuild.exe"))
     self[:vs14]="C:\\Program Files (x86)\\MSBuild\\14.0\\bin\\msbuild.exe" if(File.exists?("C:\\Program Files (x86)\\MSBuild\\14.0\\bin\\msbuild.exe"))
+    self[:vs15]="C:\\Program Files (x86)\\MSBuild\\15.0\\bin\\msbuild.exe" if(File.exists?("C:\\Program Files (x86)\\MSBuild\\15.0\\bin\\msbuild.exe"))
   end
 
   #def self.ignore_configuration(configuration)
