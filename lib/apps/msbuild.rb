@@ -4,6 +4,7 @@ puts __FILE__ if defined?(DEBUG)
 # Visual Studio 2012 version 11.0, solution format version 12.00
 # Visual Studio 2013 version 12.0, solution format version 12.00
 # Visual Studio 2015 version 14.0, solution format version 12.00
+# Visual Studio 2017 version 15.0
 class MSBuild < Hash
 
   #@@ignore_configurations=Array.new
@@ -20,6 +21,7 @@ class MSBuild < Hash
     self[:vs9]="C:\\Windows\\Microsoft.NET\\Framework\\v3.5\\msbuild.exe"  if(File.exists?("C:\\Windows\\Microsoft.NET\\Framework\\v3.5\\msbuild.exe"))
     self[:vs10]="C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319\\msbuild.exe" if(File.exists?("C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319\\msbuild.exe"))
     self[:vs12]="C:\\Program Files (x86)\\MSBuild\\12.0\\bin\\msbuild.exe" if(File.exists?("C:\\Program Files (x86)\\MSBuild\\12.0\\bin\\msbuild.exe"))
+    self[:vs14]="C:\\Program Files (x86)\\MSBuild\\14.0\\bin\\msbuild.exe" if(File.exists?("C:\\Program Files (x86)\\MSBuild\\14.0\\bin\\msbuild.exe"))
   end
 
   #def self.ignore_configuration(configuration)
@@ -60,6 +62,7 @@ class MSBuild < Hash
     return :vs12 if sln_text.include?('12.0.30723.0')
     return :vs12 if sln_text.include?('Visual Studio 2013')
     return :vs12 if sln_text.include?('12.0.31101.0')
+    return :vs15 if has_version :vs15
     return :vs14
   end
 
