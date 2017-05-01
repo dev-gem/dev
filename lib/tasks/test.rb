@@ -19,8 +19,8 @@ class Test < Array
 				dll_arg=nunit_dll
 				dll_arg="\"#{nunit_dll}\"" if(nunit_dll.include?(' '))
 				if(Test.nunit_console.include?('nunit3'))
-				  xml_arg="--result=#{nunit_dll}.TestResults.xml"
-				  xml_arg="--result=\"#{nunit_dll}.TestResults.xml\"" if(nunit_dll.include?(' '))
+				  xml_arg="--result=#{nunit_dll}.TestResults.xml --labels=All"
+				  xml_arg="--result=\"#{nunit_dll}.TestResults.xml\" --labels=All" if(nunit_dll.include?(' '))
 				else
 				  xml_arg="/xml:#{nunit_dll}.TestResults.xml"
 				  xml_arg="/xml:\"#{nunit_dll}.TestResults.xml\"" if(nunit_dll.include?(' '))

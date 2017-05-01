@@ -58,6 +58,10 @@ class MSBuild < Hash
   end
 
 	def self.get_vs_version(sln_filename)
+    if(sln_filename.nil?)
+      return :vs15 if has_version? :vs15
+      return :vs14
+    end
    	sln_text=File.read(sln_filename,:encoding=>'UTF-8')
     return :vs9 if sln_text.include?('Format Version 10.00')
     return :vs12 if sln_text.include?('12.0.30723.0')
