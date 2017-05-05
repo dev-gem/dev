@@ -12,7 +12,7 @@ The dev gem provides task definitions to support the development of ruby,c#,c++ 
 The DEV variable may be manipulated to modify the behavior of defined tasks or to 
 cause additional task to be generated.
 
-##Installation and Setup
+## Installation and Setup
 dev can be installed by the single command
 
     gem install dev
@@ -21,29 +21,29 @@ dev can be installed by the single command
 (Optional) Add an environment variable DEV_ROOT assigned to the directory that will act as the root directory for the dev gem.
 The dev_root directory is root directory for the dev gem. On Windows this defaults to the USERPROFILE environment variable. On unix/OSX this defaults to the HOME environment variable. The dev_root directory may be changed by setting the DEV_ROOT environment variable on your system.
 
-##Usage
+## Usage
 
     require 'dev'
 
-##Recognized Applications
-###[git](https://git-scm.com)
-###[svn](https://subversion.apache.org)
-###[msbuild](https://msdn.microsoft.com/en-us/library/0k6kkbsd.aspx)
-###[nuget](https://www.nuget.org/packages/NuGet.CommandLine)
-###[candle (WiX Toolset)](http://wixtoolset.org)
-###[light](http://wixtoolset.org)
+## Recognized Applications
+### [git](https://git-scm.com)
+### [svn](https://subversion.apache.org)
+### [msbuild](https://msdn.microsoft.com/en-us/library/0k6kkbsd.aspx)
+### [nuget](https://www.nuget.org/packages/NuGet.CommandLine)
+### [candle (WiX Toolset)](http://wixtoolset.org)
+### [light](http://wixtoolset.org)
 
-##Directory Structure
+## Directory Structure
 The directories uses by dev gem are located in DEV_ROOT.
 
-###dep
+### dep
 dependency directory, where files that are shared across multiple projects may be placed.
-###wrk
+### wrk
 The working directory, where source code resides.
 The example project located at http://github.com/dev-gem/hello.gem.git would be cloned into [DEV_ROOT]/wrk/github/dev-gem/hello.gem
-##Reference
-###Variables
-####DEV is a global instance of a Hash. The variable is define by require 'dev' statement
+## Reference
+### Variables
+#### DEV is a global instance of a Hash. The variable is define by require 'dev' statement
 DEV may define several keys automatically
   DEV[:scm_uri]   # the uri for the source code management system.
   DEV[:scm_type]  # the type of source code managment, (none,svn,git).
@@ -54,11 +54,11 @@ DEV may define several keys automatically
   DEV[:dev_root]  # the root working directory ENV['DEV_ROOT'] if defined, otherwise user home directory.
   DEV[:toolset]   # the boost build toolset, if available
   DEV[:paths]     # a hash containing various environment paths
-####CLEAN is a Rake::FileList that specifies file(s) to be removed during the clean task.
+#### CLEAN is a Rake::FileList that specifies file(s) to be removed during the clean task.
   CLEAN.include('doc')
-####CLOBBER is a Rake::FileList that specifies file(s) to be removed during the clobber task.
+#### CLOBBER is a Rake::FileList that specifies file(s) to be removed during the clobber task.
   CLOBBER.include('obj')
-###Tasks
+### Tasks
 dev will automatically generated the following tasks as applicable.
   rake add       # add files defined by src_glob to source code management, not generated if no scm can be detected.
   rake check     # checks if the project default task may be skipped
@@ -115,8 +115,8 @@ then a call to TASKS.refresh can be made to redefine the default task
   TASKS.refresh    
 
 
-##License
-Copyright 2012-2016 Lou Parslow
+## License
+Copyright 2012-2017 Lou Parslow
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
