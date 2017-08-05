@@ -3,3 +3,4 @@
 *.html
 **/dev_root/*
 **/svn_spec/*
+**.DS_Store
