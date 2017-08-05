@@ -14,7 +14,6 @@ class Git
     	    end
         end
     end
-
     def self.url
         url=''
         url=`git config --get remote.origin.url` if(File.exists?('.git'))

@@ -5,6 +5,7 @@ require_relative('./lib/dev.rb')
 puts RUBY_PLATFORM
 puts "DEBUG=#{ENV['DEBUG']}" if ENV.has_key?('DEBUG')
 puts "os: #{Environment.OS}"
+puts "msbuild: #{MSBuild.get_vs_version nil}"
 CLEAN.include('*.gem','*.html')
 CLEAN.include('.yardopts') if File.exists?('.yardopts')
 CLEAN.exclude('bin')
