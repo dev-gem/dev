@@ -18,7 +18,12 @@ class Build < Array
 		update_smartassembly if Environment.windows?
     	update_nuget if Environment.windows?
     	update_wix if Environment.windows?
-        update_xcode if Environment.mac?
+		update_xcode if Environment.mac?
+		
+		if(Environment.default.debug?)
+			puts "Build commands: #{self.to_s}"
+			
+		end
 	end
 
     def update_gemspec
