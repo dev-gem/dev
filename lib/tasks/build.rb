@@ -12,6 +12,9 @@ SMARTASSEMBLY_FILES=FileList.new('**/*.saproj')
 
 class Build < Array
 	def update
+
+		puts "SLN_FILES: #{SLN_FILES}" if(Environment.default.debug?)
+
     	update_gemspec
     	update_dotnet
 		update_sln if Environment.windows?

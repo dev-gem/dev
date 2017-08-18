@@ -68,4 +68,5 @@ class Array
       html << '</div>'
       html.join
     end
+
 end
