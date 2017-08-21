@@ -6,7 +6,7 @@ desc 'performs build commands'
 task :build do Tasks.execute_task :build;end
 
 SLN_FILES=FileList.new('*.sln','*/*.sln','*/*/*.sln')
-NUGET_FILES=FileList.new('**/*.nuspec')
+
 WXS_FILES=FileList.new('**/*.wxs')
 SMARTASSEMBLY_FILES=FileList.new('**/*.saproj')
 
@@ -19,7 +19,7 @@ class Build < Array
     	update_dotnet
 		update_sln if Environment.windows?
 		update_smartassembly if Environment.windows?
-    	update_nuget if Environment.windows?
+    	#update_nuget if Environment.windows?
     	update_wix if Environment.windows?
 		update_xcode if Environment.mac?
 		
@@ -72,17 +72,7 @@ class Build < Array
 		}
 	end
 
-	def update_nuget
-		puts "Build scanning for nuget files" if Environment.default.debug?
-	   	NUGET_FILES.each{|nuget_file|
-	    	build_commands = Nuget.get_build_commands nuget_file
-	    	if(!build_commands.nil?)
-	    		build_commands.each{|c|
-	    			add_quiet(c)
-	    		}
-	    	end
-	    }
-	end
+
 
 	def update_wix
 		puts "Build scanning for wxs <Product> files" if Environment.default.debug?

@@ -43,6 +43,6 @@ class Tasks
 end
 
 ['add','analyze','build','clobber','commit',
- 'doc','info','publish','pull','push','setup','test',
+ 'doc','info','package','publish','pull','push','setup','test',
  'update'].each{|name| require_relative("tasks/#{name}.rb")}
 
