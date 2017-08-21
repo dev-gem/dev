@@ -21,6 +21,7 @@ class Commands < Hash
 		  self[:test]=Test.new
 		  self[:analyze]=Analyze.new
 		  self[:doc]=Doc.new
+		  self[:package]=Package.new
 		  self[:publish]=Publish.new
 		  self[:add]=Add.new
 		  self[:commit]=Commit.new
