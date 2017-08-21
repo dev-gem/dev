@@ -33,11 +33,11 @@ else
     if(work_up_to_date)
       default_tasks=[]
     elsif(File.exists?('.git'))
-      default_tasks=[:setup,:build,:test,:add,:commit,:publish,:clean,:push,:pull]
+      default_tasks=[:setup,:build,:test,:add,:commit,:package,:publish,:clean,:push,:pull]
     elsif File.exists?('.svn')
       default_tasks=[:setup,:build,:test,:add,:commit,:publish,:clean,:update]
     else
-      default_tasks=[:setup,:build,:test,:publish]
+      default_tasks=[:setup,:build,:test,:package,:publish]
     end
   end
 
