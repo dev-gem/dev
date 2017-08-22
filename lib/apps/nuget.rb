@@ -1,4 +1,12 @@
-puts __FILE__ if defined?(DEBUG)
+if defined?(DEBUG)
+  puts DELIMITER
+  puts __FILE__
+  puts
+  puts 'nuget not found' if(!Command.executes?('nuget')) 
+  puts
+end
+#puts DELIMITER if defined?(DEBUG)
+#puts __FILE__ if defined?(DEBUG)
 
 class Nuget
 	  def self.get_build_commands nuspec_file

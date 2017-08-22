@@ -10,10 +10,10 @@ class Array
     def execute value=nil
       @env=Environment.new() if @env.nil? 
       i=0
-      puts "Array.execute length=#{self.length}" if defined?(DEBUG)
+      #puts "Array.execute length=#{self.length}" if defined?(DEBUG)
       while i < self.length
 
-        puts self[i].to_s if defined?(DEBUG)
+        #puts self[i].to_s if defined?(DEBUG)
         #puts "Array[#{i.to_s}]'=nil" if @env.debug? && self[i].nil?
         #puts "Array[#{i.to_s}].class=#{self[i].class.to_s}" if @env.debug? && !self[i].nil?
         #puts "Array[#{i.to_s}].to_s=#{self[i].to_s}" if @env.debug? && !self[i].nil?
@@ -35,6 +35,16 @@ class Array
 
     def add command
       self << command if !has_command? command
+    end
+
+    def log_debug_info(title)
+      if defined?(DEBUG) && self.length > 0
+        puts
+        puts title
+        self.each{|c| puts "  #{c[:input]}" }
+        #pp self 
+        puts
+      end
     end
 
     def has_command? command

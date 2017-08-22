@@ -1,4 +1,11 @@
-puts __FILE__ if defined?(DEBUG)
+if defined?(DEBUG)
+      puts DELIMITER
+      puts __FILE__
+      puts
+      puts 'candle not found' if(!Command.executes?('candle')) 
+      puts 'light not found' if(!Command.executes?('light')) 
+      puts
+    end
 
 #
 # 

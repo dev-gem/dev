@@ -1,3 +1,4 @@
+puts DELIMITER if defined?(DEBUG)
 puts __FILE__ if defined?(DEBUG)
 
 require_relative('string.rb')
@@ -111,7 +112,7 @@ class Environment < Hash
   end
 
   def debug?
-    return true if get_env('DEBUG')=='true'
+    return true if defined?(DEBUG)
     false
   end
 
@@ -210,22 +211,26 @@ class Environment < Hash
     puts "      dev_root: #{self.root_dir}"
     puts "       machine: #{self.machine}"
     puts "          user: #{self.user}"
+    puts "            os: #{Environment.OS}"
     #puts " configuration: #{self.configuration}"
     puts "         debug: #{self.debug?}"
-    puts "git user.email: #{Git.user_email}" 
+    #puts "git user.email: #{Git.user_email}" 
     puts " "
-    puts "Path Commands"
-    ['svn --version --quiet','git --version','msbuild /version','nuget','candle','light','gem --version'].each{|cmd|
-      command=Command.new(cmd)
-      command[:quiet]=true
-      command[:ignore_failure]=true
-      command.execute
-      if(command[:exit_code] == 0)
-        puts "#{cmd.split(' ')[0].fix(14)} #{Environment.get_version(command[:output])}"
-      else
-        puts "#{cmd.split(' ')[0].fix(14)} not found."
-          missing_command=true
-      end
-    }
+    #puts "Path Commands"
+    #['svn --version --quiet','git --version','msbuild /version','nuget','candle','light','gem --version'].each{|cmd|
+    #  command=Command.new(cmd)
+    #  command[:quiet]=true
+    #  command[:ignore_failure]=true
+    #  command.execute
+    #  if(command[:exit_code] == 0)
+    #    puts "#{cmd.split(' ')[0].fix(14)} #{Environment.get_version(command[:output])}"
+    #  else
+    #    puts "#{cmd.split(' ')[0].fix(14)} not found."
+    #      missing_command=true
+    #  end
+    #}
   end
 end
+
+puts "" if defined?(DEBUG)
+puts Environment.default.info if defined?(DEBUG)

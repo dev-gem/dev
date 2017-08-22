@@ -26,6 +26,7 @@ class Tasks
 	def execute_task task
 		if(defined?(COMMANDS))
 			if(COMMANDS.has_key?(task))
+				puts DELIMITER if defined?(DEBUG)
 				puts ":#{task}" if !@env.colorize?
 				if @env.colorize?
 					require 'ansi/code'

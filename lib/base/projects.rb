@@ -1,3 +1,4 @@
+puts DELIMITER if defined?(DEBUG)
 puts __FILE__ if defined?(DEBUG)
 
 require 'json'

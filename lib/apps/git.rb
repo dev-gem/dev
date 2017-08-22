@@ -1,4 +1,10 @@
-puts __FILE__ if defined?(DEBUG)
+if defined?(DEBUG)
+    puts DELIMITER
+    puts __FILE__
+    puts
+    puts 'git not found' if(!Command.executes?('git --version')) 
+    puts
+end
 
 require 'tmpdir'
 require 'rake'

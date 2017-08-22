@@ -1,9 +1,13 @@
-puts __FILE__ if ENV.has_key?('DEBUG')
+if defined?(DEBUG)
+    puts DELIMITER
+    puts __FILE__
+end
 
 require_relative('apps.rb')
 
 require 'json'
 require 'rake/clean'
+require 'pp'
 
 Dir.glob("#{File.dirname(__FILE__)}/tasks/*.rb").each{|rb| 
   require(rb) if !rb.include?('default')
@@ -36,7 +40,7 @@ class Commands < Hash
 			if v.length > 0
 				puts " #{k}"
 				v.each{|c|
-					puts "  #{c}" if(!c.kind_of?(Hash))
+					puts "  #{c[:input]}" if(!c.kind_of?(Hash))
 				}
 			end
 		}

@@ -1,3 +1,6 @@
+puts DELIMITER if defined?(DEBUG)
+puts __FILE__ if defined?(DEBUG)
+
 require 'time'
 require 'open3'
 require_relative('timeout.rb')
@@ -78,6 +81,15 @@ class Command < Hash
   end
   def error
     self[:error]
+  end
+  def self.executes?(command)
+    cmd = Command.new({ :input => command, :quiet => true,:ignore_failure => true})
+    cmd.execute
+    if(cmd[:exit_code] == 0)
+      true
+    else
+      false
+    end
   end
 
 	def execute value=nil

@@ -9,5 +9,12 @@ class Analyze < Array
 			FileUtils.mkdir('doc') if(!File.exists?('doc'))
 			add_quiet 'countloc -r * --html doc/countloc.html'
 		end
+
+		if defined?(DEBUG)
+			puts
+			puts "Analyze"
+			pp self 
+			puts
+		end
 	end
 end

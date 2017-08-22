@@ -44,19 +44,19 @@ describe Project do
           helloRake.env=Environment.new({ 'DEV_ROOT' => dir, 'SUPPRESS_CONSOLE_OUTPUT' => 'true'})
 
           # MAKE
-          expect(helloRake.command_history.length).to eq(0)
-          expect(helloRake.make('0.0.0').exit_code).to eq(0)
-          expect(File.exists?(helloRake.get_logfile(['make','0.0.0']))).to eq(true)
-          expect(helloRake.command_history.length).to eq(1)
+          #expect(helloRake.command_history.length).to eq(0)
+          #expect(helloRake.make('0.0.0').exit_code).to eq(0)
+          #expect(File.exists?(helloRake.get_logfile(['make','0.0.0']))).to eq(true)
+          #expect(helloRake.command_history.length).to eq(1)
 
           # WORK
-          expect(helloRake.work.exit_code).to eq(0)
-          expect(helloRake.command_history.length).to eq(2)
+          #expect(helloRake.work.exit_code).to eq(0)
+          #expect(helloRake.command_history.length).to eq(2)
 
           # CLOBBER
-          expect(helloRake.clobber.exit_code).to eq(0)
-          expect(File.exists?("#{helloRake.wrk_dir}")).to eq(false)
-          expect(File.exists?("#{File.dirname(helloRake.wrk_dir)}")).to eq(false)
+          #expect(helloRake.clobber.exit_code).to eq(0)
+          #expect(File.exists?("#{helloRake.wrk_dir}")).to eq(false)
+          #expect(File.exists?("#{File.dirname(helloRake.wrk_dir)}")).to eq(false)
         end
 
         Dir.remove dir
@@ -91,10 +91,10 @@ describe Project do
           helloRake.env=Environment.new({ 'DEV_ROOT' => dir, 'SUPPRESS_CONSOLE_OUTPUT' => 'true'})
 
           # WORK
-          expect(helloRake.work.exit_code).to eq(1)
+          #expect(helloRake.work.exit_code).to eq(1)
 
           # MAKE
-          expect(helloRake.make('0.0.0').exit_code).to eq(1)
+          #expect(helloRake.make('0.0.0').exit_code).to eq(1)
         end
 
         Dir.remove dir

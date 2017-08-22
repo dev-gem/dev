@@ -42,6 +42,13 @@ class Commit < Array
 				add_quiet "<%Commit.reset_commit_message%>"
 			end
 		end
+
+		if defined?(DEBUG)
+			puts
+			puts "Commit"
+			pp self 
+			puts
+		end
 	end
 
 	def self.reset_commit_message

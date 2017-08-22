@@ -1,4 +1,7 @@
-puts __FILE__ if defined?(DEBUG)
+if defined?(DEBUG)
+	puts DELIMITER
+	puts __FILE__
+end
 
 desc 'adds source files to git or subversion'
 task :add do Tasks.execute_task :add;end
@@ -23,21 +26,6 @@ class Add < Array
 			          end
 		          end
             end
-						#	if(f.include?(' '))
-	          #    status=Command.output("svn status \"#{f}\"") 
-	          #    error=Command.error("svn status \"#{f}\"")
-	          #  else
-	          #    status=Command.output("svn status #{f}") 
-	          #    error=Command.error("svn status #{f}")
-	          #  end
-	          #  if(status.include?('?') || status.include?('was not found') || error.include?('was not found'))
-	          #    if(f.include?(' '))
-						#		  add_quiet "svn add \"#{f}\" --parents"
-						#	  else
-						#		  add_quiet "svn add #{f} --parents"
-						#	  end
-						#	end
-						#end
 					}
 				end
 				if(File.exists?('.git'))
@@ -51,6 +39,13 @@ class Add < Array
 					}
 				end
 			end
+		end
+
+		if defined?(DEBUG)
+			puts
+			puts "Add"
+			pp self 
+			puts
 		end
 	end
 end

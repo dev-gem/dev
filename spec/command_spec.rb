@@ -85,12 +85,10 @@ describe Command do
         f.close
     }
     expect(File.exists?("#{dir}/rakefile.rb")).to eq(true)
-    #cmd=Command.new({ :input => 'rake default', :quiet => true})
-    cmd=Command.new({ :input => 'rake default', :quiet => true})#, :timeout => 2 })
+    cmd=Command.new({ :input => 'rake default', :quiet => true})
     cmd[:directory]=dir
     expect(File.exists?(cmd[:directory])).to eq(true)
     cmd.execute
-    #puts Command.execute('rake default', dir).summary
     # one line execution
     puts Command.new({ :input => 'rake default', :directory => dir }).execute.summary
     Dir.remove dir

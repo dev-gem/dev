@@ -1,3 +1,4 @@
+puts DELIMITER if defined?(DEBUG)
 puts __FILE__ if defined?(DEBUG)
 # Visual Studio 2008 version 9.0,  solution format version 10.00
 # Visual Studio 2010 version 10.0, solution format version 11.00
@@ -5,33 +6,24 @@ puts __FILE__ if defined?(DEBUG)
 # Visual Studio 2013 version 12.0, solution format version 12.00
 # Visual Studio 2015 version 14.0, solution format version 12.00
 # Visual Studio 2017 version 15.0
+require 'pp'
 class MSBuild < Hash
 
   #@@ignore_configurations=Array.new
   def initialize
-    
-    
-
-    self[:vs9]="C:\\Windows\\Microsoft.NET\\Framework\\v3.5\\msbuild.exe"  if(File.exists?("C:\\Windows\\Microsoft.NET\\Framework\\v3.5\\msbuild.exe"))
-    self[:vs10]="C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319\\msbuild.exe" if(File.exists?("C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319\\msbuild.exe"))
-    self[:vs12]="C:\\Program Files (x86)\\MSBuild\\12.0\\bin\\msbuild.exe" if(File.exists?("C:\\Program Files (x86)\\MSBuild\\12.0\\bin\\msbuild.exe"))
-    self[:vs14]="C:\\Program Files (x86)\\MSBuild\\14.0\\bin\\msbuild.exe" if(File.exists?("C:\\Program Files (x86)\\MSBuild\\14.0\\bin\\msbuild.exe"))
-    self[:vs15]="C:\\Program Files (x86)\\MSBuild\\15.0\\bin\\msbuild.exe" if(File.exists?("C:\\Program Files (x86)\\MSBuild\\15.0\\bin\\msbuild.exe"))
-    self[:vs15]="C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Enterprise\\MSBuild\\15.0\Bin\\msbuild.exe" if(File.exists?("C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Enterprise\\MSBuild\\15.0\Bin\\msbuild.exe"))
-
-    if(File.exists?("C:\\Program Files (x86)\\MSBuild\\14.0\\bin\\msbuild.exe"))
-      self[:vs14]="C:\\Program Files (x86)\\MSBuild\\14.0\\bin\\msbuild.exe" 
-    else
-      if(Environment.windows?)
-        puts "C:\\Program Files (x86)\\MSBuild\\14.0\\bin\\msbuild.exe was not found." 
-        puts "MSBUILD[:vs14]='PATH_TO_MSBUILD' may be used to specify msbuild path."
-      end
-    end
+    add(:vs9,"C:/Windows/Microsoft.NET/Framework/v3.5/msbuild.exe")
+    add(:vs10,"C:/Windows/Microsoft.NET/Framework/v4.0.30319/msbuild.exe")
+    add(:vs12,"C:/Program Files (x86)/MSBuild/12.0/bin/msbuild.exe")
+    add(:vs14,"C:/Program Files (x86)/MSBuild/14.0/bin/msbuild.exe")
+    add(:vs15,"C:/Program Files (x86)/MSBuild/15.0/bin/msbuild.exe")
+    add(:vs15,"C:/Program Files (x86)/Microsoft Visual Studio/2017/Enterprise/MSBuild/15.0/Bin/MSBuild.exe")
   end
 
-  #def self.ignore_configuration(configuration)
-  #  @@ignore_configurations.add(configuration) if(!@@ignore_configurations.include?(configuration))
-  #end
+  def add(key,name)
+    if(File.exists?(name))
+      self[key] = name
+    end
+  end
 
   def self.has_version? version
     if(defined?(MSBUILD))
@@ -123,3 +115,10 @@ class MSBuild < Hash
     end
 end
 
+if defined?(DEBUG)
+  puts
+  puts "MSBuild"
+  msb = MSBuild.new
+  pp msb
+  puts
+end

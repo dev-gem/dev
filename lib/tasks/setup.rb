@@ -13,19 +13,11 @@ class Setup < Array
 	end
 
 	def update
-		puts "Setup.update" if Environment.default.debug?
 		env=Environment.new if env.nil?
-
 		add_quiet 'bundle install' if File.exists? 'Gemfile'
-		#add Command.new( { :input => 'bundle install', :quiet => true}) if(File.exists?('Gemfile'))
-
-		#['bin','data','log','make','publish','test'].each{|dir|
-		#	add "<%FileUtils.mkdir('#{Environment.default.devroot}/#{dir}')%>" if !File.exists? "#{Environment.dev_root}/#{dir}"
-		#}
 		
 		Dir.glob('*.gemspec').each{|gemspec_file|
 			add_quiet "<%Gemspec.update('#{gemspec_file}')%>"
-			#add Command.new( { :input => "<%Gemspec.update('#{gemspec_file}')%>", :quiet => true} )
 		}
 
 		if(Dir.glob('**/packages.config').length > 0)
@@ -38,7 +30,7 @@ class Setup < Array
 			add_quiet "dotnet restore"
 		end
 
-		puts 'Setup checking SVN_EXPORTS...' if env.debug?
+		#puts 'Setup checking SVN_EXPORTS...' if env.debug?
 		if(defined?(SVN_EXPORTS))
 			SVN_EXPORTS.each{|k,v|
 				dest="#{Command.dev_root}/dep/#{k}"
@@ -60,7 +52,7 @@ class Setup < Array
 		        end
 			}
 		else
-			puts 'SVN_EXPORTS is not defined' if env.debug?
+			#puts 'SVN_EXPORTS is not defined' if env.debug?
 		end
 
 		if(defined?(GIT_EXPORTS))
@@ -80,7 +72,7 @@ class Setup < Array
 		end
 
 		if(defined?(VERSION))
-			puts "updating nuspec files for VERSION #{VERSION}" if env.debug?
+			#puts "updating nuspec files for VERSION #{VERSION}" if env.debug?
 			Dir.glob('*.nuspec').each{|nuspec|
 				current_version=IO.read(nuspec).scan(/<version>[\d.]+<\/version>/)[0]
 				puts "#{nuspec} current version=#{current_version}" if env.debug?
@@ -117,5 +109,6 @@ class Setup < Array
 				end
 			}
 		end
+		log_debug_info("Setup")
 	end
 end

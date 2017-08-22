@@ -1,5 +1,9 @@
-puts __FILE__ if ENV.has_key?('DEBUG')
+DELIMITER='==================================================================================='
+puts DELIMITER if defined?(DEBUG)
+puts __FILE__ if defined?(DEBUG)
 
+require_relative('base.rb')
+require_relative('base/string.rb')
 require_relative('base/environment.rb')
 require_relative('base/projects.rb')
 require_relative('commands.rb')
