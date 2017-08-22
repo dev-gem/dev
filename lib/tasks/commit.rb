@@ -43,12 +43,7 @@ class Commit < Array
 			end
 		end
 
-		if defined?(DEBUG)
-			puts
-			puts "Commit"
-			pp self 
-			puts
-		end
+		log_debug_info("Commit") if defined?(DEBUG)
 	end
 
 	def self.reset_commit_message
