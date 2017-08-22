@@ -1,4 +1,5 @@
-ENV["DEBUG"] = 'true'
+#ENV["DEBUG"] = 'true'
+DEBUG=true
 require_relative('./lib/dev.rb')
 # VSCode
 

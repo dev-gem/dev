@@ -25,6 +25,10 @@ The dev_root directory is root directory for the dev gem. On Windows this defaul
 
     require 'dev'
 
+### Diagnostic
+
+    DEBUG=true
+
 ## Recognized Applications
 ### [git](https://git-scm.com)
 ### [svn](https://subversion.apache.org)
