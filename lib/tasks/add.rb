@@ -41,11 +41,6 @@ class Add < Array
 			end
 		end
 
-		if defined?(DEBUG)
-			puts
-			puts "Add"
-			pp self 
-			puts
-		end
+		log_debug_info("Add") if defined?(DEBUG)
 	end
 end

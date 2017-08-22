@@ -28,20 +28,20 @@ describe Project do
             Dir.chdir("#{dir}/HelloRake") do
                 File.open('rakefile.rb','w'){|f|f.puts 'task :default do; puts "ok"; end'}
                 cmd=Command.execute('git config user.email "lou-parslow+dev.gem@gamail.com"') if Git.user_email.length < 1
-                cmd=Command.execute('git config user.name "lou-parslow"') if Git.user_name.length < 1
-                cmd=Command.execute('git config --global push.default simple') 
-                cmd=Command.execute('git add rakefile.rb')
-                cmd=Command.execute('git commit -m"added rakefile.rb"')
-                cmd=Command.execute('git tag 0.0.0 -m"0.0.0"')
-                cmd=Command.execute('git push')
-                cmd=Command.execute('git push --tags')
+                #cmd=Command.execute('git config user.name "lou-parslow"') if Git.user_name.length < 1
+                #cmd=Command.execute('git config --global push.default simple') 
+                #cmd=Command.execute('git add rakefile.rb')
+                #cmd=Command.execute('git commit -m"added rakefile.rb"')
+                #cmd=Command.execute('git tag 0.0.0 -m"0.0.0"')
+                #cmd=Command.execute('git push')
+                #cmd=Command.execute('git push --tags')
             end
         end
 
         if(!dir.include?(' '))
           # ADD
-          helloRake=Project.new("#{dir}/HelloRake.git", 'local/HelloRake')
-          helloRake.env=Environment.new({ 'DEV_ROOT' => dir, 'SUPPRESS_CONSOLE_OUTPUT' => 'true'})
+          #helloRake=Project.new("#{dir}/HelloRake.git", 'local/HelloRake')
+          #helloRake.env=Environment.new({ 'DEV_ROOT' => dir, 'SUPPRESS_CONSOLE_OUTPUT' => 'true'})
 
           # MAKE
           #expect(helloRake.command_history.length).to eq(0)
@@ -66,7 +66,7 @@ describe Project do
         dir="#{File.dirname(__FILE__)}/project_spec"
         Dir.remove dir
         Dir.make dir
-        sleep(0.5)
+        sleep(0.2)
 
          # INIT REPO HelloRake.git
         Dir.chdir(dir) do
@@ -77,18 +77,18 @@ describe Project do
                 cmd=Command.execute('git config user.email "lou-parslow+dev.gem@gamail.com"') if Git.user_email.length < 1
                 cmd=Command.execute('git config user.name "lou-parslow"') if Git.user_name.length < 1
                 cmd=Command.execute('git config --global push.default simple') 
-                cmd=Command.execute('git add README.md')
-                cmd=Command.execute('git commit -m"added README.md"')
-                cmd=Command.execute('git tag 0.0.0 -m"0.0.0"')
-                cmd=Command.execute('git push')
-                cmd=Command.execute('git push --tags')
+                #cmd=Command.execute('git add README.md')
+                #cmd=Command.execute('git commit -m"added README.md"')
+                #cmd=Command.execute('git tag 0.0.0 -m"0.0.0"')
+                #cmd=Command.execute('git push')
+                #cmd=Command.execute('git push --tags')
             end
         end
 
         if(!dir.include?(' '))
           # ADD
-          helloRake=Project.new("#{dir}/HelloRake.git", 'local/HelloRake')
-          helloRake.env=Environment.new({ 'DEV_ROOT' => dir, 'SUPPRESS_CONSOLE_OUTPUT' => 'true'})
+          #helloRake=Project.new("#{dir}/HelloRake.git", 'local/HelloRake')
+          #helloRake.env=Environment.new({ 'DEV_ROOT' => dir, 'SUPPRESS_CONSOLE_OUTPUT' => 'true'})
 
           # WORK
           #expect(helloRake.work.exit_code).to eq(1)

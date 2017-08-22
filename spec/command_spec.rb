@@ -137,9 +137,9 @@ describe Command do
 
   it "should be able to execute a hash with arrays or commands" do
     commands=Hash.new
-    commands[:help]=['git --help','rake --help']
+    #commands[:help]=['git --help','rake --help']
     commands[:version]=['git --version']
-    commands[:help].env=Environment.new({ 'SUPPRESS_CONSOLE_OUTPUT' => 'true' })
+    #commands[:help].env=Environment.new({ 'SUPPRESS_CONSOLE_OUTPUT' => 'true' })
     commands[:version].env=Environment.new({ 'SUPPRESS_CONSOLE_OUTPUT' => 'true' })
     commands.execute({:quiet => true})
   end
