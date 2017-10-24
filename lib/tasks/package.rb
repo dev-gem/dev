@@ -17,7 +17,7 @@ class Package < Array
 	    	package_commands = Nuget.get_build_commands nuget_file
 	    	if(!package_commands.nil?)
 	    		package_commands.each{|c|
-	    			add_quiet(c)
+	    			add_passive(c)
 	    		}
 	    	end
 	    }
