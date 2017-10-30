@@ -186,12 +186,15 @@ class Git
         temp_dir = Dir.mktmpdir
         begin
             puts `git clone #{url} #{temp_dir}`
+            puts "cd #{temp_dir}"
             Dir.chdir(temp_dir) do
               puts `git checkout #{branch}`
+              puts "glob #{glob}"
               Dir.glob(glob).each{|f|
                 relative_filename=f.gsub(glob_search,glob_replace)
                 dest="#{File.dirname(__FILE__)}/#{destination_directory}/#{relative_filename}"
                 FileUtils.mkdir_p File.dirname(dest) if(!Dir.exists?(File.dirname(dest)))
+                puts "copying #{f} to #{dest}"
                 FileUtils.copy(f,dest)
               }
             end
