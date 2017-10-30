@@ -192,7 +192,7 @@ class Git
               puts "glob #{glob}"
               Dir.glob(glob).each{|f|
                 relative_filename=f.gsub(glob_search,glob_replace)
-                dest="#{File.dirname(__FILE__)}/#{destination_directory}/#{relative_filename}"
+                dest="#{destination_directory}/#{relative_filename}"
                 FileUtils.mkdir_p File.dirname(dest) if(!Dir.exists?(File.dirname(dest)))
                 puts "copying #{f} to #{dest}"
                 FileUtils.copy(f,dest)
