@@ -155,7 +155,7 @@ class Git
     def self.copy(src_url,src_directory,branch,target_directory,filelist)
         if(!File.exists?(src_directory))
             puts "git clone #{src_url} #{src_directory}"
-            puts `git clone #{src_url} #{src_directory}`
+            #puts `git clone #{src_url} #{src_directory}`
         else
             puts "chdir #{src_directory}"
             Dir.chdir(src_directory) do
@@ -172,13 +172,31 @@ class Git
         puts "chdir #{src_directory}"
         Dir.chdir(src_directory) do
             puts "git checkout #{branch}"
-            puts `git checkout #{branch}`
+            #puts `git checkout #{branch}`
             filelist.each{|f|
                 dest="#{target_directory}/#{f}"
                 FileUtils.mkdir_p File.dirname(dest) if !File.exists? File.dirname(dest)
                 puts "copying #{f} to #{dest}"
                 FileUtils.cp(f,dest)
             }
+        end
+    end
+
+    def self.copy_gsub(url,branch,glob,glob_search,glob_replace,destination_directory)
+        temp_dir = Dir.mktmpdir
+        begin
+            puts `git clone #{url} #{temp_dir}`
+            Dir.chdir(temp_dir) do
+              puts `git checkout #{branch}`
+              Dir.glob(glob).each{|f|
+                relative_filename=f.gsub(glob_search,glob_replace)
+                dest="#{File.dirname(__FILE__)}/#{destination_directory}/#{relative_filename}"
+                FileUtils.mkdir_p File.dirname(dest) if(!Dir.exists?(File.dirname(dest)))
+                FileUtils.copy(f,dest)
+              }
+            end
+        ensure
+            FileUtils.remove_entry_secure temp_dir
         end
     end
 end
