@@ -77,9 +77,13 @@ class Setup < Array
 				#current_version=IO.read(nuspec).scan(/<version>[\d.\w]+<\/version>/)[0]
 				current_version=IO.read(nuspec).scan(/<version>([\d.]+)([\w-]+)?<\/version>/)[0]
 				if(!current_version.nil?)
-					tag=IO.read(nuspec).scan(/<version>([\d.]+)([\w-]+)?<\/version>/)[0][1]
-					puts 'no pre-release tag' if tag.length==0
-					puts "pre-release tag #{tag}" if tag.length > 0
+					if(current_version.length > 1)
+						tag=IO.read(nuspec).scan(/<version>([\d.]+)([\w-]+)?<\/version>/)[0][1]
+						puts "pre-release tag #{tag}"
+					else
+						puts 'no pre-release tag'
+					end
+				
 					puts "#{nuspec} current version=#{current_version}" if env.debug?
 					if(current_version.include?('<version>'))
 						target_version="<version>#{VERSION}</version>"
