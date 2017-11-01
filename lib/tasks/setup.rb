@@ -85,7 +85,7 @@ class Setup < Array
 						puts 'no pre-release tag'
 					end
 				
-					puts "#{nuspec} current version=#{current_version}" if env.debug?
+					puts "#{nuspec} current version=#{current_version}" #if env.debug?
 					if(current_version.include?('<version>'))
 						target_version="<version>#{VERSION}#{tag}</version>"
 						if(current_version != target_version)
