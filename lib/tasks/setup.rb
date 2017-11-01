@@ -74,7 +74,7 @@ class Setup < Array
 		if(defined?(VERSION))
 			#puts "updating nuspec files for VERSION #{VERSION}" if env.debug?
 			Dir.glob('*.nuspec').each{|nuspec|
-				current_version=IO.read(nuspec).scan(/<version>[\d.]+<\/version>/)[0]
+				current_version=IO.read(nuspec).scan(/<version>[\d.\w]+<\/version>/)[0]
 				puts "#{nuspec} current version=#{current_version}" if env.debug?
 				if(current_version.include?('<version>'))
 					target_version="<version>#{VERSION}</version>"
