@@ -107,7 +107,7 @@ class Setup < Array
 			    end
 			}
 			Dir.glob('**/*.csproj').each{|csproj|
-				current_version=IO.read(nuspec).scan(/<PackageVersion>[\d.]+<\/PackageVersion>/)[0]
+				current_version=IO.read(csproj).scan(/<PackageVersion>[\d.]+<\/PackageVersion>/)[0]
 				if(!current_version.nil?)
 			  		puts "#{csproj} current version=#{current_version}" if env.debug?
 			  		if(current_version.include?('<PackageVersion>'))
