@@ -95,6 +95,18 @@ class Setup < Array
 				  end
 			    end
 			}
+			Dir.glob('**/*.csproj').each{|csproj|
+				current_version=IO.read(nuspec).scan(/<PackageVersion>[\d.]+<\/PackageVersion>/)[0]
+				if(!current_version.nil?)
+			  		puts "#{csproj} current version=#{current_version}" if env.debug?
+			  		if(current_version.include?('<PackageVersion>'))
+						target_version="<PackageVersion>#{VERSION}</PackageVersion>"
+						if(current_version != target_version)
+							add_quiet "<%Text.replace_in_file('#{csproj}','#{current_version}','#{target_version}')%>"
+						end
+			  		end
+				end
+			}
 			Dir.glob('**/*.{wxs,_wxs}').each{|wxs|
 				begin
 					current_version=IO.read(wxs).scan(/\sVersion=[\"']([\d.]+)[\"']/)[0][0]
