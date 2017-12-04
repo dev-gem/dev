@@ -10,7 +10,7 @@ module Zip
   # destination directory where the zip file contents are to be placed
   def self.export zip_file, destination
     raise "#{zip_file} does not exist." unless(::File.exists?(zip_file))
-    unzip(zip_file, destiation) unless(Dir.exists?(destination))
+    unzip(zip_file, destination) unless(Dir.exists?(destination))
   end
 
   # publish a directory to a file path
