@@ -49,8 +49,10 @@ module Zip
       files.each do |entry|
         puts "Extracting #{entry.name}"
         destination_file = "#{destination}/#{entry.name}"
-        directory = ::File.dirname(dest_file)
+
+        directory = ::File.dirname(destination_file)
         FileUtils.mkpath(directory) unless(Dir.exists?(directory))        
+        
         entry.extract(destination_file)
       end
     end
