@@ -5,7 +5,9 @@ require_relative('../base/environment.rb')
 desc 'performs build commands'
 task :build do Tasks.execute_task :build;end
 
-SLN_FILES=FileList.new('*.sln','*/*.sln','*/*/*.sln')
+if !defined?(SLN_FILES)
+	SLN_FILES=FileList.new('*.sln','*/*.sln','*/*/*.sln')
+end
 
 WXS_FILES=FileList.new('**/*.wxs')
 SMARTASSEMBLY_FILES=FileList.new('**/*.saproj')
