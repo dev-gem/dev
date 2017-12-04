@@ -71,6 +71,13 @@ class Setup < Array
 			}
 		end
 
+		if(defined?(ZIP_EXPORTS))
+			ZIP_EXPORTS.each{|k,v|
+				directory = "#{Command.dev_root}/dep/#{k}"
+				Zip.export(v, k) unless(Dir.exists?(directory))
+			}
+		end
+		
 		if(defined?(VERSION))
 			#puts "updating nuspec files for VERSION #{VERSION}" if env.debug?
 			Dir.glob('*.nuspec').each{|nuspec|
