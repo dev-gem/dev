@@ -4,7 +4,7 @@ require 'zip'
 require 'fileutils'
 
 module Zip
-  extends self
+  extend self
   # exports a zip file to a destination directory
   # zip_file full path to a zip file to be exported
   # destination directory where the zip file contents are to be placed
