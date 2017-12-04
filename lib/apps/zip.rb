@@ -33,7 +33,7 @@ class Zip
   private
   def self.zip(base_directory, files_to_archive, zip_file) 
     FileUtils.mkpath(File.dirname(zip_file)) unless(Dir.exists?(File.dirname(zip_file)))
-    io = Zip::File.open(zip_file, Zip::File::CREATE); 
+    io = ::Zip::File.open(zip_file, ::Zip::File::CREATE); 
 	 
     files_to_archive.each do |file|
       io.get_output_stream(file) { |f| f.puts(File.open("#{base_directory}/#{file}", "rb").read())} 
@@ -43,7 +43,7 @@ class Zip
   end 		
 
   def self.unzip(zip_file, destination)
-	  Zip::File.open(zip_file) do |files|
+	  ::Zip::File.open(zip_file) do |files|
       files.each do |entry|
         puts "Extracting #{entry.name}"
         entry.extract("#{destination}/#{entry.name}")
