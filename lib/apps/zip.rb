@@ -1,6 +1,6 @@
 puts __FILE__ if defined?(DEBUG)
 
-#require 'rubyzip'
+#require 'zip'
 require 'fileutils'
 
 class Zip
@@ -20,34 +20,34 @@ class Zip
   def self.publish destination, source_dir, source_filelist=FileList.new('**/*')
     Dir.mktmpdir do |dir|
       tmp_file_name = "#{dir}/#{File.basename(destination)}"
-			
+      
       zip(source_dir, source_filelist, tmp_file_name)
-			
+      
       destination_dir = File.dirname(destination)
       FileUtils.mkpath(destination_dir) unless(Dir.exists?(destination_dir))
-			
+      
       FileUtils.cp(tmp_file_name, destination)
-	  end
+    end
   end
 
   private
   def self.zip(base_directory, files_to_archive, zip_file) 
     FileUtils.mkpath(File.dirname(zip_file)) unless(Dir.exists?(File.dirname(zip_file)))
-    io = ::Zip::File.open(zip_file, ::Zip::File::CREATE); 
-	 
+    io = Zip::File.open(zip_file, Zip::File::CREATE); 
+  
     files_to_archive.each do |file|
       io.get_output_stream(file) { |f| f.puts(File.open("#{base_directory}/#{file}", "rb").read())} 
     end
-	
+  
     io.close(); 
   end 		
 
   def self.unzip(zip_file, destination)
-	  ::Zip::File.open(zip_file) do |files|
+    Zip::File.open(zip_file) do |files|
       files.each do |entry|
         puts "Extracting #{entry.name}"
         entry.extract("#{destination}/#{entry.name}")
       end
-	  end
+    end
   end
 end
