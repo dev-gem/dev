@@ -1,9 +1,10 @@
 puts __FILE__ if defined?(DEBUG)
 
-#require 'zip'
+require 'zip'
 require 'fileutils'
 
-class Zip
+module Zip
+  extends self
   # exports a zip file to a destination directory
   # zip_file full path to a zip file to be exported
   # destination directory where the zip file contents are to be placed
