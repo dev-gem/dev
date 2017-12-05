@@ -71,8 +71,10 @@ class Setup < Array
 			}
 		end
 
+		puts "Here"
 		if(defined?(ZIP_EXPORTS))
 			ZIP_EXPORTS.each{|k,v|
+			    puts "Here: #{k}"
 				directory = "#{Command.dev_root}/dep/#{k}"
 				Zip.export(v, k) unless(Dir.exists?(directory))
 			}
