@@ -74,7 +74,7 @@ class Setup < Array
 		if(defined?(ZIP_EXPORTS))
 			ZIP_EXPORTS.each{|k,v|
 				directory = "#{Command.dev_root}/dep/#{k}"
-				Dev::Zip.export(v, k) unless(Dir.exists?(directory))
+				Zip.export(v, k) unless(Dir.exists?(directory))
 			}
 		end
 		
