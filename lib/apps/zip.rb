@@ -10,6 +10,8 @@ module Zip
   # destination directory where the zip file contents are to be placed
   def self.export zip_file, destination
     raise "#{zip_file} does not exist." unless(::File.exists?(zip_file))
+
+    puts "extracting: #{zip_file} to #{destination}"
     unzip(zip_file, destination) unless(Dir.exists?(destination))
   end
 
@@ -53,6 +55,7 @@ module Zip
         directory = ::File.dirname(destination_file)
         FileUtils.mkpath(directory) unless(Dir.exists?(directory))        
         
+        puts "#{entry.name} -> #{destinition_file}"
         entry.extract(destination_file)
       end
     end
