@@ -11,7 +11,7 @@ module Zip
   def self.export zip_file, destination
     raise "#{zip_file} does not exist." unless(::File.exists?(zip_file))
 
-    puts "extracting: #{zip_file} to #{destination}"
+    puts "extracting: #{zip_file} to #{destination} exist: #{Dir.exists?(destination)}"
     unzip(zip_file, destination) unless(Dir.exists?(destination))
   end
 
