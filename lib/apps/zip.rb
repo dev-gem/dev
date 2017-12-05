@@ -46,6 +46,7 @@ module Zip
   end 		
 
   def self.unzip(zip_file, destination)
+    puts "Destination: #{destination}"
     FileUtils.mkpath(destination) unless(Dir.exists?(destination))
     Zip::File.open(zip_file) do |files|
       puts "Files: #{files}"
