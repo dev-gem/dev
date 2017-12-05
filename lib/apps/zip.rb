@@ -48,8 +48,9 @@ module Zip
   def self.unzip(zip_file, destination)
     FileUtils.mkpath(destination) unless(Dir.exists?(destination))
     Zip::File.open(zip_file) do |files|
+      puts "Files: #{files}"
       files.each do |entry|
-        #puts "Extracting #{entry.name}"
+        puts "Extracting #{entry.name}"
         destination_file = "#{destination}/#{entry.name}"
 
         directory = ::File.dirname(destination_file)
