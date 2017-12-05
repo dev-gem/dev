@@ -75,7 +75,7 @@ class Setup < Array
 			ZIP_EXPORTS.each{|k,v|
 			    #puts "Here: #{k} -> #{v}"
 				directory = "#{Command.dev_root}/dep/#{k}"
-				Zip.export(v, k) unless(Dir.exists?(directory))
+				Zip.export(v, directory) unless(Dir.exists?(directory))
 			}
 		end
 		
