@@ -12,6 +12,7 @@ module Zip
     raise "#{zip_file} does not exist." unless(::File.exists?(zip_file))
 
     unzip(zip_file, destination) unless(Dir.exists?(destination))
+    sleep(0.5)  # I guess we need to get the OS some time to get things in order?    
   end
 
   # publish a directory to a file path
