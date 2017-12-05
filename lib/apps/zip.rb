@@ -20,7 +20,7 @@ module Zip
   # source_glob is a string or array of glob directives to specify files in source_dir to be publish
   # source_glob defaults to '**/*' to publish all files in the source_dir
   def self.publish source_dir, destination, source_filelist=FileList.new('**/*')
-    Dir.mktmpdir do |dir|
+    Dir.mktmpdir do |dir|           # Build zip file locally
       tmp_file_name = "#{dir}/#{::File.basename(destination)}"
       
       zip(source_dir, source_filelist, tmp_file_name)
