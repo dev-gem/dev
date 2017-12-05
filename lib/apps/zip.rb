@@ -57,7 +57,7 @@ module Zip
         directory = ::File.dirname(destination_file)
         FileUtils.mkpath(directory) unless(Dir.exists?(directory))        
         
-        puts "#{entry.name} -> #{destinition_file}"
+        puts "#{entry.name} -> #{destination_file}"
         entry.extract(destination_file)
       end
     end
