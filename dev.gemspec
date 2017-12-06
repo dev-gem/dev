@@ -30,4 +30,5 @@ Gem::Specification.new do |s|
     s.add_runtime_dependency 'rspec', '>= 3.0'
 	s.add_runtime_dependency 'ansi', '>= 1.5'
 	s.add_runtime_dependency 'rubyzip', '>= 1.2.1'
+	s.add_runtime_dependency 'bundler', '>= 1.16.0'
 end
