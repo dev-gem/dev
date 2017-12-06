@@ -15,8 +15,8 @@
 #
 Gem::Specification.new do |s|
 	s.name          = 'dev'
-	s.version		= '2.1.73'
-	s.date			= '2017-12-03'
+	s.version		= '2.1.74'
+	s.date			= '2017-12-05'
 	s.summary		= 'dev'
 	s.description	= 'development tasks'
 	s.authors		= ["Lou Parslow"]
@@ -28,5 +28,6 @@ Gem::Specification.new do |s|
 	s.license       = 'Apache 2.0'
 	s.add_runtime_dependency 'rake', '>= 0.8.0'
     s.add_runtime_dependency 'rspec', '>= 3.0'
-    s.add_runtime_dependency 'ansi', '>= 1.5'
+	s.add_runtime_dependency 'ansi', '>= 1.5'
+	s.add_runtime_dependency 'rubyzip', '>= 1.2.1'
 end
