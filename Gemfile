@@ -2,7 +2,7 @@ source "http://rubygems.org"
 gem 'rspec'
 gem 'rake'
 gem 'bundler'
-gem 'yard'
+gem 'yard' ,  '~>0.9.11'
 gem 'ansi'
 gem 'redcarpet'
 gem 'github-markup'

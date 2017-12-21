@@ -20,7 +20,7 @@ GEM
       rspec-support (~> 3.3.0)
     rspec-support (3.3.0)
     rubyzip (1.2.1)
-    yard (0.8.7.6)
+    yard (0.9.12)
 
 PLATFORMS
   ruby
@@ -34,7 +34,7 @@ DEPENDENCIES
   redcarpet
   rspec
   rubyzip
-  yard
+  yard (~> 0.9.11)
 
 BUNDLED WITH
    1.16.0
