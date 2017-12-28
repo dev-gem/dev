@@ -26,9 +26,9 @@ class Publish < Array
 			end
 		end
 
-		Dir.glob("#{Rake.application.original_dir}/**/*.{nupkg,msi,gem}").each{|publish_file|
-			dest="#{Environment.default.publish_dir}/#{File.basename(publish_file)}"
-			add_quiet "<%FileUtils.cp('#{publish_file}','#{dest}')%>" if(!File.exists?(dest) && !publish_file.include?('packages/'))
-		}
+		#Dir.glob("#{Rake.application.original_dir}/**/*.{nupkg,msi,gem}").each{|publish_file|
+		#	dest="#{Environment.default.publish_dir}/#{File.basename(publish_file)}"
+		#	add_quiet "<%FileUtils.cp('#{publish_file}','#{dest}')%>" if(!File.exists?(dest) && !publish_file.include?('packages/'))
+		#}
 	end
 end
