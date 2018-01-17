@@ -22,7 +22,7 @@ class Build < Array
 		update_sln if Environment.windows?
 		update_smartassembly if Environment.windows?
     	#update_nuget if Environment.windows?
-    	update_wix if Environment.windows?
+    	update_wix if Environment.windows? && !defined?(NO_WIX)
 		update_xcode if Environment.mac?
 		
 		log_debug_info("Build") if defined?(DEBUG)
