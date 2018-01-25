@@ -13,7 +13,7 @@ if defined?(DEBUG)
 class Wix
 	def self.get_build_commands wxs_file
       build_commands=nil
-      if(File.exists?(wxs_file))
+      if(File.exists?(wxs_file) && !defined?(NO_WIX))
          if(Environment.windows?)
             ext='msi'
             ext='exe' if(IO.read(wxs_file).include?('<Bundle'))
