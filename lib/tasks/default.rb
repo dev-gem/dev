@@ -35,7 +35,7 @@ else
     elsif(File.exists?('.git'))
       default_tasks=[:setup,:build,:test,:add,:commit,:package,:publish,:clean,:push,:pull]
     elsif File.exists?('.svn')
-      default_tasks=[:setup,:build,:test,:add,:commit,:publish,:clean,:update]
+      default_tasks=[:setup,:build,:test,:add,:commit,:publish,:clean]
     else
       default_tasks=[:setup,:build,:test,:package,:publish]
     end
