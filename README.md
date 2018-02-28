@@ -1,4 +1,7 @@
-# dev  <img src="https://badge.fury.io/rb/dev.png" alt="Gem Version" />
+# dev
+[![Gem Version](https://badge.fury.io/rb/dev.svg)](http://badge.fury.io/rb/dev)
+![license](https://img.shields.io/github/license/mashape/apistatus.svg)
+
 The dev gem automatically generate rake tasks for a project directory
 based on specific file types that is recognizes. These include
 Git (.git directory)
