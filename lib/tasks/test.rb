@@ -70,6 +70,7 @@ class Test < Array
 				@@nunit_console = NUNIT_CONSOLE 
 			end
 			@@nunit_console = "packages/NUnit.ConsoleRunner.3.7.0/tools/nunit3-console.exe" if(!File.exists?(@@nunit_console))
+			@@nunit_console = "packages/NUnit.ConsoleRunner.3.8.0/tools/nunit3-console.exe" if(!File.exists?(@@nunit_console))
 			@@nunit_console = "C:\\Program Files (x86)\\NUnit.org\\nunit-console\\nunit3-console.exe" if(!File.exists?(@@nunit_console))
 			@@nunit_console = "C:\\Program Files (x86)\\NUnit 2.6.4\\bin\\nunit-console.exe" if(!File.exists?(@@nunit_console))
 			@@nunit_console = "C:\\Program Files (x86)\\NUnit 2.6.3\\bin\\nunit-console.exe" if(!File.exists?(@@nunit_console))
