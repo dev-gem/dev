@@ -74,6 +74,9 @@ class Test < Array
 			@@nunit_console = "C:\\Program Files (x86)\\NUnit.org\\nunit-console\\nunit3-console.exe" if(!File.exists?(@@nunit_console))
 			@@nunit_console = "C:\\Program Files (x86)\\NUnit 2.6.4\\bin\\nunit-console.exe" if(!File.exists?(@@nunit_console))
 			@@nunit_console = "C:\\Program Files (x86)\\NUnit 2.6.3\\bin\\nunit-console.exe" if(!File.exists?(@@nunit_console))
+			if(!File.exists?(@@nunit_console))
+				Dir.glob('**/nunit3-console.exe'){|n| @@nunit_console=n}
+			end
 		end
 		if(!File.exists?(@@nunit_console))
 			raise "unable to locate nunit-console.exe, assign NUNIT_CONSOLE to the correct location."
