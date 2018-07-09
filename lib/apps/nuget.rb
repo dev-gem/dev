@@ -26,14 +26,14 @@ class Nuget
       versions=Hash.new
       if(filename.include?('.nuspec'))
         nuspec_text=File.read(filename,:encoding=>'UTF-8')
-        nuspec_text.scan(/<dependency[\s]+id="([\w\.]+)"[\s]+version="([\d\.]+)"/).each{|row|
+        nuspec_text.scan(/<dependency[\s]+id="([\w\.]+)"[\s]+version="([\d\.]+[-\w]+)"/).each{|row|
           versions[row[0]] = row[1]
         }
         return versions
       end
       if(filename.include?('packages.config'))
         config_text=File.read(filename,:encoding=>'UTF-8')
-        config_text.scan(/<package[\s]+id="([\w\.]+)"[\s]+version="([\d\.]+)"/).each{|row|
+        config_text.scan(/<package[\s]+id="([\w\.]+)"[\s]+version="([\d\.]+[-\w]+)"/).each{|row|
           versions[row[0]] = row[1]
         }
         return versions
@@ -43,7 +43,7 @@ class Nuget
 
     def self.set_versions filename,versions
       text=File.read(filename,:encoding=>'UTF-8')
-      text_versions=text.scan(/id="[\w\.]+"[\s]+version="[\d\.]+"/)
+      text_versions=text.scan(/id="[\w\.]+"[\s]+version="[\d\.]+[-\w]+"/)
       text2=text
       versions.each{|k,v|
         text_versions.each{|line|
