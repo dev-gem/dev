@@ -142,4 +142,22 @@ class Setup < Array
 		end
 		log_debug_info("Setup")
 	end
+
+	def self.setupStandardClassLib(name,language)
+		projectExtension="csproj"
+		projectExtension="fsproj" if(language=="F#")
+		FileUtils.mkdir(name)if(!Dir.exists?(name))
+		if(!File.exists?("#{name}/#{name}.#{projectExtension}"))
+			Dir.chdir(name) do
+				puts `dotnet new classlib -lang #{language}`
+			end
+		end
+		FileUtils.mkdir("#{name}.Test")if(!Dir.exists?("#{name}.Test"))
+		if(!File.exists?("#{name}.Test/#{name}.Test.#{projectExtension}"))
+			Dir.chdir("#{name}.Test") do
+				puts `dotnet new nunit -lang #{language}`
+				puts `dotnet add reference ../#{name}/#{name}.#{projectExtension}`
+			end
+		end
+	end
 end
