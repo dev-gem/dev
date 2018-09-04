@@ -14,18 +14,22 @@ class Test < Array
 
 		if(defined?(NUNIT))
 			NUNIT.each{|nunit_dll|
-				nunit_arg=Test.nunit_console
-				nunit_arg="\"#{Test.nunit_console}\"" if Test.nunit_console.include?(' ')
-				dll_arg=nunit_dll
-				dll_arg="\"#{nunit_dll}\"" if(nunit_dll.include?(' '))
-				if(Test.nunit_console.include?('nunit3'))
-				  xml_arg="--result=#{nunit_dll}.TestResults.xml --labels=All"
-				  xml_arg="--result=\"#{nunit_dll}.TestResults.xml\" --labels=All" if(nunit_dll.include?(' '))
-				else
-				  xml_arg="/xml:#{nunit_dll}.TestResults.xml"
-				  xml_arg="/xml:\"#{nunit_dll}.TestResults.xml\"" if(nunit_dll.include?(' '))
-			    end
-				add_quiet "#{nunit_arg} #{dll_arg} #{xml_arg}"
+				skip = false
+				skip = true if(nunit_dll.include?('/netcoreapp')) 
+				if(!skip)
+					nunit_arg=Test.nunit_console
+					nunit_arg="\"#{Test.nunit_console}\"" if Test.nunit_console.include?(' ')
+					dll_arg=nunit_dll
+					dll_arg="\"#{nunit_dll}\"" if(nunit_dll.include?(' '))
+					if(Test.nunit_console.include?('nunit3'))
+						xml_arg="--result=#{nunit_dll}.TestResults.xml --labels=All"
+						xml_arg="--result=\"#{nunit_dll}.TestResults.xml\" --labels=All" if(nunit_dll.include?(' '))
+					else
+						xml_arg="/xml:#{nunit_dll}.TestResults.xml"
+						xml_arg="/xml:\"#{nunit_dll}.TestResults.xml\"" if(nunit_dll.include?(' '))
+						end
+					add_quiet "#{nunit_arg} #{dll_arg} #{xml_arg}"
+				end
 			}
 		end
 
