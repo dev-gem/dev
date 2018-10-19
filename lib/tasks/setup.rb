@@ -22,7 +22,7 @@ class Setup < Array
 
 		if(Dir.glob('**/packages.config').length > 0)
 			Dir.glob('**/*.sln').each{|sln_file|
-				add_quiet "nuget restore #{sln_file}"
+				add_quiet "nuget restore #{sln_file}" if(!sln_file.include?('packages/'))
 			}
 		end
 

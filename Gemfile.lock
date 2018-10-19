@@ -19,7 +19,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.3.0)
     rspec-support (3.3.0)
-    rubyzip (1.2.1)
+    rubyzip (1.2.2)
     yard (0.9.12)
 
 PLATFORMS
@@ -33,8 +33,8 @@ DEPENDENCIES
   rake
   redcarpet
   rspec
-  rubyzip
+  rubyzip (~> 1.2.2)
   yard (~> 0.9.11)
 
 BUNDLED WITH
-   1.16.1
+   1.16.5
