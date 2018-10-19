@@ -25,6 +25,17 @@ class Git
         url=`git config --get remote.origin.url` if(File.exists?('.git'))
     end
 
+    @@master_url=''
+    def self.master_url
+        @@master_url
+    end
+    def self.master_url=(url)
+        @@master_url=url
+    end
+    def self.is_fork?
+        self.master_url != self.url
+    end
+    
     def self.user_email
         email=''
         begin
