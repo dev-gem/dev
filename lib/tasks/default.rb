@@ -33,7 +33,12 @@ else
     if(work_up_to_date)
       default_tasks=[]
     elsif(File.exists?('.git'))
-      default_tasks=[:setup,:build,:test,:add,:commit,:package,:publish,:clean,:push,:pull]
+      if(defined?(NO_AUTO_COMMIT))
+        default_tasks=[:setup,:build,:test,:package,:publish,:clean]
+      else
+        puts ':add,:commit,:push,:pull tasks are part of :default, to opt-out, define NO_AUTO_COMMIT'
+        default_tasks=[:setup,:build,:test,:add,:commit,:package,:publish,:clean,:push,:pull]
+      end
     elsif File.exists?('.svn')
       default_tasks=[:setup,:build,:test,:add,:commit,:publish,:clean]
     else
