@@ -114,6 +114,18 @@ class Setup < Array
 				  end
 			    end
 			}
+			Dir.glob('*.yml').each{|yml|
+				current_version=IO.read(yml).scan(/v:\"([\d.]+)\"/)[0]
+				if(!current_version.nil?)
+					puts "#{yml} current version=#{current_version}" if defined?(DEBUG)
+					if(current_version.include?('v:'))
+						target_version="v:\"#{VERSION}\""
+						if(current_version != target_version)
+							add "<%Text.replace_in_file('#{yml}','#{current_version}','#{target_version}')%>"
+						end
+					end
+				end
+			}
 			Dir.glob('**/*.csproj').each{|csproj|
 				current_version=IO.read(csproj).scan(/<PackageVersion>[\d.]+<\/PackageVersion>/)[0]
 				if(!current_version.nil?)
