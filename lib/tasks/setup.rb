@@ -116,7 +116,7 @@ class Setup < Array
 			}
 			Dir.glob('*.yml').each{|yml|
 				puts "scanning #{yml} for version..." if defined?(DEBUG)
-				current_version=IO.read(yml).scan(/v:\"([\d.]+)\"/)[0]
+				current_version=IO.read(yml).scan(/v:\(\"[\d.]+\"\)/)[0]
 				puts "no version found in #{yml}" if current_version.nil?
 				if(!current_version.nil?)
 					puts "#{yml} current version=#{current_version}" if defined?(DEBUG)
