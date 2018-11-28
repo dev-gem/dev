@@ -38,6 +38,13 @@ class Nuget
         }
         return versions
       end
+      if(filename.include?('.csproj'))
+        config_text=File.read(filename,:encoding=>'UTF-8')
+        config_text.scan(/<PackageReference[\s]+Include="([\w\.]+)"[\s]+Version="([\d\.]+[-\w]+)"/).each{|row|
+          versions[row[0]] = row[1]
+        }
+        return versions
+      end
       versions
     end
 
