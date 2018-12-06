@@ -139,7 +139,7 @@ class Setup < Array
 						end
 			  		end
 				end
-				current_version=IO.read(nuspec).scan(/Vversion>[\d.\w-]+<\/Version>/)[0]
+				current_version=IO.read(csproj).scan(/Vversion>[\d.\w-]+<\/Version>/)[0]
 				if(!current_version.nil?)
 					puts "#{csproj} current version=#{current_version}" if env.debug?
 					if(current_version.include?('<Version>'))
