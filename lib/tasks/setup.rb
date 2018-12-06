@@ -139,6 +139,16 @@ class Setup < Array
 						end
 			  		end
 				end
+				current_version=IO.read(nuspec).scan(/Vversion>[\d.\w-]+<\/Version>/)[0]
+				if(!current_version.nil?)
+					puts "#{csproj} current version=#{current_version}" if env.debug?
+					if(current_version.include?('<Version>'))
+					  target_version="<Version>#{VERSION}</Version>"
+					  if(current_version != target_version)
+						  add_quiet "<%Text.replace_in_file('#{csproj}','#{current_version}','#{target_version}')%>"
+					  end
+					end
+			  end
 			}
 			Dir.glob('**/*.{wxs,_wxs}').each{|wxs|
 				begin
