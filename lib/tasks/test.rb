@@ -105,4 +105,6 @@ class Test < Array
 	end
 end
 
-NUNIT=FileList.new('**/bin/**/*.Test.dll','**/bin/**/*.Tests.dll','**/lib/**/*.Test.dll','**/lib/**/*.Tests.dll')
+if !defined?(NUNIT)
+	NUNIT=FileList.new('**/bin/**/*.Test.dll','**/bin/**/*.Tests.dll','**/lib/**/*.Test.dll','**/lib/**/*.Tests.dll')
+end
