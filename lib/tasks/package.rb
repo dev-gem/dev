@@ -13,13 +13,15 @@ class Package < Array
     end
     def update_nuget
 		puts "Package scanning for nuget files" if Environment.default.debug?
-	   	NUGET_FILES.each{|nuget_file|
-	    	package_commands = Nuget.get_build_commands nuget_file
-	    	if(!package_commands.nil?)
-	    		package_commands.each{|c|
-	    			add_passive(c)
-	    		}
-	    	end
+		   NUGET_FILES.each{|nuget_file|
+			if(!nuget_file.include('/obj/'))
+				package_commands = Nuget.get_build_commands nuget_file
+				if(!package_commands.nil?)
+					package_commands.each{|c|
+						add_passive(c)
+					}
+				end
+			end
 	    }
 	end
 end
