@@ -5,6 +5,7 @@ puts __FILE__ if defined?(DEBUG)
 require_relative('base.rb')
 require_relative('base/string.rb')
 require_relative('base/environment.rb')
+require_relative('base/giturl.rb')
 require_relative('base/projects.rb')
 require_relative('commands.rb')
 
