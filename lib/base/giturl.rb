@@ -27,6 +27,6 @@ class GitUrl
     end
     
     def self.get_relative_dir url 
-        url.gsub('http://','').gsub('http://','').gsub('.git','')
+        url.gsub('http://','').gsub('https://','').gsub('.git','')
     end
 end
