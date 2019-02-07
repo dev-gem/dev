@@ -2,7 +2,6 @@ class GitUrl
     def self.build url 
 
         if(url.kind_of?(Array))
-            puts "url is an Array"
             url.each{|u| GitUrl.build u}
         else
             puts "build #{url}"
