@@ -16,6 +16,7 @@ class Test < Array
 			NUNIT.each{|nunit_dll|
 				skip = false
 				skip = true if(nunit_dll.include?('/netcoreapp')) 
+				skip = true if(nunit_dll.include?('packages/'))
 				if(!skip)
 					nunit_arg=Test.nunit_console
 					nunit_arg="\"#{Test.nunit_console}\"" if Test.nunit_console.include?(' ')
