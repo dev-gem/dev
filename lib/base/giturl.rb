@@ -26,8 +26,8 @@ class GitUrl
         work_dir = get_work_dir(url,tag)
         puts "work_dir #{work_dir}"
         if(!Dir.exists?(work_dir))
-            puts "git clone -b '#{tag}' --single-branch --depth 1 #{url} #{work_dir}"
-            puts `git clone -b '#{tag}' --single-branch --depth 1 #{url} #{work_dir}`
+            puts "git clone -b #{tag} --single-branch --depth 1 #{url} #{work_dir}"
+            puts `git clone -b #{tag} --single-branch --depth 1 #{url} #{work_dir}`
         end
     
         Dir.chdir(work_dir) do
