@@ -21,6 +21,21 @@ class GitUrl
         end
     end
 
+    def self.build_tags url
+        local_dir = Environment.dev_root + "/build/" + get_relative_dir(url)
+        if(!Dir.exists?(local_dir))
+            puts `git clone #{url} #{local_dir}`
+        end
+        Dir.chdir(local_dir) do
+            puts `git pull`
+            stags = `git tag`.gsub('\r','')
+            tags = stag.split('\n')
+            tags.each{|tag|
+                build_tag url tags.strip
+            }
+        end
+    end
+
     def self.build_tag url, tag
         puts "build #{url} #{tag}"
         work_dir = get_build_dir_tag(url,tag)
@@ -28,11 +43,11 @@ class GitUrl
         if(!Dir.exists?(work_dir))
             puts "git clone -b #{tag} --single-branch --depth 1 #{url} #{work_dir}"
             puts `git clone -b #{tag} --single-branch --depth 1 #{url} #{work_dir}`
-        end
-    
-        Dir.chdir(work_dir) do
-            puts "rake #{work_dir}"
-            puts `rake`
+
+            Dir.chdir(work_dir) do
+                puts "rake #{work_dir}"
+                puts `rake`
+            end
         end
     end
     
