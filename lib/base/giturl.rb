@@ -26,14 +26,16 @@ class GitUrl
         if(!Dir.exists?(local_dir))
             puts `git clone #{url} #{local_dir}`
         end
+        stags=''
         Dir.chdir(local_dir) do
             puts `git pull`
             stags = `git tag`.gsub('\r','')
-            tags = stags.split('\n')
-            tags.each{|tag|
-                build_tag url, tag.strip
-            }
+            
         end
+        tags = stags.split('\n')
+        tags.each{|tag|
+            build_tag url, tag.strip
+        }
     end
 
     def self.build_tag url, tag
@@ -44,9 +46,11 @@ class GitUrl
             puts "git clone -b #{tag} --single-branch --depth 1 #{url} #{work_dir}"
             puts `git clone -b #{tag} --single-branch --depth 1 #{url} #{work_dir}`
 
-            Dir.chdir(work_dir) do
-                puts "rake #{work_dir}"
-                puts `rake`
+            if(Dir.exists?(work_dir)) 
+                Dir.chdir(work_dir) do
+                    puts "rake #{work_dir}"
+                    puts `rake`
+                end
             end
         end
     end
