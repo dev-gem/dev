@@ -29,7 +29,7 @@ class GitUrl
         Dir.chdir(local_dir) do
             puts `git pull`
             stags = `git tag`.gsub('\r','')
-            tags = stag.split('\n')
+            tags = stags.split('\n')
             tags.each{|tag|
                 build_tag url tags.strip
             }
