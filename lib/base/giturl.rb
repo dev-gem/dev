@@ -31,7 +31,7 @@ class GitUrl
             stags = `git tag`.gsub('\r','')
             tags = stags.split('\n')
             tags.each{|tag|
-                build_tag url tag.strip
+                build_tag url, tag.strip
             }
         end
     end
