@@ -47,9 +47,7 @@ class GitUrl
     end
 
     def self.build_tag url, tag
-        puts "build #{url} #{tag}"
         build_dir = get_build_dir_tag(url,tag)
-        puts "build_dir #{build_dir}"
         if(!Dir.exists?(build_dir))
             puts "git clone -b #{tag} --single-branch --depth 1 #{url} #{build_dir}"
             puts `git clone -b #{tag} --single-branch --depth 1 #{url} #{build_dir}`
