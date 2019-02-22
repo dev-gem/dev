@@ -22,23 +22,28 @@ class GitUrl
     end
 
     def self.build_tags url
-        puts "GitUrl.build_tags #{url}"
-        local_dir = Environment.dev_root + "/build/" + get_relative_dir(url)
-        if(!Dir.exists?(local_dir))
-            puts "git clone #{url} #{local_dir}"
-            puts `git clone #{url} #{local_dir}`
+
+        if(url.kind_of?(Array))
+            url.each{|u| GitUrl.build_tags u}
+        else
+            puts "GitUrl.build_tags #{url}"
+            local_dir = Environment.dev_root + "/build/" + get_relative_dir(url)
+            if(!Dir.exists?(local_dir))
+                puts "git clone #{url} #{local_dir}"
+                puts `git clone #{url} #{local_dir}`
+            end
+            stags=''
+            Dir.chdir(local_dir) do
+                puts `git pull`
+                stags = `git tag`.gsub('\r','')
+                
+            end
+            tags = stags.split("\n")
+            puts "tags: #{tags}"
+            tags.each{|tag|
+                build_tag url, tag.strip
+            }
         end
-        stags=''
-        Dir.chdir(local_dir) do
-            puts `git pull`
-            stags = `git tag`.gsub('\r','')
-            
-        end
-        tags = stags.split("\n")
-        puts "tags: #{tags}"
-        tags.each{|tag|
-            build_tag url, tag.strip
-        }
     end
 
     def self.build_tag url, tag
