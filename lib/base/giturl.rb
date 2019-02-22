@@ -22,8 +22,10 @@ class GitUrl
     end
 
     def self.build_tags url
+        puts `GitUrl.build_tags #{url}`
         local_dir = Environment.dev_root + "/build/" + get_relative_dir(url)
         if(!Dir.exists?(local_dir))
+            puts "git clone #{url} #{local_dir}"
             puts `git clone #{url} #{local_dir}`
         end
         stags=''
@@ -33,6 +35,7 @@ class GitUrl
             
         end
         tags = stags.split('\n')
+        puts "tags: #{tags}"
         tags.each{|tag|
             build_tag url, tag.strip
         }
@@ -40,15 +43,15 @@ class GitUrl
 
     def self.build_tag url, tag
         puts "build #{url} #{tag}"
-        work_dir = get_build_dir_tag(url,tag)
-        puts "work_dir #{work_dir}"
-        if(!Dir.exists?(work_dir))
-            puts "git clone -b #{tag} --single-branch --depth 1 #{url} #{work_dir}"
-            puts `git clone -b #{tag} --single-branch --depth 1 #{url} #{work_dir}`
+        build_dir = get_build_dir_tag(url,tag)
+        puts "build_dir #{build_dir}"
+        if(!Dir.exists?(build_dir))
+            puts "git clone -b #{tag} --single-branch --depth 1 #{url} #{build_dir}"
+            puts `git clone -b #{tag} --single-branch --depth 1 #{url} #{build_dir}`
 
-            if(Dir.exists?(work_dir)) 
-                Dir.chdir(work_dir) do
-                    puts "rake #{work_dir}"
+            if(Dir.exists?(build_dir)) 
+                Dir.chdir(build_dir) do
+                    puts "rake #{build_dir}"
                     puts `rake`
                 end
             end
