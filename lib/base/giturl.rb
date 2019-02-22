@@ -23,7 +23,7 @@ class GitUrl
 
     def self.build_tag url, tag
         puts "build #{url} #{tag}"
-        work_dir = get_work_dir_tag(url,tag)
+        work_dir = get_build_dir_tag(url,tag)
         puts "work_dir #{work_dir}"
         if(!Dir.exists?(work_dir))
             puts "git clone -b #{tag} --single-branch --depth 1 #{url} #{work_dir}"
@@ -40,8 +40,8 @@ class GitUrl
         Environment.dev_root + "/work/" + get_relative_dir(url)
     end
 
-    def self.get_work_dir_tag url, tag
-        Environment.dev_root + "/work/" + get_relative_dir(url) + "-#{tag}"
+    def self.get_build_dir_tag url, tag
+        Environment.dev_root + "/build/" + get_relative_dir(url) + "-#{tag}"
     end
     
     def self.get_relative_dir url 
