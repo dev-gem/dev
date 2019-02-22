@@ -22,7 +22,7 @@ class GitUrl
     end
 
     def self.build_tags url
-        puts `GitUrl.build_tags #{url}`
+        puts "GitUrl.build_tags #{url}"
         local_dir = Environment.dev_root + "/build/" + get_relative_dir(url)
         if(!Dir.exists?(local_dir))
             puts "git clone #{url} #{local_dir}"
