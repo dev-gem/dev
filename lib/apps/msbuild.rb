@@ -61,12 +61,12 @@ class MSBuild < Hash
       return :vs15 if has_version? :vs15
       return :vs14
     end
-   	sln_text=File.read(sln_filename,:encoding=>'UTF-8')
+    sln_text=File.read(sln_filename,:encoding=>'UTF-8')
+    return :vs16 if sln_text.include?('Visual Studio Version 16')
     return :vs9 if sln_text.include?('Format Version 10.00')
     return :vs12 if sln_text.include?('12.0.30723.0')
     return :vs12 if sln_text.include?('Visual Studio 2013')
     return :vs12 if sln_text.include?('12.0.31101.0')
-    return :vs16 if sln_text.include?('Visual Studio Version 16')
     return :vs16 if has_version? :vs16
     return :vs15 if has_version? :vs15
     return :vs14
@@ -102,6 +102,7 @@ class MSBuild < Hash
     def self.get_build_commands sln_filename
       build_commands=nil
       vs_version=MSBuild.get_vs_version(sln_filename)
+      puts "vs version for '#{sln_filename}' : #{vs_version}"
       if(MSBuild.has_version?(vs_version))
         MSBuild.get_configurations(sln_filename).each{ |configuration|
           MSBuild.get_platforms(sln_filename).each{|platform|
