@@ -6,6 +6,7 @@ puts __FILE__ if defined?(DEBUG)
 # Visual Studio 2013 version 12.0, solution format version 12.00
 # Visual Studio 2015 version 14.0, solution format version 12.00
 # Visual Studio 2017 version 15.0
+# Visual Studio 2019 version 16.0
 require 'pp'
 class MSBuild < Hash
 
@@ -17,6 +18,7 @@ class MSBuild < Hash
     add(:vs14,"C:/Program Files (x86)/MSBuild/14.0/bin/msbuild.exe")
     add(:vs15,"C:/Program Files (x86)/MSBuild/15.0/bin/msbuild.exe")
     add(:vs15,"C:/Program Files (x86)/Microsoft Visual Studio/2017/Enterprise/MSBuild/15.0/Bin/MSBuild.exe")
+    add(:vs16,"C:/Program Files (x86)/Microsoft Visual Studio/2019/Preview/MSBuild/Current/Bin/MSBuilder.exe")
   end
 
   def add(key,name)
@@ -55,6 +57,7 @@ class MSBuild < Hash
 
 	def self.get_vs_version(sln_filename)
     if(sln_filename.nil?)
+      return :vs16 if has_version? :vs16
       return :vs15 if has_version? :vs15
       return :vs14
     end
