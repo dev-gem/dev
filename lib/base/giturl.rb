@@ -17,6 +17,8 @@ class GitUrl
                 puts `git pull`
                 puts "rake #{work_dir}"
                 puts `rake`
+                puts "rake clobber"
+                puts `rake clobber`
             end
         end
     end
