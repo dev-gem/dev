@@ -18,7 +18,12 @@ class MSBuild < Hash
     add(:vs14,"C:/Program Files (x86)/MSBuild/14.0/bin/msbuild.exe")
     add(:vs15,"C:/Program Files (x86)/MSBuild/15.0/bin/msbuild.exe")
     add(:vs15,"C:/Program Files (x86)/Microsoft Visual Studio/2017/Enterprise/MSBuild/15.0/Bin/MSBuild.exe")
-    add(:vs16,"C:/Program Files (x86)/Microsoft Visual Studio/2019/Preview/MSBuild/Current/Bin/MSBuild.exe")
+    if(File.exists?("C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe"))
+      add(:vs16,"C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe")
+    end
+    if(File.exists?("C:/Program Files (x86)/Microsoft Visual Studio/2019/Preview/MSBuild/Current/Bin/MSBuild.exe"))
+      add(:vs16,"C:/Program Files (x86)/Microsoft Visual Studio/2019/Preview/MSBuild/Current/Bin/MSBuild.exe")
+    end
   end
 
   def add(key,name)
