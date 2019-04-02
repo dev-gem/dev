@@ -17,6 +17,8 @@ class GitUrl
                 puts `git pull`
                 puts "rake #{work_dir}"
                 puts `rake`
+                puts "rake clobber"
+                puts `rake clobber`
             end
         end
     end
@@ -38,7 +40,7 @@ class GitUrl
                 stags = `git tag`.gsub('\r','')
                 
             end
-            tags = stags.split("\n")
+            tags = stags.split("\n").reverse
             puts "tags: #{tags}"
             tags.each{|tag|
                 build_tag url, tag.strip
