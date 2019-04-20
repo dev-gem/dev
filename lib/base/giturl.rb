@@ -23,6 +23,18 @@ class GitUrl
         end
     end
 
+    def self.update_build_repo url
+        local_dir = Environment.dev_root + "/build/" + get_relative_dir(url)
+        if(!Dir.exists?(local_dir))
+            puts "git clone #{url} #{local_dir}"
+            puts `git clone #{url} #{local_dir}`
+        end
+        stags=''
+        Dir.chdir(local_dir) do
+            puts `git pull` 
+        end
+    end
+
     def self.build_tags url
 
         if(url.kind_of?(Array))
@@ -65,6 +77,10 @@ class GitUrl
     
     def self.get_work_dir url
         Environment.dev_root + "/work/" + get_relative_dir(url)
+    end
+
+    def self.get_build_dir url
+        Environment.dev_root + "/build/" + get_relative_dir(url)
     end
 
     def self.get_build_dir_tag url, tag
