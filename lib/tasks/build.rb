@@ -61,6 +61,7 @@ class Build < Array
 	def update_smartassembly
 		#puts "Build scanning for sa (smart assembly) files" if Environment.default.debug?
 		sa = 'C:/Program Files/Red Gate/SmartAssembly 6/SmartAssembly.com'
+		sa = 'C:/Program Files/Red Gate/SmartAssembly 7/SmartAssembly.com' if File.exists?('C:/Program Files/Red Gate/SmartAssembly 7/SmartAssembly.com')
 		SMARTASSEMBLY_FILES.each{|saproj_file|
 			puts "  #{saproj_file}" if Environment.default.debug?
 			if(!File.exists?(sa))
