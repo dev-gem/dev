@@ -74,6 +74,7 @@ class MSBuild < Hash
     end
     sln_text=File.read(sln_filename,:encoding=>'UTF-8')
     return :vs16 if sln_text.include?('Visual Studio Version 16')
+    return :vs15 if sln_text.include?('VisualStudioVersion = 15.')
     return :vs9 if sln_text.include?('Format Version 10.00')
     return :vs12 if sln_text.include?('12.0.30723.0')
     return :vs12 if sln_text.include?('Visual Studio 2013')
