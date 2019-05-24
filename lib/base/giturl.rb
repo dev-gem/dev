@@ -2,7 +2,7 @@ class GitUrl
 
     def self.pull url
         if(url.kind_of?(Array))
-            url.each{|u| GitUrl.build u}
+            url.each{|u| GitUrl.pull u}
         else
             puts "pull #{url}"
             work_dir = get_work_dir(url)
