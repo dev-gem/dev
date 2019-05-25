@@ -25,9 +25,9 @@ Gem::Specification.new do |s|
     s.required_ruby_version = '>= 1.9.3'
     s.executables   = ["dev"]
 	s.files         = Dir["LICENSE","README","{lib}/**/*.rb","{test]/**/test_*.rb"]
-	s.license       = 'Apache 2.0'
-	s.add_runtime_dependency 'rake', '>= 0.8.0'
-    s.add_runtime_dependency 'rspec', '>= 3.0'
-	s.add_runtime_dependency 'rubyzip', '>= 1.2.2'
-	s.add_runtime_dependency 'bundler', '>= 1.16.0'
+	s.license       = 'Apache-2.0'
+	s.add_runtime_dependency 'rake', '~> 0.8.0'
+    s.add_runtime_dependency 'rspec', '~> 3.0'
+	s.add_runtime_dependency 'rubyzip', '~> 1.2'
+	s.add_runtime_dependency 'bundler', '~> 1.16'
 end
