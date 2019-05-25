@@ -4,10 +4,8 @@ class GitUrl
         if(url.kind_of?(Array))
             url.each{|u| GitUrl.pull u}
         else
-            put ' '
-            #puts "pull #{url}"
+            puts ' '
             work_dir = get_work_dir(url)
-            #puts "work_dir #{work_dir}"
             if(!Dir.exists?(work_dir))
                 puts "git clone #{url} #{work_dir}"
                 puts `git clone #{url} #{work_dir}`
