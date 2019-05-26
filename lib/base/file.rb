@@ -11,7 +11,7 @@ class File
 		}
 	end
 
-	def self.publish destination, source_dir, source_glob='**/*', overwrite_existing=false
+	def self.publish destination, source_dir, source_glob='**/*', exclude_glob=nil# overwrite_existing=false
 
 		output = "\n"
 		FileUtils.mkdir_p destination if !File.exists? destination
@@ -19,6 +19,11 @@ class File
 		files=nil
 		Dir.chdir(source_dir) do
 			files=FileList.new(source_glob).to_a
+			if(!exclude_glob.nil?)
+				FileList.new(exclude_glob).to_a.each{|f|
+					files.delete(f) if(files.include?(f))
+				}
+			end
 		end
 		output = output + "\nfiles: #{files}.to_s"
 
@@ -27,7 +32,7 @@ class File
 				file="#{destination}/#{f}"
 				dirname=File.dirname(file)
 				FileUtils.mkdir_p dirname if !File.exists? dirname
-				FileUtils.cp(f,file) if !File.exists? file || overwrite_existing
+				FileUtils.cp(f,file) if !File.exists? file# || overwrite_existing
 			}
 		end
 		output
