@@ -34,8 +34,16 @@ class Wix
             build_commands
       end
 
-      def self.set_component_files wxs_file, component_id, filenames
+      def self.get_wix_with_files wxs_template_text, component_id, filenames
             # <Component[-\s\w="]+Id="ApplicationFiles"[-"\s\w=]+>([-<="\/.>\s\w]+)<\/C
-            
+
+      end
+      
+      def self.update_wix_files wxs_filename, component_id, filenames
+            wix_text = IO.read(wxs_filename)
+            new_text = get_wix_with_files(wix_text, component_id,filenames)
+            if(wix_text != new_text)
+                  File.open(wxs_filename,'w'){|f| f.write(new_text) }
+            end
       end
 end

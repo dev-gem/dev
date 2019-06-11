@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+   <Product 
+     Id="*" 
+     UpgradeCode="EFA3A8D6-2662-4A90-8320-76EF628F0D66" 
+     Name="Example" 
+     Version="2.1.141"
+     Manufacturer="Tester" Language="1033">
+      <Package 
+        InstallerVersion="200" 
+        Compressed="yes" 
+        InstallScope="perMachine"
+        Comments="Windows Installer Package"/>
+
+      <MajorUpgrade AllowSameVersionUpgrades="yes"
+                  DowngradeErrorMessage="A newer version of [ProductName] is already installed. If you are sure you want to downgrade, remove the existing installation via Programs and Features." />
+      <Media Id="1" Cabinet="product.cab" EmbedCab="yes"/>
+ 
+	<SetProperty Id="ARPINSTALLLOCATION" Value="[ApplicationFolder]"
+               After="CostFinalize" />
+      <PropertyRef Id="WIX_IS_NETFRAMEWORK_46_OR_LATER_INSTALLED"/>
+      <Condition Message='This setup requires the .NET Framework 4.6 installed.'>
+        <![CDATA[Installed OR WIX_IS_NETFRAMEWORK_46_OR_LATER_INSTALLED]]>
+      </Condition>
+
+      <Directory Id="TARGETDIR" Name="SourceDir">
+         <Directory Id="ProgramFilesFolder">
+           <Directory Id="Tester" Name="Tester">
+            <Directory Id="INSTALLDIR" Name="Example">
+               <Component Id="ApplicationFiles" Guid="EA2F3209-1DF6-40FE-A275-492B66D33C86">
+                  <File Id="ApplicationFile0" Source="bin/Release/Example.exe"/>
+                  <File Id="ApplicationFile1" Source="bin/Release/An.Example.2-Package.dll"/>
+               </Component>
+         
+            </Directory>
+           </Directory>
+         </Directory>
+         <Component Id="RegistryEntries" Guid="3607AE74-9D82-4C37-8F42-79456BE2E3AF">
+           <RegistryKey Root="HKLM" 
+                        Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\PoleViewer" 
+                        Action="createAndRemoveOnUninstall">
+              <RegistryValue Type="string" Name="InstallLocation" Value="[INSTALLDIR]" />
+              <RegistryValue Type="string" Name="Version" Value="2.1.141" />
+           </RegistryKey>
+         </Component>
+      </Directory>
+ 
+      <Feature Id="DefaultFeature" Level="1">
+         <ComponentRef Id="ApplicationFiles"/>
+         <ComponentRef Id="RegistryEntries" />
+      </Feature>
+   </Product>
+</Wix>
