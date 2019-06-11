@@ -37,7 +37,12 @@ class Wix
       def self.get_wix_with_files wxs_template_text, component_id, filenames
             # <Component[-\s\w="]+Id="ApplicationFiles"[-"\s\w=]+>([-<="\/.>\s\w]+)<\/C
             search=wxs_template_text.scan(/<Component[-\s\w="]+Id="ApplicationFiles"[-"\s\w=]+>([-<="\/.>\s\w]+)<\/C/)[0][0]
-            replace='bin/a.dll'
+            replace=''#bin/a.dll''
+            index = 0
+            filenames.each{|f|
+                  replace += "<File Id=\"#{component_id}#{index}\" Source=\"#{f}\"/>\r\n"
+                  index += 1
+            }
             wxs_template_text.gsub(search,replace)
             #`git branch`.scan(/\* ([.\w-]+)/)[0][0] if(File.exists?('.git'))
       end
