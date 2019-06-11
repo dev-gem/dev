@@ -11,7 +11,7 @@ describe Wix do
         
         expect(wxs.include?('bin/Release/Example.exe')).to eq(false)
 
-        puts wxs
+        #puts wxs
         expect(wxs.include?('bin/b.dll')).to eq(true)
     end
 end
