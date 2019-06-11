@@ -15,7 +15,7 @@
 #
 Gem::Specification.new do |s|
 	s.name          = 'dev'
-	s.version		= '2.1.137'
+	s.version		= '2.1.141'
 	s.date			= '2019-06-11'
 	s.summary		= 'dev'
 	s.description	= 'development tasks'
@@ -25,10 +25,9 @@ Gem::Specification.new do |s|
     s.required_ruby_version = '>= 1.9.3'
     s.executables   = ["dev"]
 	s.files         = Dir["LICENSE","README","{lib}/**/*.rb","{test]/**/test_*.rb"]
-	s.license       = 'Apache 2.0'
-	s.add_runtime_dependency 'rake', '>= 0.8.0'
-    s.add_runtime_dependency 'rspec', '>= 3.0'
-	s.add_runtime_dependency 'ansi', '>= 1.5'
-	s.add_runtime_dependency 'rubyzip', '>= 1.2.2'
-	s.add_runtime_dependency 'bundler', '>= 1.16.0'
+	s.license       = 'Apache-2.0'
+	s.add_runtime_dependency 'rake', '~> 12.3'
+    s.add_runtime_dependency 'rspec', '~> 3.8'
+	s.add_runtime_dependency 'rubyzip', '~> 1.2'
+	s.add_runtime_dependency 'bundler', '~> 2.0'
 end

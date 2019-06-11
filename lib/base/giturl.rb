@@ -4,9 +4,8 @@ class GitUrl
         if(url.kind_of?(Array))
             url.each{|u| GitUrl.pull u}
         else
-            puts "pull #{url}"
+            puts ' '
             work_dir = get_work_dir(url)
-            puts "work_dir #{work_dir}"
             if(!Dir.exists?(work_dir))
                 puts "git clone #{url} #{work_dir}"
                 puts `git clone #{url} #{work_dir}`
@@ -28,14 +27,8 @@ class GitUrl
             puts "build #{url}"
             work_dir = get_work_dir(url)
             puts "work_dir #{work_dir}"
-            #if(!Dir.exists?(work_dir))
-            #    puts "git clone #{url} #{work_dir}"
-            #    puts `git clone #{url} #{work_dir}`
-            #end
-        
+
             Dir.chdir(work_dir) do
-                #puts "git pull (#{work_dir})"
-                #puts `git pull`
                 puts "rake #{work_dir}"
                 puts `rake`
                 puts "rake clobber"

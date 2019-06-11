@@ -35,5 +35,7 @@ class Wix
       end
 
       def self.set_component_files wxs_file, component_id, filenames
+            # <Component[-\s\w="]+Id="ApplicationFiles"[-"\s\w=]+>([-<="\/.>\s\w]+)<\/C
+            
       end
 end
