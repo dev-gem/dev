@@ -37,12 +37,13 @@ class Wix
       def self.get_wix_with_files wxs_template_text, component_id, filenames
             # <Component[-\s\w="]+Id="ApplicationFiles"[-"\s\w=]+>([-<="\/.>\s\w]+)<\/C
             search=wxs_template_text.scan(/<Component[-\s\w="]+Id="ApplicationFiles"[-"\s\w=]+>([-<="\/.>\s\w]+)<\/C/)[0][0]
-            replace="\r\n"
+            replace=""
             index = 0
             filenames.each{|f|
-                  replace += "\r\n                 <File Id=\"#{component_id}#{index}\" Source=\"#{f}\"/>"
+                  replace += "\n                 <File Id=\"#{component_id}#{index}\" Source=\"#{f}\"/>"
                   index += 1
             }
+            replace += "\n"
             wxs_template_text.gsub(search,replace)
       end
       
