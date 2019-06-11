@@ -8,5 +8,7 @@ describe Wix do
         example = IO.read(wxs_file)
         wxs = Wix.get_wix_with_files(example,"ApplicationFiles", ["bin/a.dll","bin/b.dll"])
         expect(wxs.include?('bin/a.dll')).to eq(true)
+        #expect(wxs.include?('bin/b.dll')).to eq(true)
+        expect(wxs.include?('bin/Release/Example.exe')).to eq(false)
     end
 end
