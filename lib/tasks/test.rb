@@ -44,6 +44,14 @@ class Test < Array
 			}
 		end
 
+		# dotnet test
+		Dir.glob('**/*.Test.csproj'){|proj|
+			text = IO.read(proj)
+			if(text.include?('/netcoreapp'))
+				add_quiet("dotnet test #{proj}")
+			end
+		}
+
 		if(defined?(TESTS))
 			TEST.each{|t| add_quiet t}
 		end
