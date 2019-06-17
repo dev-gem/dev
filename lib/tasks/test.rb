@@ -45,7 +45,9 @@ class Test < Array
 		end
 
 		# dotnet test
+		puts "scanning for **/*.Test.csproj" if Environment.default.debug?
 		Dir.glob('**/*.Test.csproj'){|proj|
+			puts "found #{proj}" if Environment.default.debug?
 			text = IO.read(proj)
 			if(text.include?('/netcoreapp'))
 				add_quiet("dotnet test #{proj}")
