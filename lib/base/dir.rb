@@ -37,6 +37,20 @@ class Dir
     mtime
   end
 
+  def self.get_project_name directory
+    name = directory.split('/').last
+    rakefile = "{directory}/rakefile.rb"
+    if(File.exists?(rakefile))
+      txt=IO.read(rakefile)
+      if(txt.include?("NAME="))
+        scan = txt.scan(/NAME=['"]([\w.]+)/)
+        if(!scan.nil?)
+          name = scan[0][0] if(scan.length > 0 && !scan[0].nil? && scan[0].length > 0)
+        end
+      end
+    end
+  end
+
   def self.zip(directory,files,zipfilename)
     if Gem::Specification::find_all_by_name('rubyzip').any?
       require 'zip'
