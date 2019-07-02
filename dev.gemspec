@@ -16,7 +16,7 @@
 Gem::Specification.new do |s|
 	s.name          = 'dev'
 	s.version		= '2.1.148'
-	s.date			= '2019-06-17'
+	s.date			= '2019-07-02'
 	s.summary		= 'dev'
 	s.description	= 'development tasks'
 	s.authors		= ["Lou Parslow"]
@@ -29,5 +29,5 @@ Gem::Specification.new do |s|
 	s.add_runtime_dependency 'rake', '~> 12.3'
     s.add_runtime_dependency 'rspec', '~> 3.8'
 	s.add_runtime_dependency 'rubyzip', '~> 1.2'
-	s.add_runtime_dependency 'bundler', '~> 2.0'
+	#s.add_runtime_dependency 'bundler', '~> 2.0'
 end

@@ -2,10 +2,8 @@ GEM
   remote: http://rubygems.org/
   specs:
     diff-lcs (1.2.5)
-    github-markup (1.4.0)
     rainbow (3.0.0)
     rake (10.4.2)
-    redcarpet (3.3.2)
     rspec (3.3.0)
       rspec-core (~> 3.3.0)
       rspec-expectations (~> 3.3.0)
@@ -19,8 +17,8 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.3.0)
     rspec-support (3.3.0)
-    rubyzip (1.2.2)
-    yard (0.9.12)
+    rubyzip (1.2.3)
+    yard (0.9.20)
 
 PLATFORMS
   ruby
@@ -28,13 +26,11 @@ PLATFORMS
 
 DEPENDENCIES
   bundler
-  github-markup
   rainbow
   rake
-  redcarpet
   rspec
-  rubyzip (~> 1.2.2)
-  yard (~> 0.9.11)
+  rubyzip (~> 1.2.3)
+  yard (~> 0.9.20)
 
 BUNDLED WITH
    1.17.1

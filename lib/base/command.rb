@@ -92,6 +92,7 @@ class Command < Hash
     end
   end
 
+  # todo: add log of execution
 	def execute value=nil
 
     puts "#{self[:input]}" if defined?(DEBUG)
