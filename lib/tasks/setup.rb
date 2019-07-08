@@ -24,6 +24,10 @@ class Setup < Array
 			Dir.glob('**/*.sln').each{|sln_file|
 				add_quiet "nuget restore #{sln_file}" if(!sln_file.include?('packages/'))
 			}
+		else
+			Dir.glob('**/*.sln').each{|sln_file|
+				add_quiet "dotnet restore #{sln_file}"
+			}
 		end
 
 		if(File.exists?('project.json'))
