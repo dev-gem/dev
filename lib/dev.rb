@@ -72,7 +72,6 @@ class Dev
 end
 
 require_relative('base.rb')
-#require_relative('apps.rb')
 require_relative('tasks.rb')
 require_relative('commands.rb')
 

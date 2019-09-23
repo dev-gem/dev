@@ -39,7 +39,7 @@ class Dir
 
   def self.get_project_name directory
     name = directory.split('/').last
-    rakefile = "{directory}/rakefile.rb"
+    rakefile = "#{directory}/rakefile.rb"
     if(File.exists?(rakefile))
       txt=IO.read(rakefile)
       if(txt.include?("NAME="))
@@ -49,6 +49,7 @@ class Dir
         end
       end
     end
+    name
   end
 
   def self.zip(directory,files,zipfilename)
