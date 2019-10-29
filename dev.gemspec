@@ -28,6 +28,6 @@ Gem::Specification.new do |s|
 	s.license       = 'Apache-2.0'
 	s.add_runtime_dependency 'rake', '~> 12.3'
     s.add_runtime_dependency 'rspec', '~> 3.8'
-	s.add_runtime_dependency 'rubyzip', '~> 1.2'
+	s.add_runtime_dependency 'rubyzip', '>= 1.2', '< 3.0'
 	#s.add_runtime_dependency 'bundler', '~> 2.0'
 end
