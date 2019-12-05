@@ -30,6 +30,9 @@ class MSBuild < Hash
     if(File.exists?("C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/MSBuild/Current/Bin/MSBuild.exe"))
       add(:vs16,"C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/MSBuild/Current/Bin/MSBuild.exe")
     end
+    if(File.exists?("C:/Program Files (x86)/Microsoft Visual Studio/2019/Professional/MSBuild/Current/Bin/MSBuild.exe"))
+      add(:vs16,"C:/Program Files (x86)/Microsoft Visual Studio/2019/Professional/MSBuild/Current/Bin/MSBuild.exe")
+    end
   end
 
   def add(key,name)
