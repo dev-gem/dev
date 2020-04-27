@@ -16,7 +16,7 @@
 Gem::Specification.new do |s|
 	s.name          = 'dev'
 	s.version		= '2.1.152'
-	s.date			= '2020-01-24'
+	s.date			= '2020-04-27'
 	s.summary		= 'dev'
 	s.description	= 'development tasks'
 	s.authors		= ["Lou Parslow"]
@@ -26,7 +26,6 @@ Gem::Specification.new do |s|
     s.executables   = ["dev"]
 	s.files         = Dir["LICENSE","README","{lib}/**/*.rb","{test]/**/test_*.rb"]
 	s.license       = 'Apache-2.0'
-	s.add_runtime_dependency 'rake', '~> 12.3'
     s.add_runtime_dependency 'rspec', '~> 3.8'
 	s.add_runtime_dependency 'rubyzip', '>= 1.2', '< 3.0'
 	#s.add_runtime_dependency 'bundler', '~> 2.0'
