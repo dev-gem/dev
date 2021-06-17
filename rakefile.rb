@@ -43,3 +43,11 @@ task :publish do
 	   end
     end
 end
+
+task :msbuild do
+	puts MSBUILD
+	puts MSBUILD[:vs16]
+	if(MSBuild.has_version?(:vs16)) 
+		puts MSBuild.get_version(:vs16)
+	end
+end
