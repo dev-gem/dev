@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #
 # NuGet packages: NBench, NBench.Runner
 #

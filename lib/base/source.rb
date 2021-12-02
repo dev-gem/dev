@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 puts __FILE__ if defined?(DEBUG)
 
-SOURCE=FileList.new('LICENSE','README','README.md',"Gemfile")
+SOURCE = FileList.new('LICENSE', 'README', 'README.md', 'Gemfile')
 SOURCE.include('*.{gitignore,yml,gemspec}')
 SOURCE.include('**/*.{rb}')
 SOURCE.include('**/*.{cs,xaml,resx,settings}')
@@ -15,7 +17,7 @@ SOURCE.include('**/*.{html,htm}')
 SOURCE.include('**/*.{ico}')
 SOURCE.include('**/*.{txt}')
 SOURCE.include('**/*.{wxs,_wxs}')
-SOURCE.exclude('bin','obj','lib')
+SOURCE.exclude('bin', 'obj', 'lib')
 SOURCE.exclude('**/obj/**/*.*')
 SOURCE.exclude('**/bin/**/*.*')
 SOURCE.exclude('commit.message')
