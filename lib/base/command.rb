@@ -3,15 +3,15 @@
 puts DELIMITER if defined?(DEBUG)
 puts __FILE__ if defined?(DEBUG)
 
-require 'time'
-require 'open3'
-require_relative('timeout')
-require_relative('timer')
-require_relative('array')
-require_relative('hash')
-require_relative('string')
-require_relative('environment')
-require_relative('dir')
+require "time"
+require "open3"
+require_relative("timeout")
+require_relative("timer")
+require_relative("array")
+require_relative("hash")
+require_relative("string")
+require_relative("environment")
+require_relative("dir")
 BUFFER_SIZE = 1024 unless defined?(BUFFER_SIZE)
 
 # = Command
@@ -36,14 +36,14 @@ BUFFER_SIZE = 1024 unless defined?(BUFFER_SIZE)
 #
 class Command < Hash
   def initialize(command)
-    self[:input] = ''
+    self[:input] = ""
     self[:timeout] = 0
-    self[:directory] = ''
+    self[:directory] = ""
     self[:exit_code] = 0
-    self[:output] = ''
-    self[:error] = ''
-    self[:machine] = ''
-    self[:user] = ''
+    self[:output] = ""
+    self[:error] = ""
+    self[:machine] = ""
+    self[:user] = ""
     self[:start_time] = nil
     self[:end_time] = nil
 
@@ -57,10 +57,10 @@ class Command < Hash
   end
 
   def save(filename)
-    File.open(filename, 'w') { |f| f.write(to_json) }
+    File.open(filename, "w") { |f| f.write(to_json) }
   end
 
-  def open(filename = '')
+  def open(filename = "")
     @filename = filename if filename.length.positive?
     clear
     JSON.parse(IO.read(@filename)).each { |k, v| self[k.to_sym] = v }
@@ -116,8 +116,8 @@ class Command < Hash
     timer = Timer.new
 
     Dir.chdir(self[:directory]) do
-      if self[:input].include?('<%') && self[:input].include?('%>')
-        ruby = self[:input].gsub('<%', '').gsub('%>', '')
+      if self[:input].include?("<%") && self[:input].include?("%>")
+        ruby = self[:input].gsub("<%", "").gsub("%>", "")
 
         begin
           self[:output] = eval(ruby)
@@ -136,7 +136,7 @@ class Command < Hash
             self[:elapsed] = timer.elapsed_str
             self[:end_time] = Time.now
           else
-            require_relative 'timeout'
+            require_relative "timeout"
             result = run_with_timeout(self[:directory], self[:input], self[:timeout], 2)
             self[:output] = result[0]
             self[:exit_code] = result[1]
@@ -171,35 +171,35 @@ class Command < Hash
   end
 
   def self.machine
-    return ENV['COMPUTERNAME'] unless ENV['COMPUTERNAME'].nil?
+    return ENV["COMPUTERNAME"] unless ENV["COMPUTERNAME"].nil?
 
     machine = `hostname`
-    machine = machine.split('.')[0] if machine.include?('.')
+    machine = machine.split(".")[0] if machine.include?(".")
     machine.strip
   end
 
   def self.user
-    ENV['USER'].nil? ? ENV['USERNAME'] : ENV['USER']
+    ENV["USER"].nil? ? ENV["USERNAME"] : ENV["USER"]
   end
 
   def self.home
     %w[USERPROFILE HOME].each do |v|
-      return ENV[v].gsub('\\', '/') unless ENV[v].nil?
+      return ENV[v].gsub('\\', "/") unless ENV[v].nil?
     end
-    dir = '~'
-    dir = ENV['HOME'] unless ENV['HOME'].nil?
-    dir = ENV['USERPROFILE'].gsub('\\', '/') unless ENV['USERPROFILE'].nil?
+    dir = "~"
+    dir = ENV["HOME"] unless ENV["HOME"].nil?
+    dir = ENV["USERPROFILE"].gsub('\\', "/") unless ENV["USERPROFILE"].nil?
     dir
   end
 
   def self.dev_root
     %w[DEV_HOME DEV_ROOT].each do |v|
-      return ENV[v].gsub('\\', '/') unless ENV[v].nil?
+      return ENV[v].gsub('\\', "/") unless ENV[v].nil?
     end
     home
   end
 
-  def self.execute(command, working_directory = '')
+  def self.execute(command, working_directory = "")
     cmd = Command.new({ input: command, quiet: true }) if command.is_a?(String)
     cmd[:directory] = working_directory if command.is_a?(String)
     cmd = command if command.is_a?(Command)
@@ -234,7 +234,7 @@ class Command < Hash
   end
 
   def getFormattedTimeSpan(timespan)
-    result = ''
+    result = ""
     seconds = timespan.round
     if seconds > 99
       minutes = (seconds / 60).round
@@ -246,22 +246,22 @@ class Command < Hash
   end
 
   def summary(include_directory = false)
-    duration = ''
+    duration = ""
     duration = getFormattedTimeSpan(self[:end_time] - self[:start_time])
     if Environment.default.colorize?
-      require 'ansi/code'
+      require "ansi/code"
       cduration = ANSI.reset + duration
       # code=ANSI.green + '+ ' + ANSI.reset
       # code=ANSI.red   + '- ' + ANSI.reset if exit_code != 0
       cinput = ANSI.reset + self[:input] + ANSI.reset
-      cinput = ANSI.red   + self[:input] + ANSI.reset if exit_code != 0
-      cdirectory = ''
+      cinput = ANSI.red + self[:input] + ANSI.reset if exit_code != 0
+      cdirectory = ""
       cdirectory = "(#{self[:directory]})" if include_directory
       "  #{cduration} #{cinput} #{cdirectory}"
     else
-      code = ' '
-      code = 'X' if exit_code != 0
-      sdirectory = ''
+      code = " "
+      code = "X" if exit_code != 0
+      sdirectory = ""
       sdirectory = "(#{self[:directory]})" if include_directory
       "#{code} #{duration} #{self[:input]} #{sdirectory}"
     end
@@ -269,7 +269,7 @@ class Command < Hash
 
   def format_property(name, value)
     if Environment.default.colorize?
-      require 'ansi/code'
+      require "ansi/code"
       "#{name}: " + ANSI.yellow + ANSI.bright + value.to_s.strip + ANSI.reset
     else
       "#{name}: #{value}"
@@ -277,33 +277,33 @@ class Command < Hash
   end
 
   def info
-    result = "#{format_property('input'.fix(15), self[:input])}\n"
-    result = "#{result}#{format_property('directory'.fix(15), self[:directory])}\n"
-    result = "#{result}#{format_property('exit_code'.fix(15), self[:exit_code])}\n"
-    result = result + format_property('duration'.fix(15),
+    result = "#{format_property("input".fix(15), self[:input])}\n"
+    result = "#{result}#{format_property("directory".fix(15), self[:directory])}\n"
+    result = "#{result}#{format_property("exit_code".fix(15), self[:exit_code])}\n"
+    result = result + format_property("duration".fix(15),
                                       getFormattedTimeSpan(self[:end_time] - self[:start_time])) + "\n"
-    output = ['']
+    output = [""]
     output = self[:output].strip.split("\n") unless self[:output].nil?
     if output.length <= 1
-      result = "#{result}#{format_property('output'.fix(15), output[0])}\n"
+      result = "#{result}#{format_property("output".fix(15), output[0])}\n"
       # result=result + format_property('output'.fix(15),'') + "\n" if(output.length==0)
       # result=result + format_property('output'.fix(15),output) + "\n" if(output.length==1)
     else
-      result = "#{result}#{format_property('output'.fix(15), '')}\n"
+      result = "#{result}#{format_property("output".fix(15), "")}\n"
       output.each do |line|
-        result = "#{result}#{' '.fix(16)}#{line}\n"
+        result = "#{result}#{" ".fix(16)}#{line}\n"
       end
     end
-    error = ['']
+    error = [""]
     error = self[:error].strip.split("\n") unless self[:error].nil?
     if error.length <= 1
-      result = "#{result}#{format_property('error'.fix(15), error[0])}\n"
+      result = "#{result}#{format_property("error".fix(15), error[0])}\n"
       # result=result + format_property('error'.fix(15),'') + "\n" if(error.length==0)
       # result=result + format_property('error'.fix(15),error) + "\n" if(error.length==1)
     else
-      result = "#{result}#{format_property('error'.fix(15), '')}\n"
+      result = "#{result}#{format_property("error".fix(15), "")}\n"
       error.each do |line|
-        result = "#{result}#{' '.fix(16)}#{line}\n"
+        result = "#{result}#{" ".fix(16)}#{line}\n"
       end
     end
   end
@@ -313,7 +313,7 @@ class Command < Hash
       [
         '<div><table><tr><td width="20"></td><td><pre>',
         self[:input],
-        '</pre></td></tr></table></div>'
+        "</pre></td></tr></table></div>",
       ].join
     else
       [
@@ -324,8 +324,8 @@ class Command < Hash
           ["<tr><td><strong>#{k}</strong></td>",
            v.respond_to?(:to_html) ? v.to_html : "<td><span><pre>#{v}</pre></span></td></tr>"]
         end,
-        '</table>',
-        '</td></tr></table></td></tr></table></div>'
+        "</table>",
+        "</td></tr></table></td></tr></table></div>",
       ].join
     end
   end

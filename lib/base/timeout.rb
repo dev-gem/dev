@@ -14,7 +14,7 @@
 # If you've got a cleaner way of doing this, I'd be interested to see it.
 # If you think you can do it with Ruby's Timeout module, think again.
 def run_with_timeout(directory, command, timeout, tick)
-  output = ''
+  output = ""
   exit_code = 1
 
   Open3.popen2e(command, chdir: directory) do |_stdin, stderrout, thread|
@@ -46,13 +46,14 @@ def run_with_timeout(directory, command, timeout, tick)
     if thread.alive?
       # We need to kill the process, because killing the thread leaves
       # the process alive but detached, annoyingly enough.
-      Process.kill('TERM', pid)
+      Process.kill("TERM", pid)
       exit_code = 5
     end
   end
 
   [output, exit_code]
 end
+
 #  begin
 #    # Start task in another thread, which spawns a process
 #    stdin, stderrout, thread = Open3.popen2e(command, :chdir=>directory)
@@ -94,13 +95,14 @@ end
 #  return [output,exit_code]
 # end
 
-require 'timeout'
+require "timeout"
+
 def run_with_timeout2(directory, command, timeout)
   # stdout, stderr pipes
   rout, wout = IO.pipe
   rerr, werr = IO.pipe
-  output = ''
-  error = ''
+  output = ""
+  error = ""
   exit_code = 1
   pid = Process.spawn(command, chdir: directory, out: wout, err: werr)
   begin
@@ -110,7 +112,7 @@ def run_with_timeout2(directory, command, timeout)
       error = rerr.readlines.join("\n")
     end
   rescue StandardError
-    Proces.kill('TERM', pid)
+    Proces.kill("TERM", pid)
     output = "#{output}timeout occurred."
   ensure
     rout.close

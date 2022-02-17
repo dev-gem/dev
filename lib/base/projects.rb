@@ -3,12 +3,12 @@
 puts DELIMITER if defined?(DEBUG)
 puts __FILE__ if defined?(DEBUG)
 
-require 'json'
-require 'rake'
-require_relative('environment')
-require_relative('project')
-require_relative('../apps/git')
-require_relative('../apps/svn')
+require "json"
+require "rake"
+require_relative("environment")
+require_relative("project")
+require_relative("../apps/git")
+require_relative("../apps/svn")
 
 class Projects < Hash
   attr_accessor :env
@@ -24,7 +24,7 @@ class Projects < Hash
   end
 
   def current
-    fullname = Rake.application.original_dir.gsub("#{Environment.default.wrk_dir}/", '')
+    fullname = Rake.application.original_dir.gsub("#{Environment.default.wrk_dir}/", "")
     if key? fullname
       self[fullname]
     else
@@ -40,29 +40,29 @@ class Projects < Hash
 
   def save
     Dir.make File.dirname(filename) unless File.exist? File.dirname(filename)
-    File.open(filename, 'w') { |f| f.write(JSON.pretty_generate(self)) }
+    File.open(filename, "w") { |f| f.write(JSON.pretty_generate(self)) }
   end
 
   def open
     if File.exist? filename
       JSON.parse(IO.read(filename)).each do |k, v|
         self[k] = if v.is_a?(Project)
-                    v
-                  else
-                    Project.new(v)
-                  end
+            v
+          else
+            Project.new(v)
+          end
       end
       # update_state
     end
   end
 
-  def get_projects(value = '')
+  def get_projects(value = "")
     puts "get_projects #{value}" if @env.debug?
     puts "get_project total project count #{length}" if @env.debug?
     projects = []
-    filter = ''
+    filter = ""
     filter = value.to_s if !value.nil? && value.is_a?(String)
-    filter = value[0].to_s if !value.nil? && value.is_a?(Array) && !value[0].to_s.include?('=')
+    filter = value[0].to_s if !value.nil? && value.is_a?(Array) && !value[0].to_s.include?("=")
 
     puts "get_project filter '#{filter}'" if @env.debug?
     each do |k, v|
@@ -112,9 +112,9 @@ class Projects < Hash
       exit_code = result.exit_code if result.exit_code != 0
     rescue StandardError => e
       puts "error raised during work #{project.fullname}"
-      puts '--------------------------------------------'
+      puts "--------------------------------------------"
       puts e
-      puts '--------------------------------------------'
+      puts "--------------------------------------------"
     end
     exit_code
   end
@@ -128,9 +128,9 @@ class Projects < Hash
       exit_code = result.exit_code if result.exit_code != 0
     rescue StandardError => e
       puts "error raised during work #{project.fullname}"
-      puts '--------------------------------------------'
+      puts "--------------------------------------------"
       puts e
-      puts '--------------------------------------------'
+      puts "--------------------------------------------"
     end
     exit_code
   end
@@ -151,9 +151,9 @@ class Projects < Hash
       exit_code = result.exit_code if result.exit_code != 0
     rescue StandardError => e
       puts "error raised during make #{project.fullname}"
-      puts '--------------------------------------------'
+      puts "--------------------------------------------"
       puts e
-      puts '--------------------------------------------'
+      puts "--------------------------------------------"
     end
     exit_code
   end
@@ -163,27 +163,27 @@ class Projects < Hash
     puts "clobbering #{projects.length} projects..." if @env.debug?
     projects.each do |project|
       project.clobber
-    # Dir.remove_empty @env.wrk_dir
+      # Dir.remove_empty @env.wrk_dir
     rescue StandardError => e
       puts "error raised during clobber #{project.fullname}"
-      puts '--------------------------------------------'
+      puts "--------------------------------------------"
       puts e
-      puts '--------------------------------------------'
+      puts "--------------------------------------------"
     end
   end
 
   def update(args)
     projects = get_projects args
     puts "updating #{projects.length} projects..." if @env.debug?
-    projects.each  do |project|
+    projects.each do |project|
       puts "updating #{project.fullname}" if @env.debug?
       result = project.update
       exit_code = result.exit_code if result.exit_code != 0
     rescue StandardError => e
       puts "error raised during update #{project.fullname}"
-      puts '--------------------------------------------'
+      puts "--------------------------------------------"
       puts e
-      puts '--------------------------------------------'
+      puts "--------------------------------------------"
     end
   end
 
@@ -196,10 +196,10 @@ class Projects < Hash
     project = nil
     url = Git.remote_origin
     url = Svn.url if url.length.zero?
-    if Rake.application.original_dir.include?('/wrk/') &&
+    if Rake.application.original_dir.include?("/wrk/") &&
        url.length.positive?
       project = Project.new(url)
-      fullname = Rake.application.original_dir.gsub("#{Environment.dev_root}/wrk/", '')
+      fullname = Rake.application.original_dir.gsub("#{Environment.dev_root}/wrk/", "")
       project[:fullname] = name if name.length.positive? && !name.include?(Environment.dev_root)
       if defined?(PROJECTS)
         PROJECTS[name] = project unless PROJECTS.key?(name)
@@ -213,23 +213,23 @@ class Projects < Hash
   end
 
   def pull
-    each { |_k, v| v.pull if v.respond_to?('pull'.to_sym) }
+    each { |_k, v| v.pull if v.respond_to?("pull".to_sym) }
   end
 
   def rake
-    each { |_k, v| v.rake if v.respond_to?('rake'.to_sym) }
+    each { |_k, v| v.rake if v.respond_to?("rake".to_sym) }
   end
 
-  def import(pattern = '')
+  def import(pattern = "")
     wrk = @env.wrk_dir
     if File.exist?(wrk)
       Dir.chdir(wrk) do
         puts "scanning #{wrk} for imports..."
-        Dir.glob('**/rakefile.rb').each do |rakefile|
+        Dir.glob("**/rakefile.rb").each do |rakefile|
           rakedir = File.dirname(rakefile)
           url = Project.get_url rakedir
           project = Project.new(Project.get_url(rakedir))
-          project[:fullname] = rakedir.gsub(@env.wrk_dir, '') if project.fullname.include?(':')
+          project[:fullname] = rakedir.gsub(@env.wrk_dir, "") if project.fullname.include?(":")
           if (pattern.length.zero? || project.fullname.include?(pattern)) && (project.fullname.length.positive? && !key?(project.fullname))
             puts "importing #{project.fullname}"
             self[project.fullname] = project

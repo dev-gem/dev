@@ -5,7 +5,7 @@ class GitUrl
     if url.is_a?(Array)
       url.each { |u| GitUrl.pull u }
     else
-      puts ' '
+      puts " "
       work_dir = get_work_dir(url)
       unless Dir.exist?(work_dir)
         puts "git clone #{url} #{work_dir}"
@@ -31,7 +31,7 @@ class GitUrl
       Dir.chdir(work_dir) do
         puts "rake #{work_dir}"
         puts `rake`
-        puts 'rake clobber'
+        puts "rake clobber"
         puts `rake clobber`
       end
     end
@@ -43,7 +43,7 @@ class GitUrl
       puts "git clone #{url} #{local_dir}"
       puts `git clone #{url} #{local_dir}`
     end
-    stags = ''
+    stags = ""
     Dir.chdir(local_dir) do
       puts `git pull`
     end
@@ -59,10 +59,10 @@ class GitUrl
         puts "git clone #{url} #{local_dir}"
         puts `git clone #{url} #{local_dir}`
       end
-      stags = ''
+      stags = ""
       Dir.chdir(local_dir) do
         puts `git pull`
-        stags = `git tag`.gsub('\r', '')
+        stags = `git tag`.gsub('\r', "")
       end
       tags = stags.split("\n").reverse
       puts "tags: #{tags}"
@@ -100,6 +100,6 @@ class GitUrl
   end
 
   def self.get_relative_dir(url)
-    url.gsub('http://', '').gsub('https://', '').gsub('.git', '')
+    url.gsub("http://", "").gsub("https://", "").gsub(".git", "")
   end
 end

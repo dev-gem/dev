@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'fileutils'
+require "fileutils"
 
 class Dir
   def self.make(directory)
@@ -9,7 +9,7 @@ class Dir
 
   def self.remove(directory, remove_empty_parents = false)
     FileUtils.rm_rf directory unless Dir.empty?(directory)
-    FileUtils.rm_r directory  if File.exist?(directory)
+    FileUtils.rm_r directory if File.exist?(directory)
     if remove_empty_parents
       parent_dir = File.dirname(directory)
       Dir.remove parent_dir, true if Dir.empty?(parent_dir)
@@ -26,8 +26,8 @@ class Dir
   def self.get_latest_mtime(directory)
     mtime = Time.new(1980)
     Dir.chdir(directory) do
-      latest_filename = ''
-      Dir.glob('**/*.*').each do |f|
+      latest_filename = ""
+      Dir.glob("**/*.*").each do |f|
         if mtime.nil? || File.mtime(f) > mtime
           mtime = File.mtime(f)
           latest_filename = f
@@ -39,11 +39,11 @@ class Dir
   end
 
   def self.get_project_name(directory)
-    name = directory.split('/').last
+    name = directory.split("/").last
     rakefile = "#{directory}/rakefile.rb"
     if File.exist?(rakefile)
       txt = IO.read(rakefile)
-      if txt.include?('NAME=')
+      if txt.include?("NAME=")
         scan = txt.scan(/NAME=['"]([\w.]+)/)
         name = scan[0][0] if !scan.nil? && (scan.length.positive? && !scan[0].nil? && scan[0].length.positive?)
       end
@@ -52,13 +52,13 @@ class Dir
   end
 
   def self.zip(directory, files, zipfilename)
-    if Gem::Specification.find_all_by_name('rubyzip').any?
-      require 'zip'
+    if Gem::Specification.find_all_by_name("rubyzip").any?
+      require "zip"
       File.delete(zipfilename) if File.exist?(zipfilename)
       Zip::File.open(zipfilename, Zip::File::CREATE) do |zipfile|
         Dir.chdir(directory) do
           count = 0
-          files.each  do |source_file|
+          files.each do |source_file|
             zipfile.add(source_file, "#{directory}/#{source_file}")
             count += 1
           end
@@ -71,8 +71,8 @@ class Dir
   end
 
   def self.unzip(zipfilename, directory)
-    if Gem::Specification.find_all_by_name('rubyzip').any?
-      require 'zip'
+    if Gem::Specification.find_all_by_name("rubyzip").any?
+      require "zip"
       count = 0
       Zip::File.open(zipfilename) do |zip_file|
         zip_file.each do |entry|

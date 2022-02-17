@@ -5,15 +5,16 @@ if defined?(DEBUG)
   puts __FILE__
 end
 
-require_relative('apps')
+require_relative("apps")
 
-require 'json'
-require 'rake/clean'
-require 'pp'
+require "json"
+require "rake/clean"
+require "pp"
 
 Dir.glob("#{File.dirname(__FILE__)}/tasks/*.rb").sort.each do |rb|
-  require(rb) unless rb.include?('default')
+  require(rb) unless rb.include?("default")
 end
+
 class Commands < Hash
   attr_accessor :env
 
@@ -37,9 +38,9 @@ class Commands < Hash
   end
 
   def info
-    puts 'Commands'
-    each  do |k, v|
-      v.update if v.respond_to? 'update'
+    puts "Commands"
+    each do |k, v|
+      v.update if v.respond_to? "update"
       next unless v.length.positive?
 
       puts " #{k}"

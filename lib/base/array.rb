@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-require_relative('environment')
+require_relative("environment")
+
 class Array
   attr_accessor :env
 
@@ -73,11 +74,11 @@ class Array
 
   def to_html
     html = []
-    html << '<div>'
+    html << "<div>"
     each do |e|
       html << e.to_html if e.respond_to?(:to_html)
     end
-    html << '</div>'
+    html << "</div>"
     html.join
   end
 end

@@ -3,7 +3,7 @@
 puts DELIMITER if defined?(DEBUG)
 puts __FILE__ if defined?(DEBUG)
 
-require_relative('string')
+require_relative("string")
 
 class Environment < Hash
   attr_accessor :output, :publish_dir
@@ -15,12 +15,12 @@ class Environment < Hash
   end
 
   def initialize(env = nil)
-    @output = ''
+    @output = ""
 
     @env = {}
-    @env_aliases = { 'HOME' => ['USERPROFILE'],
-                     'DEV_ROOT' => %w[DEV_HOME HOME USERPROFILE],
-                     'USERNAME' => %w[USER USR] }
+    @env_aliases = { "HOME" => ["USERPROFILE"],
+                     "DEV_ROOT" => %w[DEV_HOME HOME USERPROFILE],
+                     "USERNAME" => %w[USER USR] }
     env&.each { |k, v| @env[k.to_s] = v }
     @@default = self if @@default.nil?
 
@@ -36,15 +36,15 @@ class Environment < Hash
 
   def admin?
     rights = `whoami /priv`
-    rights.include?('SeCreateGlobalPrivilege')
+    rights.include?("SeCreateGlobalPrivilege")
   end
 
   def root_dir
-    get_env('DEV_ROOT').gsub('\\', '/')
+    get_env("DEV_ROOT").gsub('\\', "/")
   end
 
   def home_dir
-    get_env('HOME').gsub('\\', '/')
+    get_env("HOME").gsub('\\', "/")
   end
 
   def log_dir
@@ -54,12 +54,12 @@ class Environment < Hash
   end
 
   def dropbox_dir
-    dropbox_info = "#{ENV['LOCALAPPDATA']}/Dropbox/info.json"
+    dropbox_info = "#{ENV["LOCALAPPDATA"]}/Dropbox/info.json"
     if File.exist?(dropbox_info)
       info = JSON.parse(IO.read(dropbox_info))
-      return info['personal']['path'] if info.key?('personal') && info['personal'].key?('path')
+      return info["personal"]["path"] if info.key?("personal") && info["personal"].key?("path")
     end
-    ''
+    ""
   end
 
   def tmp_dir
@@ -81,15 +81,15 @@ class Environment < Hash
   end
 
   def machine
-    return ENV['COMPUTERNAME'] unless ENV['COMPUTERNAME'].nil?
+    return ENV["COMPUTERNAME"] unless ENV["COMPUTERNAME"].nil?
 
     machine = `hostname`
-    machine = machine.split('.')[0] if machine.include?('.')
+    machine = machine.split(".")[0] if machine.include?(".")
     machine.strip
   end
 
   def user
-    get_env('USERNAME')
+    get_env("USERNAME")
   end
 
   def get_env(key)
@@ -97,7 +97,7 @@ class Environment < Hash
 
     value = ENV[key]
     if value.nil? && @env_aliases.key?(key)
-      @env_aliases[key].each  do |akey|
+      @env_aliases[key].each do |akey|
         value = get_env(akey) if value.nil?
       end
     end
@@ -117,8 +117,8 @@ class Environment < Hash
   def colorize?
     colorize = true
     if Environment.windows?
-      if `gem list win32console`.include?('win32console')
-        require 'ansi/code'
+      if `gem list win32console`.include?("win32console")
+        require "ansi/code"
       else
         colorize = false
       end
@@ -138,7 +138,7 @@ class Environment < Hash
   end
 
   def out(message)
-    puts message unless get_env('SUPPRESS_CONSOLE_OUTPUT')
+    puts message unless get_env("SUPPRESS_CONSOLE_OUTPUT")
     @output = "#{@output}#{message}\\n"
   end
 
@@ -148,13 +148,13 @@ class Environment < Hash
 
   def self.OS
     if windows?
-      'windows'
+      "windows"
     elsif mac?
-      'mac'
+      "mac"
     elsif linux?
-      'linux'
+      "linux"
     else
-      'unix'
+      "unix"
     end
   end
 
@@ -175,23 +175,23 @@ class Environment < Hash
   end
 
   def self.check
-    puts 'checking commands...'
+    puts "checking commands..."
     missing_command = false
-    ['ruby --version', 'svn --version --quiet', 'git --version', 'msbuild /version', 'nunit-console', 'nuget', 'candle',
-     'light', 'gem --version'].each do |cmd|
+    ["ruby --version", "svn --version --quiet", "git --version", "msbuild /version", "nunit-console", "nuget", "candle",
+     "light", "gem --version"].each do |cmd|
       command = Command.new(cmd)
       command[:quiet] = true
       command[:ignore_failure] = true
       command.execute
       if (command[:exit_code]).zero?
-        puts "#{cmd.split(' ')[0]} #{get_version(command[:output])}"
+        puts "#{cmd.split(" ")[0]} #{get_version(command[:output])}"
       else
-        puts "#{cmd.split(' ')[0]} not found."
+        puts "#{cmd.split(" ")[0]} not found."
         missing_command = true
       end
     end
     if missing_command
-      puts 'missing commands may be resolved by making sure that are installed and in PATH environment variable.'
+      puts "missing commands may be resolved by making sure that are installed and in PATH environment variable."
     end
   end
 
@@ -200,7 +200,7 @@ class Environment < Hash
   end
 
   def info
-    puts 'Environment'
+    puts "Environment"
     puts "  ruby version: #{`ruby --version`}"
     puts " ruby platform: #{RUBY_PLATFORM}"
     puts "      dev_root: #{root_dir}"
@@ -210,7 +210,7 @@ class Environment < Hash
     # puts " configuration: #{self.configuration}"
     puts "         debug: #{debug?}"
     # puts "git user.email: #{Git.user_email}"
-    puts ' '
+    puts " "
     # puts "Path Commands"
     # ['svn --version --quiet','git --version','msbuild /version','nuget','candle','light','gem --version'].each{|cmd|
     #  command=Command.new(cmd)
@@ -227,5 +227,5 @@ class Environment < Hash
   end
 end
 
-puts '' if defined?(DEBUG)
+puts "" if defined?(DEBUG)
 puts Environment.default.info if defined?(DEBUG)

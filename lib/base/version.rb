@@ -38,7 +38,7 @@ class Version
     if File.exist?(filename)
       orig = IO.read(filename)
       text = Version.update_text orig, version
-      File.open(filename, 'w') { |f| f.write(text) } if orig != text
+      File.open(filename, "w") { |f| f.write(text) } if orig != text
     end
   end
 
@@ -49,9 +49,9 @@ class Version
   end
 
   def self.read(filename)
-    return Gem::Specification.load(filename).version.to_s if filename.include?('.gemspec')
+    return Gem::Specification.load(filename).version.to_s if filename.include?(".gemspec")
 
-    if filename.include?('AssemblyInfo.cs')
+    if filename.include?("AssemblyInfo.cs")
       scan = IO.read(filename).scan(/Version\("([\d.]+)"\)/)
       return scan[0][0] if !scan.nil? && (scan.length.positive? && !scan[0].nil? && scan[0].length.positive?)
 
@@ -59,20 +59,20 @@ class Version
       scan = IO.read(filename).scan(/Version="([\d.]+)"/)
       return scan[0][0] if !scan.nil? && (scan.length.positive? && !scan[0].nil? && scan[0].length.positive?)
     end
-    '0.0'
+    "0.0"
   end
 
   def self.get_version
-    Dir.glob('**/*.gemspec').each do |gemspec|
+    Dir.glob("**/*.gemspec").each do |gemspec|
       return Version.read gemspec
     end
-    Dir.glob('**/AssemblyInfo.cs').each do |assemblyInfo|
+    Dir.glob("**/AssemblyInfo.cs").each do |assemblyInfo|
       return Version.read assemblyInfo
     end
-    Dir.glob('**/*.wxs').each do |wxs|
+    Dir.glob("**/*.wxs").each do |wxs|
       return Version.read wxs
     end
-    '0.0'
+    "0.0"
   end
 end
 

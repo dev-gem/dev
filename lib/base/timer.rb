@@ -15,7 +15,7 @@ class Timer
   end
 
   def elapsed_str
-    elapsed_str = "[#{'%.0f' % elapsed}s]"
+    elapsed_str = "[#{"%.0f" % elapsed}s]"
   end
 
   def self.elapsed_exceeds?(name, duration_seconds)
@@ -42,7 +42,7 @@ class Timer
 
   def self.set_timestamp(name)
     Dir.mkdir("#{DEV_TASKS[:dev_root]}/log") unless Dir.exist?("#{DEV_TASKS[:dev_root]}/log")
-    File.open("#{DEV_TASKS[:dev_root]}/log/#{name}.timestamp", 'w') { |f| f.puts(Time.now.to_s) }
+    File.open("#{DEV_TASKS[:dev_root]}/log/#{name}.timestamp", "w") { |f| f.puts(Time.now.to_s) }
   end
 end
 

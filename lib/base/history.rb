@@ -16,7 +16,7 @@ class History
   def get_commands(pattern)
     commands = []
     Dir.chdir(@dev.log_dir) do
-      Dir.glob("*#{pattern.gsub('/', '-')}*.*").each do |logfile|
+      Dir.glob("*#{pattern.gsub("/", "-")}*.*").each do |logfile|
         commands << Command.new(JSON.parse(IO.read(logfile)))
       end
     end
@@ -24,17 +24,17 @@ class History
   end
 
   def add_command(command)
-    code = '0'
-    code = 'X' if command[:exit_code] != 0
-    directory = command[:directory].gsub(@dev.root_dir, '').gsub('/', '-')
+    code = "0"
+    code = "X" if command[:exit_code] != 0
+    directory = command[:directory].gsub(@dev.root_dir, "").gsub("/", "-")
     name = "#{command[:input]}.#{code}.#{directory}.json"
     filename = "#{@dev.log_dir}/#{name}"
     puts "add command #{filename}" if @dev.debug?
-    File.open(filename, 'w') { |f| f.write(command.to_json) }
+    File.open(filename, "w") { |f| f.write(command.to_json) }
   end
 
   def get_wrk_command(project_fullname)
-    commands = get_commands(project_fullname.to_s.gsub('/', '-'))
+    commands = get_commands(project_fullname.to_s.gsub("/", "-"))
     return commands[0] if commands.length.positive?
 
     nil

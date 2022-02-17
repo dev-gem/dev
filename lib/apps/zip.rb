@@ -2,8 +2,8 @@
 
 puts __FILE__ if defined?(DEBUG)
 
-require 'zip'
-require 'fileutils'
+require "zip"
+require "fileutils"
 
 module Zip
   # exports a zip file to a destination directory
@@ -21,8 +21,8 @@ module Zip
   # destination is the zip file path
   # source_glob is a string or array of glob directives to specify files in source_dir to be publish
   # source_glob defaults to '**/*' to publish all files in the source_dir
-  def self.publish(source_dir, destination, source_filelist = FileList.new('**/*'))
-    Dir.mktmpdir do |dir|           # Build zip file locally
+  def self.publish(source_dir, destination, source_filelist = FileList.new("**/*"))
+    Dir.mktmpdir do |dir| # Build zip file locally
       tmp_file_name = "#{dir}/#{::File.basename(destination)}"
 
       zip(source_dir, source_filelist, tmp_file_name)
@@ -39,7 +39,7 @@ module Zip
     io = Zip::File.open(zip_file, Zip::File::CREATE)
 
     files_to_archive.each do |file|
-      io.get_output_stream(file) { |f| f.puts(::File.open("#{base_directory}/#{file}", 'rb').read) }
+      io.get_output_stream(file) { |f| f.puts(::File.open("#{base_directory}/#{file}", "rb").read) }
     end
 
     io.close

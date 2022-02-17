@@ -27,7 +27,7 @@ class Tasks
       puts DELIMITER if defined?(DEBUG)
       puts ":#{task}" unless @env.colorize?
       if @env.colorize?
-        require 'ansi/code'
+        require "ansi/code"
         puts ANSI.white + ANSI.bold + ":#{task}" + ANSI.reset if @env.colorize?
       end
       execute(COMMANDS[task])

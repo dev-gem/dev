@@ -11,7 +11,7 @@ class Text
     text1 = IO.read(filename)
     text2 = text1.gsub(search) { |_str| str = replace }
     unless text1 == text2
-      File.open(filename, 'w') { |f| f.puts text2 }
+      File.open(filename, "w") { |f| f.puts text2 }
       return true
     end
     false

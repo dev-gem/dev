@@ -9,30 +9,31 @@ puts __FILE__ if defined?(DEBUG)
 # Visual Studio 2015 version 14.0, solution format version 12.00
 # Visual Studio 2017 version 15.0
 # Visual Studio 2019 version 16.0
-require 'pp'
+require "pp"
+
 class MSBuild < Hash
   # @@ignore_configurations=Array.new
   def initialize
-    add(:vs9, 'C:/Windows/Microsoft.NET/Framework/v3.5/msbuild.exe')
-    add(:vs10, 'C:/Windows/Microsoft.NET/Framework/v4.0.30319/msbuild.exe')
-    add(:vs12, 'C:/Program Files (x86)/MSBuild/12.0/bin/msbuild.exe')
-    add(:vs14, 'C:/Program Files (x86)/MSBuild/14.0/bin/msbuild.exe')
-    add(:vs15, 'C:/Program Files (x86)/MSBuild/15.0/bin/msbuild.exe')
-    add(:vs15, 'C:/Program Files (x86)/Microsoft Visual Studio/2017/Enterprise/MSBuild/15.0/Bin/MSBuild.exe')
-    if File.exist?('C:/Program Files (x86)/Microsoft Visual Studio/2017/Professional/MSBuild/15.0/Bin/MSBuild.exe')
-      add(:vs15, 'C:/Program Files (x86)/Microsoft Visual Studio/2017/Professional/MSBuild/15.0/Bin/MSBuild.exe')
+    add(:vs9, "C:/Windows/Microsoft.NET/Framework/v3.5/msbuild.exe")
+    add(:vs10, "C:/Windows/Microsoft.NET/Framework/v4.0.30319/msbuild.exe")
+    add(:vs12, "C:/Program Files (x86)/MSBuild/12.0/bin/msbuild.exe")
+    add(:vs14, "C:/Program Files (x86)/MSBuild/14.0/bin/msbuild.exe")
+    add(:vs15, "C:/Program Files (x86)/MSBuild/15.0/bin/msbuild.exe")
+    add(:vs15, "C:/Program Files (x86)/Microsoft Visual Studio/2017/Enterprise/MSBuild/15.0/Bin/MSBuild.exe")
+    if File.exist?("C:/Program Files (x86)/Microsoft Visual Studio/2017/Professional/MSBuild/15.0/Bin/MSBuild.exe")
+      add(:vs15, "C:/Program Files (x86)/Microsoft Visual Studio/2017/Professional/MSBuild/15.0/Bin/MSBuild.exe")
     end
-    if File.exist?('C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe')
-      add(:vs16, 'C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe')
+    if File.exist?("C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe")
+      add(:vs16, "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/MSBuild.exe")
     end
-    if File.exist?('C:/Program Files (x86)/Microsoft Visual Studio/2019/Preview/MSBuild/Current/Bin/MSBuild.exe')
-      add(:vs16, 'C:/Program Files (x86)/Microsoft Visual Studio/2019/Preview/MSBuild/Current/Bin/MSBuild.exe')
+    if File.exist?("C:/Program Files (x86)/Microsoft Visual Studio/2019/Preview/MSBuild/Current/Bin/MSBuild.exe")
+      add(:vs16, "C:/Program Files (x86)/Microsoft Visual Studio/2019/Preview/MSBuild/Current/Bin/MSBuild.exe")
     end
-    if File.exist?('C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/MSBuild/Current/Bin/MSBuild.exe')
-      add(:vs16, 'C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/MSBuild/Current/Bin/MSBuild.exe')
+    if File.exist?("C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/MSBuild/Current/Bin/MSBuild.exe")
+      add(:vs16, "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/MSBuild/Current/Bin/MSBuild.exe")
     end
-    if File.exist?('C:/Program Files (x86)/Microsoft Visual Studio/2019/Professional/MSBuild/Current/Bin/MSBuild.exe')
-      add(:vs16, 'C:/Program Files (x86)/Microsoft Visual Studio/2019/Professional/MSBuild/Current/Bin/MSBuild.exe')
+    if File.exist?("C:/Program Files (x86)/Microsoft Visual Studio/2019/Professional/MSBuild/Current/Bin/MSBuild.exe")
+      add(:vs16, "C:/Program Files (x86)/Microsoft Visual Studio/2019/Professional/MSBuild/Current/Bin/MSBuild.exe")
     end
   end
 
@@ -50,7 +51,7 @@ class MSBuild < Hash
   end
 
   def self.in_path?
-    command = Command.new('msbuild /version')
+    command = Command.new("msbuild /version")
     command[:quiet] = true
     command[:ignore_failure] = true
     command.execute
@@ -60,7 +61,7 @@ class MSBuild < Hash
   end
 
   def self.get_version(version)
-    return 'msbuild' if MSBuild.in_path?
+    return "msbuild" if MSBuild.in_path?
 
     if defined?(MSBUILD)
       MSBUILD[version]
@@ -77,14 +78,14 @@ class MSBuild < Hash
 
       return :vs14
     end
-    sln_text = File.read(sln_filename, encoding: 'UTF-8')
-    return :vs16 if sln_text.include?('Visual Studio Version 16')
-    return :vs15 if sln_text.include?('VisualStudioVersion = 15.')
-    return :vs9 if sln_text.include?('Format Version 10.00')
-    return :vs12 if sln_text.include?('12.0.30723.0')
-    return :vs12 if sln_text.include?('Visual Studio 2013')
-    return :vs12 if sln_text.include?('12.0.31101.0')
-    return :vs14 if sln_text.include?('VisualStudioVersion = 14.0.')
+    sln_text = File.read(sln_filename, encoding: "UTF-8")
+    return :vs16 if sln_text.include?("Visual Studio Version 16")
+    return :vs15 if sln_text.include?("VisualStudioVersion = 15.")
+    return :vs9 if sln_text.include?("Format Version 10.00")
+    return :vs12 if sln_text.include?("12.0.30723.0")
+    return :vs12 if sln_text.include?("Visual Studio 2013")
+    return :vs12 if sln_text.include?("12.0.31101.0")
+    return :vs14 if sln_text.include?("VisualStudioVersion = 14.0.")
     return :vs16 if has_version? :vs16
     return :vs15 if has_version? :vs15
 
@@ -93,7 +94,7 @@ class MSBuild < Hash
 
   def self.get_configurations(sln_filename)
     configs = []
-    sln_text = File.read(sln_filename, encoding: 'UTF-8')
+    sln_text = File.read(sln_filename, encoding: "UTF-8")
     sln_text.scan(/= (\w+)\|/).each do |m|
       c = m.first.to_s
       ignore = false
@@ -105,7 +106,7 @@ class MSBuild < Hash
 
   def self.get_platforms(sln_filename)
     platforms = []
-    sln_text = File.read(sln_filename, encoding: 'UTF-8')
+    sln_text = File.read(sln_filename, encoding: "UTF-8")
     # sln_text.scan( /= [\w]+\|([\w ]+)/ ).each{|m|
     sln_text.scan(/\|([\w\d\s]+)\s*=/).each do |m|
       p = m.first.to_s.strip
@@ -123,11 +124,11 @@ class MSBuild < Hash
         MSBuild.get_platforms(sln_filename).each do |platform|
           build_commands = [] if build_commands.nil?
           msbuild_arg = MSBuild.get_version(vs_version)
-          msbuild_arg = "\"#{MSBuild.get_version(vs_version)}\"" if msbuild_arg.include?(' ')
+          msbuild_arg = "\"#{MSBuild.get_version(vs_version)}\"" if msbuild_arg.include?(" ")
           sln_arg = sln_filename
-          sln_arg = "\"#{sln_filename}\"" if sln_filename.include?(' ')
+          sln_arg = "\"#{sln_filename}\"" if sln_filename.include?(" ")
           platform_arg = "/p:Platform=#{platform}"
-          platform_arg = "/p:Platform=\"#{platform}\"" if platform.include?(' ')
+          platform_arg = "/p:Platform=\"#{platform}\"" if platform.include?(" ")
           build_commands << "#{msbuild_arg} #{sln_arg} /p:Configuration=#{configuration} #{platform_arg}"
         end
       end
@@ -138,7 +139,7 @@ end
 
 if defined?(DEBUG)
   puts
-  puts 'MSBuild'
+  puts "MSBuild"
   msb = MSBuild.new
   pp msb
   puts

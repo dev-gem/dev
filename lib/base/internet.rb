@@ -2,8 +2,9 @@
 
 puts __FILE__ if defined?(DEBUG)
 
-require 'open-uri'
-require 'timeout'
+require "open-uri"
+require "timeout"
+
 class Internet
   @@available = true
 
@@ -11,8 +12,8 @@ class Internet
     return @@available unless @@available.nil?
 
     begin
-      index = open('http://www.google.com').read
-      if index.include?('<Title>Google')
+      index = open("http://www.google.com").read
+      if index.include?("<Title>Google")
         @@available = true
       else
         puts "open('http://www.google.com') returned false"

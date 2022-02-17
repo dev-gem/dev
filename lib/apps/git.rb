@@ -4,29 +4,29 @@ if defined?(DEBUG)
   puts DELIMITER
   puts __FILE__
   puts
-  puts 'git not found' unless Command.executes?('git --version')
+  puts "git not found" unless Command.executes?("git --version")
   puts
 end
 
-require 'tmpdir'
-require 'rake'
+require "tmpdir"
+require "rake"
 
 class Git
-  def self.branch(directory = '')
+  def self.branch(directory = "")
     directory = Dir.pwd if directory.length.zero?
     Dir.chdir(directory) do
-      `git branch`.scan(/\* ([.\w-]+)/)[0][0] if File.exist?('.git')
+      `git branch`.scan(/\* ([.\w-]+)/)[0][0] if File.exist?(".git")
     rescue StandardError
-      ''
+      ""
     end
   end
 
   def self.url
-    url = ''
-    url = `git config --get remote.origin.url` if File.exist?('.git')
+    url = ""
+    url = `git config --get remote.origin.url` if File.exist?(".git")
   end
 
-  @@master_url = ''
+  @@master_url = ""
   def self.master_url
     @@master_url
   end
@@ -40,48 +40,48 @@ class Git
   end
 
   def self.user_email
-    email = ''
+    email = ""
     begin
       email = `git config --list`.scan(/user.email=([\d\w.@\-+]+)/)[0][0]
     rescue StandardError
-      email = ''
+      email = ""
     end
     email
   end
 
   def self.user_name
-    name = ''
+    name = ""
     begin
       name = `git config --list`.scan(/user.name=([\d\w.@\-+]+)/)[0][0]
     rescue StandardError
-      name = ''
+      name = ""
     end
     name
   end
 
-  def self.remote_origin(directory = '')
-    url = ''
+  def self.remote_origin(directory = "")
+    url = ""
     directory = Dir.pwd if directory.length.zero?
     Dir.chdir(directory) do
-      url = `git remote show origin`.scan(%r{Fetch URL: ([.\-:/\w\d]+)})[0][0] if File.exist?('.git')
+      url = `git remote show origin`.scan(%r{Fetch URL: ([.\-:/\w\d]+)})[0][0] if File.exist?(".git")
     rescue StandardError
-      url = ''
+      url = ""
     end
     url
   end
 
-  def self.has_changes?(directory = '')
+  def self.has_changes?(directory = "")
     directory = Dir.pwd if directory.length.zero?
     Dir.chdir(directory) do
-      if File.exist?('.git')
-        return true if `git status`.include?('modified:')
-        return true if `git status`.include?('new file:')
+      if File.exist?(".git")
+        return true if `git status`.include?("modified:")
+        return true if `git status`.include?("new file:")
       end
     end
     false
   end
 
-  def self.init(directory = '')
+  def self.init(directory = "")
     directory = Dir.pwd if directory.length.zero?
     parent = File.dirname(directory)
     FileUtils.mkdir_p parent if !File.exist?(parent) && parent.length.positive?
@@ -96,9 +96,9 @@ class Git
       # `git pull`
       tags = `git tag`
       unless tags.include?(version)
-        puts 'tagging branch'
+        puts "tagging branch"
         puts `git tag #{version} -m'#{version}'`
-        puts 'committing'
+        puts "committing"
         puts `git commit -m'#{version}'`
         # puts 'pushing'
         # puts `git push --tags`
@@ -129,7 +129,7 @@ class Git
             puts "copying file #{f} for publishing"
           end
         end
-        puts 'git add -A'
+        puts "git add -A"
         puts `git add -A`
         puts 'git commit -m"add"'
         puts `git commit -m"add"`
@@ -149,14 +149,14 @@ class Git
     end
   end
 
-  def self.latest_tag(directory = '')
+  def self.latest_tag(directory = "")
     if directory.length.zero?
-      Command.output('git describe --abbrev=0 --tags').strip
-    # `git describe --abbrev=0 --tags`.strip
+      Command.output("git describe --abbrev=0 --tags").strip
+      # `git describe --abbrev=0 --tags`.strip
     else
-      result = ''
+      result = ""
       Dir.chdir(directory) do
-        result = Command.output('git describe --abbrev=0 --tags').strip
+        result = Command.output("git describe --abbrev=0 --tags").strip
         # result=`git describe --abbrev=0 --tags`.strip
       end
       result
@@ -166,12 +166,12 @@ class Git
   def self.copy(src_url, src_directory, branch, target_directory, filelist)
     if !File.exist?(src_directory)
       puts "git clone #{src_url} #{src_directory}"
-    # puts `git clone #{src_url} #{src_directory}`
+      # puts `git clone #{src_url} #{src_directory}`
     else
       puts "chdir #{src_directory}"
       Dir.chdir(src_directory) do
-        puts 'git pull'
-        git_pull = Command.new('git pull')
+        puts "git pull"
+        git_pull = Command.new("git pull")
         git_pull[:directory] = src_directory
         git_pull[:timeout] = 30
         git_pull[:ignore_failure] = true

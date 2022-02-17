@@ -4,7 +4,7 @@ if defined?(DEBUG)
   puts DELIMITER
   puts __FILE__
   puts
-  puts 'nuget not found' unless Command.executes?('nuget')
+  puts "nuget not found" unless Command.executes?("nuget")
   puts
 end
 # puts DELIMITER if defined?(DEBUG)
@@ -16,32 +16,32 @@ class Nuget
     if File.exist?(nuspec_file)
       build_commands = [] if build_commands.nil?
       build_commands << if defined?(INCLUDE_REFERENCED_PROJECTS)
-                          "nuget pack #{nuspec_file} -IncludeReferencedProjects"
-                        else
-                          "nuget pack #{nuspec_file}"
-                        end
+        "nuget pack #{nuspec_file} -IncludeReferencedProjects"
+      else
+        "nuget pack #{nuspec_file}"
+      end
     end
     build_commands
   end
 
   def self.get_versions(filename)
     versions = {}
-    if filename.include?('.nuspec')
-      nuspec_text = File.read(filename, encoding: 'UTF-8')
+    if filename.include?(".nuspec")
+      nuspec_text = File.read(filename, encoding: "UTF-8")
       nuspec_text.scan(/<dependency\s+id="([\w.]+)"\s+version="([\d.]+[-\w]+)"/).each do |row|
         versions[row[0]] = row[1]
       end
       return versions
     end
-    if filename.include?('packages.config')
-      config_text = File.read(filename, encoding: 'UTF-8')
+    if filename.include?("packages.config")
+      config_text = File.read(filename, encoding: "UTF-8")
       config_text.scan(/<package\s+id="([\w.]+)"\s+version="([\d.]+[-\w]+)"/).each do |row|
         versions[row[0]] = row[1]
       end
       return versions
     end
-    if filename.include?('.csproj')
-      config_text = File.read(filename, encoding: 'UTF-8')
+    if filename.include?(".csproj")
+      config_text = File.read(filename, encoding: "UTF-8")
       config_text.scan(/<PackageReference\s+Include="([\w.]+)"\s+Version="([\d.]+[-\w]+)"/).each do |row|
         versions[row[0]] = row[1]
       end
@@ -51,7 +51,7 @@ class Nuget
   end
 
   def self.set_versions(filename, versions)
-    text = File.read(filename, encoding: 'UTF-8')
+    text = File.read(filename, encoding: "UTF-8")
     text_versions = text.scan(/id="[\w.]+"\s+version="[\d.]+[-\w]+"/)
     text2 = text
     versions.each do |k, v|
@@ -62,7 +62,7 @@ class Nuget
         end
       end
     end
-    File.open(filename, 'w') { |f| f.puts text2 } unless text == text2
+    File.open(filename, "w") { |f| f.puts text2 } unless text == text2
   end
 
   def self.update_versions(source_filename, destination_filename)

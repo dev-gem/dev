@@ -1,33 +1,33 @@
 # frozen_string_literal: true
 
-require_relative '../lib/base/project'
-require_relative '../lib/base/command'
-require_relative '../lib/base/dir'
-require_relative '../lib/base/environment'
-require 'rake'
+require_relative "../lib/base/project"
+require_relative "../lib/base/command"
+require_relative "../lib/base/dir"
+require_relative "../lib/base/environment"
+require "rake"
 
 describe Project do
-  it 'should be able to automatically initialize properties from url constructor' do
-    hellogem = Project.new('http://github.com/dev-gem/HelloRubyGem.git')
-    hellogem.env.set_env('SUPPRESS_CONSOLE_OUTPUT', 'true')
+  it "should be able to automatically initialize properties from url constructor" do
+    hellogem = Project.new("http://github.com/dev-gem/HelloRubyGem.git")
+    hellogem.env.set_env("SUPPRESS_CONSOLE_OUTPUT", "true")
 
-    expect(hellogem.url).to eq('http://github.com/dev-gem/HelloRubyGem.git')
-    expect(hellogem.fullname).to eq('github/dev-gem/HelloRubyGem')
-    expect(hellogem.name).to eq('HelloRubyGem')
-    expect(hellogem.make_dir('0.0.0')).to eq("#{hellogem.env.root_dir}/make/github/dev-gem/HelloRubyGem-0.0.0")
+    expect(hellogem.url).to eq("http://github.com/dev-gem/HelloRubyGem.git")
+    expect(hellogem.fullname).to eq("github/dev-gem/HelloRubyGem")
+    expect(hellogem.name).to eq("HelloRubyGem")
+    expect(hellogem.make_dir("0.0.0")).to eq("#{hellogem.env.root_dir}/make/github/dev-gem/HelloRubyGem-0.0.0")
   end
 
-  it 'should be able to perform basic tasks for HelloRake project' do
+  it "should be able to perform basic tasks for HelloRake project" do
     dir = "#{File.dirname(__FILE__)}/project_spec"
     Dir.remove dir
     Dir.make dir
 
     # INIT REPO HelloRake.git
     Dir.chdir(dir) do
-      cmd = Command.execute('git init --bare HelloRake.git')
+      cmd = Command.execute("git init --bare HelloRake.git")
       cmd = Command.execute("git clone \"#{dir}/HelloRake.git\"")
       Dir.chdir("#{dir}/HelloRake") do
-        File.open('rakefile.rb', 'w') { |f| f.puts 'task :default do; puts "ok"; end' }
+        File.open("rakefile.rb", "w") { |f| f.puts 'task :default do; puts "ok"; end' }
         cmd = Command.execute('git config user.email "lou-parslow+dev.gem@gamail.com"') if Git.user_email.empty?
         # cmd=Command.execute('git config user.name "lou-parslow"') if Git.user_name.length < 1
         # cmd=Command.execute('git config --global push.default simple')
@@ -39,7 +39,7 @@ describe Project do
       end
     end
 
-    unless dir.include?(' ')
+    unless dir.include?(" ")
       # ADD
       # helloRake=Project.new("#{dir}/HelloRake.git", 'local/HelloRake')
       # helloRake.env=Environment.new({ 'DEV_ROOT' => dir, 'SUPPRESS_CONSOLE_OUTPUT' => 'true'})
@@ -63,7 +63,7 @@ describe Project do
     Dir.remove dir
   end
 
-  it 'should fail work and make if there is not rakefile' do
+  it "should fail work and make if there is not rakefile" do
     dir = "#{File.dirname(__FILE__)}/project_spec"
     Dir.remove dir
     Dir.make dir
@@ -71,13 +71,13 @@ describe Project do
 
     # INIT REPO HelloRake.git
     Dir.chdir(dir) do
-      cmd = Command.execute('git init --bare HelloRake.git')
+      cmd = Command.execute("git init --bare HelloRake.git")
       cmd = Command.execute("git clone \"#{dir}/HelloRake.git\"")
       Dir.chdir("#{dir}/HelloRake") do
-        File.open('README.md', 'w') { |f| f.puts 'test' }
+        File.open("README.md", "w") { |f| f.puts "test" }
         cmd = Command.execute('git config user.email "lou-parslow+dev.gem@gamail.com"') if Git.user_email.empty?
         cmd = Command.execute('git config user.name "lou-parslow"') if Git.user_name.empty?
-        cmd = Command.execute('git config --global push.default simple')
+        cmd = Command.execute("git config --global push.default simple")
         # cmd=Command.execute('git add README.md')
         # cmd=Command.execute('git commit -m"added README.md"')
         # cmd=Command.execute('git tag 0.0.0 -m"0.0.0"')
@@ -86,7 +86,7 @@ describe Project do
       end
     end
 
-    unless dir.include?(' ')
+    unless dir.include?(" ")
       # ADD
       # helloRake=Project.new("#{dir}/HelloRake.git", 'local/HelloRake')
       # helloRake.env=Environment.new({ 'DEV_ROOT' => dir, 'SUPPRESS_CONSOLE_OUTPUT' => 'true'})

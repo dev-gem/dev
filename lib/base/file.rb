@@ -2,11 +2,11 @@
 
 puts __FILE__ if defined?(DEBUG)
 
-require 'fileutils'
+require "fileutils"
 
 class File
   def self.amalgamate(filename, source)
-    File.open(filename, 'w') do |file|
+    File.open(filename, "w") do |file|
       source.each do |source_file|
         file.puts IO.read(source_file)
       end
@@ -14,7 +14,7 @@ class File
   end
 
   # overwrite_existing=false
-  def self.publish(destination, source_dir, source_glob = '**/*', exclude_glob = nil)
+  def self.publish(destination, source_dir, source_glob = "**/*", exclude_glob = nil)
     output = "\n"
     FileUtils.mkdir_p destination unless File.exist? destination
 
@@ -30,7 +30,7 @@ class File
     output += "\nfiles: #{files}.to_s"
 
     Dir.chdir(source_dir) do
-      files.each  do |f|
+      files.each do |f|
         file = "#{destination}/#{f}"
         dirname = File.dirname(file)
         FileUtils.mkdir_p dirname unless File.exist? dirname
