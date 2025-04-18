@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 source "http://rubygems.org"
-gem "bundler"
+gem "bundler", "~> 2.6.8"
 gem "rainbow"
 gem "rake"
 gem "rspec"
